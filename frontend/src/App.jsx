@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 // import del header y el css global de la app
 import Header from './components/Header/Header'
 // import del footer
+import Footer from './components/Footer/Footer'
 import './index.css'
 
 const App = () => {
