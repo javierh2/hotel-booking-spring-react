@@ -7,6 +7,10 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Header from './components/Header/Header'
 // import del footer
 import Footer from './components/Footer/Footer'
+// import del searchbar
+import SearchBar from './components/SearchBar/SearchBar'
+
+
 import './index.css'
 
 const App = () => {

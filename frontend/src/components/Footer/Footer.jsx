@@ -1,6 +1,5 @@
 import './Footer.css'
 
-
 // Iconos SVG para redes sociales, no se usan librerías externas para mantener el proyecto ligero y sin dependencias innecesarias.
 const IconFacebook = () => (
     <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
