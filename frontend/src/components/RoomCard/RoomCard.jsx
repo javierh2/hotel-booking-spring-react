@@ -1,5 +1,5 @@
-import { useNavigate} from "react-router-dom";
-import "./RoomCard.css";
+import { useNavigate} from 'react-router-dom';
+import './RoomCard.css';
 
 const RoomCard = ({ room }) => {
     const navigate = useNavigate()
@@ -12,8 +12,8 @@ const RoomCard = ({ room }) => {
 
     // función para manejar el error de carga de la imagen, oculta la imagen y muestra un placeholder
     const handleImageError = (event) => {
-        event.target.style.display = 'none';
-        event.target.nextSibling.style.display = 'flex';
+        event.target.style.display = "none";
+        event.target.nextSibling.style.display = "flex";
     }
 
 
@@ -29,7 +29,7 @@ const RoomCard = ({ room }) => {
                             className="room-card__image"
                             onError={handleImageError}
                         />
-                        <div className="room-card__image-placeholder" style={{ display: 'none' }}>
+                        <div className="room-card__image-placeholder" style={{ display: "none" }}>
                             🏨
                         </div>
                     </>

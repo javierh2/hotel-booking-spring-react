@@ -2,18 +2,12 @@
 // Routes  contenedor de todas las rutas
 // Route define qué componente mostrar según la URL
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
-
 // import del header y el css global de la app
 import Header from './components/Header/Header'
+import './index.css'
 // import del footer
 import Footer from './components/Footer/Footer'
-// import del componente Categories
-import Categories from './components/Categories/Categories'
-// import del componente SearchBar
-import SearchBar from './components/SearchBar/SearchBar'
 
-
-import './index.css'
 
 const App = () => {
   return (
@@ -28,14 +22,7 @@ const App = () => {
         {/* Routes decide qué página mostrar según la URL actual */}
         <main className="app-main">
           <Routes>
-
-            <Route path="/" element={
-              <>
-                <SearchBar />
-                <Categories />
-              </>
-            }/>
-
+            <Route path="/" element={<h1>Bienvenido a Digital Booking</h1>}/>
           </Routes>
         </main>
 

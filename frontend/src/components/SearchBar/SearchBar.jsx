@@ -4,7 +4,7 @@ import './SearchBar.css'
 const SearchBar = () => {
 
 
-    const [searchValue, setSearchValue] = useState('')
+    const [searchValue, setSearchValue] = useState("")
 
     const handleInputChange = (event) => {
         setSearchValue(event.target.value)
@@ -12,13 +12,13 @@ const SearchBar = () => {
 
 
     const handleSearch = () => {
-        console.log('Buscando:', searchValue)
+        console.log("Buscando:", searchValue)
         // TODO: feature of search
     }
 
 
     const handleKeyDown = (event) => {
-        if (event.key === 'Enter') {
+        if (event.key === "Enter") {
             handleSearch()
         }
     }

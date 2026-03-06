@@ -4,26 +4,26 @@ import './Categories.css'
 const CATEGORIES = [
     {
         id: 1,
-        name: 'Hotels',
-        icon: '🏨',
+        name: "Hotels",
+        icon: "🏨",
         count: 120,
     },
     {
         id: 2,
-        name: 'Hostels',
-        icon: '🏠',
+        name: "Hostels",
+        icon: "🏠",
         count: 85,
     },
     {
         id: 3,
-        name: 'Apartments',
-        icon: '🏢',
+        name: "Apartments",
+        icon: "🏢",
         count: 64,
     },
     {
         id: 4,
-        name: 'Bed & Breakfast',
-        icon: '🛏️',
+        name: "Bed & Breakfast",
+        icon: "🛏️",
         count: 43,
     },
 ]
