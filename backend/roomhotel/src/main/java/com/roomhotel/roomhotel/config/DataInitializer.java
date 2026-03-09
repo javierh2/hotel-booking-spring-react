@@ -1,0 +1,109 @@
+package com.roomhotel.roomhotel.config;
+
+
+import com.roomhotel.roomhotel.entity.Room;
+import com.roomhotel.roomhotel.repository.RoomRepository;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+@Configuration
+public class DataInitializer {
+    @Bean
+    CommandLineRunner initData(RoomRepository roomRepository){
+        return args -> {
+            if (roomRepository.count() == 0){
+                roomRepository.save(Room.builder()
+                        .name("Suite Presidencial")
+                        .description("Habitación de lujo con vista panorámica, jacuzzi privado y servicio de mayordomo las 24 horas.")
+                        .category("Suite")
+                        .price(350.0)
+                        .imageRoom("https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=400")
+                        .active(true)
+                        .build());
+                roomRepository.save(Room.builder()
+                        .name("Habitación Doble Estándar")
+                        .description("Cómoda habitación para dos personas con cama queen size y desayuno incluido.")
+                        .category("Estándar")
+                        .price(120.0)
+                        .imageRoom("https://images.unsplash.com/photo-1618773928121-c32242e63f39?w=400")
+                        .active(true)
+                        .build());
+
+                roomRepository.save(Room.builder()
+                        .name("Departamento Familiar")
+                        .description("Amplio departamento con dos habitaciones, cocina equipada e ideal para familias.")
+                        .category("Departamento")
+                        .price(200.0)
+                        .imageRoom("https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=400")
+                        .active(true)
+                        .build());
+
+                roomRepository.save(Room.builder()
+                        .name("Hostel Cama Compartida")
+                        .description("Cama en habitación compartida con casillero personal. Ideal para mochileros.")
+                        .category("Hostel")
+                        .price(25.0)
+                        .imageRoom("https://images.unsplash.com/photo-1555854877-bab0e564b8d5?w=400")
+                        .active(true)
+                        .build());
+
+                roomRepository.save(Room.builder()
+                        .name("Suite Junior")
+                        .description("Suite elegante con sala de estar separada y amenities de lujo.")
+                        .category("Suite")
+                        .price(220.0)
+                        .imageRoom("https://images.unsplash.com/photo-1578683010236-d716f9a3f461?w=400")
+                        .active(true)
+                        .build());
+
+                roomRepository.save(Room.builder()
+                        .name("Cabaña de Montaña")
+                        .description("Acogedora cabaña con chimenea, vista a la montaña y desayuno casero incluido.")
+                        .category("Bed & Breakfast")
+                        .price(180.0)
+                        .imageRoom("https://images.unsplash.com/photo-1542718610-a1d656d1884c?w=400")
+                        .active(true)
+                        .build());
+
+                roomRepository.save(Room.builder()
+                        .name("Habitación Simple Económica")
+                        .description("Habitación cómoda y funcional para viajeros solos con excelente relación precio-calidad.")
+                        .category("Estándar")
+                        .price(65.0)
+                        .imageRoom("https://images.unsplash.com/photo-1505693314120-0d443867891c?w=400")
+                        .active(true)
+                        .build());
+
+                roomRepository.save(Room.builder()
+                        .name("Loft Industrial")
+                        .description("Moderno loft con diseño industrial, techos altos y ubicación céntrica.")
+                        .category("Departamento")
+                        .price(160.0)
+                        .imageRoom("https://images.unsplash.com/photo-1536376072261-38c75010e6c9?w=400")
+                        .active(true)
+                        .build());
+
+                roomRepository.save(Room.builder()
+                        .name("Hostel Privado Doble")
+                        .description("Habitación privada en hostel con baño compartido. Lo mejor de ambos mundos.")
+                        .category("Hostel")
+                        .price(55.0)
+                        .imageRoom("https://images.unsplash.com/photo-1520277739336-7bf67edfa768?w=400")
+                        .active(true)
+                        .build());
+
+                roomRepository.save(Room.builder()
+                        .name("Bed & Breakfast Colonial")
+                        .description("Encantadora habitación en casona colonial con jardín y desayuno artesanal.")
+                        .category("Bed & Breakfast")
+                        .price(95.0)
+                        .imageRoom("https://images.unsplash.com/photo-1444201983204-c43cbd584d93?w=400")
+                        .active(true)
+                        .build());
+
+                System.out.println("10 habitaciones cargadas correctamente desde D.I");
+            }
+        };
+    }
+}
