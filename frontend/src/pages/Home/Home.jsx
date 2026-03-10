@@ -6,7 +6,7 @@ import SearchBar from '../../components/SearchBar/SearchBar'
 import './Home.css'
 
 // import del servicio para obtener habitaciones aleatorias desde el backend
-import {getRandomRoom} from '../../services/roomService'
+import {getRandomRooms} from '../../services/roomService'
 
 
 const Home = () => {
@@ -23,7 +23,7 @@ const Home = () => {
         setLoading(true)
         setError(null)
         try {
-            const data = await getRandomRoom() // función del servicio roomService para obtener habitaciones aleatorias
+            const data = await getRandomRooms() // función del servicio roomService para obtener habitaciones aleatorias
             setRooms(data)
         } catch (err) {
             setError(err.message)
