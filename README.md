@@ -12,8 +12,6 @@ Aplicación **Full Stack de reservas de habitaciones** desarrollada con **Java S
 
 El proyecto simula una plataforma de **gestión y visualización de habitaciones de hotel**, permitiendo a los usuarios explorar productos y a los administradores gestionarlos mediante un panel de administración.
 
-Repositorio del proyecto:  
-https://github.com/javierh2/proyect_hotel_java_react_dh
 
 ---
 
@@ -142,6 +140,9 @@ GET | /api/rooms/random | Habitaciones aleatorias |
 GET | /api/rooms/{id} | Detalle de habitación |
 POST | /api/rooms | Crear habitación |
 DELETE | /api/rooms/{id} | Eliminar habitación |
+
+**Documentacion de Postman**
+https://documenter.getpostman.com/view/33164372/2sBXietaPi
 
 ---
 
