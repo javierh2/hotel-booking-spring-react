@@ -1,9 +1,10 @@
 import './Pagination.css'
 
+/// Componente de paginación
 const Pagination = ({ currentPage, totalPages, onPageChange }) => {
 
     if (totalPages <= 1) return null
-
+    // Generar array de páginas [1, 2, 3, ..., totalPages]
     const pages = Array.from({ length: totalPages }, (_, i) => i + 1)
 
     return (

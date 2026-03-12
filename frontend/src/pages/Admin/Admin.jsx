@@ -3,7 +3,7 @@ import { deleteRoom, getAllRooms } from '../../services/roomService'
 import RoomForm from '../../components/RoomForm/RoomForm'
 import './Admin.css'
 
-// página de administración de habitaciones, muestra una tabla con las habitaciones existentes y permite crear nuevas habitaciones o eliminar las existentes, también muestra estadísticas como el total de habitaciones, el precio promedio y el precio más bajo
+// página de administración de habitaciones, muestra una tabla con las habitaciones existentes y permite crear nuevas habitaciones o eliminar las existentes
 const Admin = () => {
 
     const [rooms, setRooms] = useState([])
@@ -36,7 +36,6 @@ const Admin = () => {
             setLoading(false)
         }
     }
-
     // carga inicial de habitaciones al montar el componente
     useEffect(() => {
         fetchRooms()
@@ -54,7 +53,6 @@ const Admin = () => {
             Esta acción no se puede revertir.`
         )
         if (!confirmation) return
-
         try {
             await deleteRoom(id)
             setRooms(prev => prev.filter(room => room.id !== id))
@@ -94,7 +92,7 @@ const Admin = () => {
                         </div>
                     </div>
 
-                    {/* estadísticas rápidas */}
+                    {/* estadísticas */}
                     {!loading && !error && (
                         <div className="admin__stats">
                             <div className="admin__stat-card">
@@ -112,10 +110,9 @@ const Admin = () => {
                         </div>
                     )}
 
-                    {/* menú de funciones — cada card es una función disponible */}
+                    {/* menú de funciones */}
                     <div className="admin__menu">
 
-                        {/* HU #10: botón "Lista de productos" que lleva a la tabla */}
                         <button
                             className="admin__menu-card"
                             onClick={() => setView('list')}
@@ -125,7 +122,6 @@ const Admin = () => {
                             <span className="admin__menu-desc">Visualizá todas las habitaciones disponibles</span>
                         </button>
 
-                        {/* HU #3: botón "Agregar producto" que abre el modal */}
                         <button
                             className="admin__menu-card"
                             onClick={() => setShowForm(true)}
@@ -149,8 +145,7 @@ const Admin = () => {
         )
     }
 
-    // ── VISTA LISTA DE PRODUCTOS ────────────────────────────────────────────
-    // HU #10: tabla con todos los productos — columnas Id, Imagen, Nombre, Categoría, Precio, Acciones
+    // tabla con todos los productos — columnas Id, Imagen, Nombre, Categoría, Precio, Acciones
     return (
         <div className="admin">
             <div className="admin__content">

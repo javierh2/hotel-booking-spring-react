@@ -3,10 +3,10 @@ import './Header.css'
 
 const Header = () => {
 
-
+    // useNavigate es un hook de react-router-dom que permite navegar programáticamente a otras rutas
     const navigate = useNavigate()
 
-
+    // función para manejar el click en el logo, navega a la página principal ("/")
     const handleLogoClick = () => {
         navigate('/')
     }
@@ -35,7 +35,7 @@ const Header = () => {
                     </div>
                 </div>
 
-                {/* botones */}
+                {/* botones sin funciones */}
 
                 <div className="header__actions">
                     <button

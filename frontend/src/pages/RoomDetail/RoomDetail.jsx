@@ -7,6 +7,7 @@ import './RoomDetail.css'
 
 const RoomDetail = () => {
 
+    // Obtener el ID de la habitación desde la URL
     const { id } = useParams()
 
     const navigate = useNavigate()
@@ -15,6 +16,7 @@ const RoomDetail = () => {
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState(null)
 
+    // Al cargar el detalle, asegurarnos de que la página esté scrolleada al top
     useEffect(() => {
         window.scrollTo(0, 0);
     }, []);
@@ -66,7 +68,7 @@ const RoomDetail = () => {
     return (
         <div className="room-detail">
 
-            {/* ── HEADER DEL DETALLE — título izquierda, volver derecha ── */}
+            {/* título izquierda, volver derecha */}
             <div className="room-detail__top-bar">
                 <h1 className="room-detail__name">{room.name}</h1>
 
@@ -84,7 +86,7 @@ const RoomDetail = () => {
                 </button>
             </div>
 
-            {/* ── GALERÍA PARTIDA: imagen principal izquierda + grilla derecha ── */}
+            {/* imagen principal izquierda + grilla derecha */}
             <div className="room-detail__gallery">
 
                 {/* Imagen principal — mitad izquierda */}
@@ -125,7 +127,7 @@ const RoomDetail = () => {
 
             </div>
 
-            {/* ── CONTENIDO ── */}
+            {/* contenido */}
             <div className="room-detail__content">
 
                 <div className="room-detail__price-row">

@@ -3,20 +3,21 @@ import './SearchBar.css'
 
 const SearchBar = () => {
 
-
+    // Estado para almacenar el valor del input de búsqueda
     const [searchValue, setSearchValue] = useState("")
 
+    // Función para manejar el cambio en el input de búsqueda
     const handleInputChange = (event) => {
         setSearchValue(event.target.value)
     }
 
-
+    // TODO: función para manejar la búsqueda, actualmente solo imprime el valor de búsqueda en la consola
     const handleSearch = () => {
         console.log("Buscando:", searchValue)
         // TODO: feature of search
     }
 
-
+    // Función para manejar la tecla Enter en el input de búsqueda
     const handleKeyDown = (event) => {
         if (event.key === "Enter") {
             handleSearch()

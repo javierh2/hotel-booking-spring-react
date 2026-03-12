@@ -21,7 +21,6 @@ const Home = () => {
 
     // función para cargar las habitaciones desde el backend dentro de un useEffect para que se ejecute al montar el componente - DRY - no repetir código de carga en otros componentes
     const fetchRooms = async () => {
-
         //reset de estados para cada nueva carga
         setLoading(true)
         setError(null)
@@ -35,15 +34,16 @@ const Home = () => {
             setLoading(false)
         }
     }
-
     useEffect(() => {
         fetchRooms()
     }, [])
 
+    // lógica para paginar las habitaciones - cálculo de total de páginas, índice de inicio y habitaciones a mostrar en la página actual
     const totalPages = Math.ceil(rooms.length / ROOMS_PER_PAGE)
     const startIndex = (currentPage - 1) * ROOMS_PER_PAGE
     const currentRooms = rooms.slice(startIndex, startIndex + ROOMS_PER_PAGE)
 
+    // función para manejar el cambio de página desde el componente Pagination - actualiza el estado de la página actual y hace scroll suave a la sección de recomendaciones
     const handlePageChange = (page) => {
         setCurrentPage(page)
         document.getElementById('recommendations')?.scrollIntoView({
