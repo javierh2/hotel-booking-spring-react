@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
-//intercepta excepciones de TODOS los controllers y devuelve json limpio
+// intercepta excepciones de TODOS los controllers y devuelve json limpio
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
@@ -21,7 +21,7 @@ public class GlobalExceptionHandler {
         return buildError(HttpStatus.NOT_FOUND, ex.getMessage());
     }
 
-    // nombre duplicado  HTTP 409
+    // nombre duplicado HTTP 409
     @ExceptionHandler(DuplicateNameException.class)
     public ResponseEntity<Map<String, Object>> handleDuplicate(DuplicateNameException ex) {
         return buildError(HttpStatus.CONFLICT, ex.getMessage());
@@ -55,7 +55,7 @@ public class GlobalExceptionHandler {
                 "Error interno del servidor: " + ex.getMessage());
     }
 
-    // Helper privadoq que arma la respuesta de error estándar
+    // Helper privado que arma la respuesta de error estándar
     // Todos los errores tienen el mismo formato JSON
     private ResponseEntity<Map<String, Object>> buildError(HttpStatus status, String message) {
         Map<String, Object> response = new HashMap<>();

@@ -32,9 +32,9 @@ public class CorsConfig {
 
                         .allowedMethods("GET", "POST", "DELETE", "PUT", "OPTIONS")
 
-                        //autentificación
+                        // autentificación
                         .allowedHeaders("*")
-                        //cookies y credenciales
+                        // cookies y credenciales
                         .allowCredentials(true);
             }
         };

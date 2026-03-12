@@ -102,7 +102,7 @@ public class DataInitializer {
                         .active(true)
                         .build());
 
-                System.out.println("10 habitaciones cargadas correctamente desde D.I");
+                System.out.println("10 habitaciones cargadas correctamente desde DataInitializer");
             }
         };
     }

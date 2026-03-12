@@ -25,7 +25,7 @@ public class RoomService {
     }
 
 
-    //listar productos
+    // listar productos
     public List<RoomResponseDTO> getAllRooms() {
         // findAll() trae TODAS las habitaciones de la DB
         // .stream() convierte la lista en un flujo para procesarla
@@ -65,7 +65,7 @@ public class RoomService {
     }
 
 
-    // registrar producto(habitación)
+    // registrar habitación
     @Transactional
     // @Transactional ,si funciona impacta en la DB, sino, hace rollback, evita datos incompletos en la DB
     public RoomResponseDTO createRoom(RoomRequestDTO requestDTO) {

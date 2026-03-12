@@ -18,7 +18,6 @@ DTO  viaja entre frontend y backend
 public class RoomRequestDTO {
 
     // campos del frontend
-
     @NotBlank(message = "El nombre es obligatorio")
     private String name;
 
