@@ -232,7 +232,7 @@ cd proyect_hotel_java_react_dh
 ## Ejecutar backend
 
 ```bash
-cd backend
+cd backend/roomhotel
 mvn spring-boot:run
 ```
 
