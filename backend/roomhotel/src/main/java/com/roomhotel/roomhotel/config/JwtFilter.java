@@ -1,6 +1,5 @@
 package com.roomhotel.roomhotel.config;
 
-
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
@@ -9,7 +8,6 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -20,56 +18,68 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
-// JwtFilter intercepta cada solicitud entrante para verificar si incluye un token JWT válido en el encabezado Authorization.
-// Si el token es válido, extrae el email del usuario,carga sus detalles de seguridad y establece la autenticación
-// en el contexto de seguridad de Spring para que el resto de la aplicación pueda identificar al usuario autenticado.
+// JwtFilter intercepta cada solicitud entrante para verificar si incluye un token JWT válido.
+// Si el token es válido, extrae el email, carga los detalles del usuario y establece
+// la autenticación en el SecurityContext para que Spring Security reconozca al usuario.
 @Component
-@RequiredArgsConstructor
 public class JwtFilter extends OncePerRequestFilter {
 
-    // UserRepository se inyecta para cargar los detalles del usuario a partir del email extraído del token JWT.
     private final UserRepository userRepository;
+    private final String jwtSecret;
 
-    // jwtSecret se inyecta desde application.properties para verificar la firma del token JWT.
-    @Value("${jwt.secret}")
-    private String jwtSecret;
+    // Constructor manual en lugar de @RequiredArgsConstructor porque necesitamos
+    // combinar inyección por constructor (UserRepository) con @Value (jwtSecret).
+    // Lombok no incluye campos anotados con @Value en el constructor generado,
+    // lo que causa que jwtSecret llegue null en runtime y el token falle silenciosamente.
+    public JwtFilter(UserRepository userRepository,
+        @Value("${jwt.secret}") String jwtSecret) {
+        this.userRepository = userRepository;
+        this.jwtSecret = jwtSecret;
+    }
 
-    // doFilterInternal es el método principal que se ejecuta para cada solicitud entrante.
     @Override
     protected void doFilterInternal(
             HttpServletRequest request,
             HttpServletResponse response,
             FilterChain filterChain
-    ) throws ServletException, IOException{
-        final String authHeader = request.getHeader("Authorization"); // obtiene el encabezado Authorization de la solicitud
+    ) throws ServletException, IOException {
 
+        final String authHeader = request.getHeader("Authorization");
 
-        if (authHeader == null || !authHeader.startsWith("Bearer ")){ // si el encabezado es nulo o no comienza con "Bearer ", continúa sin autenticación
-            filterChain.doFilter(request,response);
+        // si no hay header o no empieza con "Bearer ", dejamos pasar sin autenticar.
+        // los endpoints públicos (GET rooms, register, login) no necesitan token.
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            filterChain.doFilter(request, response);
             return;
         }
 
-        // extrae el token JWT del encabezado (removiendo el prefijo "Bearer ")
+        // sacamos el prefijo "Bearer " (7 caracteres) para quedarnos solo con el token
         final String token = authHeader.substring(7);
         final String email;
-        // intenta verificar el token JWT usando la clave secreta. Si la verificación falla, continúa sin autenticación.
-        try{
+
+        try {
+            // verifica firma + expiración y extrae el subject (email).
+            // si el token fue alterado o expiró lanza JWTVerificationException.
             email = JWT.require(Algorithm.HMAC256(jwtSecret))
                     .build()
                     .verify(token)
                     .getSubject();
-        }catch (JWTVerificationException e){
-            filterChain.doFilter(request,response);
+        } catch (JWTVerificationException e) {
+            // token inválido o expirado — Spring Security rechazará el request
+            // si el endpoint requiere autenticación
+            filterChain.doFilter(request, response);
             return;
         }
 
-        // si se obtiene un email válido del token y no hay una autenticación ya establecida en el contexto de seguridad,
-        // carga los detalles del usuario desde la base de datos usando el email, crea un token de autenticación y
-        // lo establece en el contexto de seguridad para que el usuario sea reconocido como autenticado en el resto de la aplicación
+        // solo cargamos el usuario si aún no hay autenticación en el contexto
+        // para evitar trabajo innecesario en requests ya autenticados
         if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            UserDetails userDetails = userRepository.findByEmail(email)
-                    .orElse(null);
-            if(userDetails != null){
+            UserDetails userDetails = userRepository.findByEmail(email).orElse(null);
+
+            if (userDetails != null) {
+                // cargamos el usuario con sus permisos en el SecurityContext.
+                // a partir de acá Spring Security sabe quién es el usuario
+                // y qué puede hacer durante todo el procesamiento del request.
                 UsernamePasswordAuthenticationToken authToken =
                         new UsernamePasswordAuthenticationToken(
                                 userDetails,
@@ -80,6 +90,7 @@ public class JwtFilter extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().setAuthentication(authToken);
             }
         }
-        filterChain.doFilter(request,response); // continúa con la cadena de filtros para que la solicitud pueda ser procesada por el controlador correspondiente
+
+        filterChain.doFilter(request, response);
     }
 }
