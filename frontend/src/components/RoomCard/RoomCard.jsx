@@ -17,7 +17,6 @@ const RoomCard = ({ room }) => {
     }
 
 
-
     return (
         <article className="room-card" onClick={handleViewDetail}>
             <div className="room-card__image-wrapper">
@@ -40,7 +39,7 @@ const RoomCard = ({ room }) => {
                 )}
 
                 {room.category && (
-                    <span className="room-card__badge">{room.category}</span>
+                    <span className="room-card__badge">{room.category.title}</span>
                 )}
             </div>
 

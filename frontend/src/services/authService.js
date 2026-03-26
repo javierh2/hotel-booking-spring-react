@@ -1,10 +1,10 @@
 
-const BASE__URL = "http://localhost:8080/api/auth"
+const BASE_URL = "http://localhost:8080/api/auth"
 
 
 // register llama a la API para crear un nuevo usuario, recibe un objeto con los datos del formulario de registro y devuelve la respuesta de la API
 export const registerUser = async (data) => {
-    const response = await fetch (`${BASE__URL}/register`, {
+    const response = await fetch (`${BASE_URL}/register`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
@@ -24,7 +24,7 @@ export const registerUser = async (data) => {
 
 // login llama a la API para iniciar sesión, recibe un objeto con los datos del formulario de login y devuelve la respuesta de la API que incluye el token JWT
 export const loginUser = async(data) =>{
-    const response = await fetch(`${BASE__URL}/login`, {
+    const response = await fetch(`${BASE_URL}/login`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json"

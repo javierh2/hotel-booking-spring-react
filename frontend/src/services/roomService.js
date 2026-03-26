@@ -1,13 +1,13 @@
-const BASE_URL = 'http://localhost:8080/api/rooms'
+const BASE_URL = "http://localhost:8080/api/rooms"
 
 // lee el token del localStorage y arma el header Authorization.
 // se usa solo en POST y DELETE que requieren ROLE_ADMIN.
 // GET es público y no necesita token.
 const getAuthHeader = () => {
-    const stored = localStorage.getItem('db_user')
+    const stored = localStorage.getItem("db_user")
     if (!stored) return {}
     const user = JSON.parse(stored)
-    return { 'Authorization': `Bearer ${user.token}` }
+    return { "Authorization": `Bearer ${user.token}` }
 }
 
 export const getRandomRooms = async () => {
@@ -37,7 +37,7 @@ export const getRoomById = async (id) => {
 // requiere ROLE_ADMIN — manda el token en Authorization
 export const deleteRoom = async (id) => {
     const response = await fetch(`${BASE_URL}/${id}`, {
-        method: 'DELETE',
+        method: "DELETE",
         headers: {
             ...getAuthHeader()
         }
@@ -51,9 +51,9 @@ export const deleteRoom = async (id) => {
 // requiere ROLE_ADMIN — manda el token en Authorization
 export const createRoom = async (roomData) => {
     const response = await fetch(BASE_URL, {
-        method: 'POST',
+        method: "POST",
         headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
             ...getAuthHeader()
         },
         body: JSON.stringify(roomData)

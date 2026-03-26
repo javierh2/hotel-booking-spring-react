@@ -111,3 +111,110 @@
         grid-template-columns: 1fr;
     }
 }
+
+.categories-filter {
+    width: 100%;
+    padding: 40px 40px 0;
+    background-color: #F9F3EE;
+}
+
+.categories-filter__content {
+    max-width: 1280px;
+    margin: 0 auto;
+}
+
+.categories-filter__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.categories-filter__title {
+    font-size: 20px;
+    font-weight: 700;
+    color: #2C3E50;
+}
+
+.categories-filter__clear {
+    padding: 6px 14px;
+    background-color: transparent;
+    border: 2px solid #C47E5A;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #C47E5A;
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+
+.categories-filter__clear:hover {
+    background-color: #C47E5A;
+    color: #FFFFFF;
+}
+
+.categories-filter__grid {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.categories-filter__card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 16px;
+    background-color: #FFFFFF;
+    border: 2px solid #EFE4D9;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    min-width: 100px;
+}
+
+.categories-filter__card:hover {
+    border-color: #C47E5A;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(196, 126, 90, 0.15);
+}
+
+.categories-filter__card--active {
+    border-color: #C47E5A;
+    background-color: #FDF5F0;
+    box-shadow: 0 4px 12px rgba(196, 126, 90, 0.2);
+}
+
+.categories-filter__img {
+    width: 56px;
+    height: 40px;
+    object-fit: cover;
+    border-radius: 6px;
+}
+
+.categories-filter__label {
+    font-size: 12px;
+    font-weight: 600;
+    color: #2C3E50;
+}
+
+.recommendations__empty {
+    font-size: 15px;
+    color: #9E8E82;
+    margin-bottom: 16px;
+}
+
+@media (max-width: 768px) {
+    .categories-filter {
+        padding: 32px 16px 0;
+    }
+
+    .categories-filter__grid {
+        gap: 10px;
+    }
+
+    .categories-filter__card {
+        min-width: 80px;
+        padding: 10px 12px;
+    }
+}
