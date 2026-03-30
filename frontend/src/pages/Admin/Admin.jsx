@@ -225,7 +225,7 @@ const Admin = () => {
                                         <td>{room.name}</td>
 
                                         <td>
-                                            <span className="admin__badge">{room.category}</span>
+                                            <span className="admin__badge">{room.category?.title || "Sin categoría"}</span>
                                         </td>
 
                                         <td>

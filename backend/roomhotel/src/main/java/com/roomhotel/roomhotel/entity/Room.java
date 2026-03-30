@@ -8,7 +8,7 @@ import lombok.*;
 
 
 @Entity
-@Table(name = "ROOMS")
+@Table(name = "rooms")
 @Getter
 @Setter
 @NoArgsConstructor

@@ -8,7 +8,7 @@ const RoomForm = ({ onClose, onRoomCreated }) => {
     const [formData, setFormData] = useState({
         name: "",
         description: "",
-        category: "",
+        categoryId: "",
         price: "",
         imageRoom: "",
     })
@@ -44,8 +44,8 @@ const RoomForm = ({ onClose, onRoomCreated }) => {
         if (!formData.description.trim()) {
             newErrors.description = "La descripción es obligatoria"
         }
-        if (!formData.category) {
-            newErrors.category = "La categoría es obligatoria"
+        if (!formData.categoryId) {
+            newErrors.categoryId = "La categoría es obligatoria"
         }
         if (!formData.price) {
             newErrors.price = "El precio es obligatorio"
@@ -163,20 +163,20 @@ const RoomForm = ({ onClose, onRoomCreated }) => {
                             Categoría <span>*</span>
                         </label>
                         <select
-                            name="category"
-                            className={`room-form__select ${errors.category ? 'room-form__select--error' : ''}`}
-                            value={formData.category}
+                            name="categoryId"
+                            className={`room-form__select ${errors.categoryId ? 'room-form__select--error' : ''}`}
+                            value={formData.categoryId}
                             onChange={handleChange}
                         >
                             <option value="">Seleccioná...</option>
-                            <option value="Suite">Suite</option>
-                            <option value="Estándar">Estándar</option>
-                            <option value="Hostel">Hostel</option>
-                            <option value="Departamento">Departamento</option>
-                            <option value="Bed & Breakfast">Bed & Breakfast</option>
+                            <option value="1">Suite</option>
+                            <option value="2">Estándar</option>
+                            <option value="3">Departamento</option>
+                            <option value="4">Hostel</option>
+                            <option value="5">Bed & Breakfast</option>
                         </select>
-                        {errors.category && (
-                            <span className="room-form__error">{errors.category}</span>
+                        {errors.categoryId && (
+                            <span className="room-form__error">{errors.categoryId}</span>
                         )}
                     </div>
 

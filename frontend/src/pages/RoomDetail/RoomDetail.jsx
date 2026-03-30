@@ -74,7 +74,7 @@ const RoomDetail = () => {
 
                 {room.category && (
                     <span className="room-detail__category-badge">
-                        {room.category}
+                        {room.category.title}
                     </span>
                 )}
 
@@ -136,7 +136,7 @@ const RoomDetail = () => {
                 </div>
 
                 {room.category && (
-                    <span className="room-detail__hero-badge">{room.category}</span>
+                    <span className="room-detail__hero-badge">{room.category.title}</span>
                 )}
 
                 <div className="room-detail__divider" />
@@ -148,7 +148,7 @@ const RoomDetail = () => {
                     <div className="room-detail__info-card">
                         <span className="room-detail__info-icon">🏷️</span>
                         <p className="room-detail__info-label">Categoría</p>
-                        <p className="room-detail__info-value">{room.category}</p>
+                        <p className="room-detail__info-value">{room.category?.title}</p>
                     </div>
                     <div className="room-detail__info-card">
                         <span className="room-detail__info-icon">💰</span>

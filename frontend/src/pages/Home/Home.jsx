@@ -51,7 +51,7 @@ const Home = () => {
 
     useEffect(() => {
         fetchRooms()
-        fetchCategories
+        fetchCategories()
     }, [])
 
 
