@@ -68,16 +68,14 @@ const RoomDetail = () => {
     return (
         <div className="room-detail">
 
-            {/* título izquierda, volver derecha */}
+            {/* top bar: título, badge de categoría, botón volver */}
             <div className="room-detail__top-bar">
                 <h1 className="room-detail__name">{room.name}</h1>
-
                 {room.category && (
                     <span className="room-detail__category-badge">
                         {room.category.title}
                     </span>
                 )}
-
                 <button
                     className="room-detail__back-btn"
                     onClick={() => navigate('/')}
@@ -86,10 +84,8 @@ const RoomDetail = () => {
                 </button>
             </div>
 
-            {/* imagen principal izquierda + grilla derecha */}
+            {/* galería partida: imagen principal izquierda + grilla 2x2 derecha */}
             <div className="room-detail__gallery">
-
-                {/* Imagen principal — mitad izquierda */}
                 <div className="room-detail__gallery-main">
                     {room.imageRoom ? (
                         <img
@@ -101,8 +97,6 @@ const RoomDetail = () => {
                         <div className="room-detail__gallery-placeholder">🏨</div>
                     )}
                 </div>
-
-                {/* Grilla 2x2 — mitad derecha */}
                 <div className="room-detail__gallery-grid">
                     {[0, 1, 2, 3].map((i) => (
                         <div key={i} className="room-detail__gallery-cell">
@@ -124,31 +118,51 @@ const RoomDetail = () => {
                         </div>
                     ))}
                 </div>
-
             </div>
 
-            {/* contenido */}
+            {/* contenido principal */}
             <div className="room-detail__content">
-
                 <div className="room-detail__price-row">
                     <span className="room-detail__price">${room.price}</span>
                     <span className="room-detail__price-label">por noche</span>
                 </div>
-
-                {room.category && (
-                    <span className="room-detail__hero-badge">{room.category.title}</span>
-                )}
-
                 <div className="room-detail__divider" />
-
                 <p className="room-detail__section-title">Descripción</p>
                 <p className="room-detail__description">{room.description}</p>
+                <div className="room-detail__divider" />
+                {/* bloque de características */}
+                {room.features && room.features.length > 0 && (
+                    <div className="room-detail__features">
+                        <h2 className="room-detail__features-title">
+                            ¿Qué ofrece este lugar?
+                        </h2>
 
+                        <div className="room-detail__divider" />
+
+                        {/* grilla de features */}
+                        <div className="room-detail__features-grid">
+                            {room.features.map(feature => (
+                                <div key={feature.id} className="room-detail__feature-item">
+                                    <span className="room-detail__feature-icon">
+                                        {feature.icon || '✦'}
+                                    </span>
+                                    <span className="room-detail__feature-name">
+                                        {feature.name}
+                                    </span>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                )}
+                <div className="room-detail__divider" />
+                {/* info cards: categoría, precio, disponibilidad */}
                 <div className="room-detail__info-grid">
                     <div className="room-detail__info-card">
                         <span className="room-detail__info-icon">🏷️</span>
                         <p className="room-detail__info-label">Categoría</p>
-                        <p className="room-detail__info-value">{room.category?.title}</p>
+                        <p className="room-detail__info-value">
+                            {room.category?.title || 'Sin categoría'}
+                        </p>
                     </div>
                     <div className="room-detail__info-card">
                         <span className="room-detail__info-icon">💰</span>
@@ -163,8 +177,8 @@ const RoomDetail = () => {
                         </p>
                     </div>
                 </div>
-
             </div>
+
         </div>
     )
 }
