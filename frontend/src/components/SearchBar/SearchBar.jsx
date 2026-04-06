@@ -13,7 +13,7 @@ const SearchBar = () => {
 
     // TODO: función para manejar la búsqueda, actualmente solo imprime el valor de búsqueda en la consola
     const handleSearch = () => {
-        console.log("Buscando:", searchValue)
+        console.log("Search:", searchValue)
         // TODO: feature of search
     }
 

@@ -92,7 +92,7 @@ const Header = () => {
 
                             {/* saludo con el nombre del usuario */}
                             <span className="header__user-greeting">
-                                Hola, {user.firstName}
+                                Hello!  {user.firstName}
                             </span>
 
                             {/* avatar con iniciales — click abre el dropdown */}
@@ -128,7 +128,7 @@ const Header = () => {
                                                 setDropdownOpen(false)
                                             }}
                                         >
-                                            Panel de administración
+                                            Admin Panel
                                         </button>
                                     )}
 
@@ -137,7 +137,7 @@ const Header = () => {
                                         className="header__dropdown-item header__dropdown-item--logout"
                                         onClick={handleLogout}
                                     >
-                                        Cerrar sesión
+                                        Log out
                                     </button>
 
                                 </div>

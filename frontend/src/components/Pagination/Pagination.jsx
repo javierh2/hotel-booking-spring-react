@@ -16,7 +16,7 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
                 onClick={() => onPageChange(1)}
                 disabled={currentPage === 1}
             >
-                « Inicio
+                « Start
             </button>
 
             {/* Botón anterior */}
@@ -49,7 +49,7 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
             </button>
 
             <span className="pagination__info">
-                {currentPage} de {totalPages}
+                {currentPage} of {totalPages}
             </span>
 
         </div>

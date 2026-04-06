@@ -90,14 +90,14 @@ const Home = () => {
                 <div className="categories-filter__content">
 
                     <div className="categories-filter__header">
-                        <h2 className="categories-filter__title">Categorías</h2>
+                        <h2 className="categories-filter__title">Categories</h2>
                         {selectedCategory && (
                             // botón para limpiar el filtro — HU #20
                             <button
                                 className="categories-filter__clear"
                                 onClick={() => handleCategorySelect(null)}
                             >
-                                Limpiar filtro ✕
+                                Clean filter ✕
                             </button>
                         )}
                     </div>
