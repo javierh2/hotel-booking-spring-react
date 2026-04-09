@@ -16,26 +16,23 @@ El proyecto simula una plataforma de **gestión y visualización de habitaciones
 
 # 📌 Descripción del Proyecto
 
-**Digital Booking – Room Hotel** es una aplicación web desarrollada como parte de un **desafío profesional de desarrollo Full Stack**.
+**Digital Booking – Room Hotel** es una aplicación web desarrollada como parte de un desafío profesional Full Stack.
 
-El objetivo fue construir la estructura base de una plataforma de reservas, implementando tanto el **backend como el frontend** y conectándolos mediante una **API REST**.
+Durante el **Sprint 2** se implementó una evolución completa del sistema agregando:
 
-Durante el **Sprint 1** se implementaron funcionalidades clave como:
+• Sistema de autenticación con JWT  
+• Gestión de usuarios y roles  
+• Categorías y características de productos  
+• Panel de administración avanzado  
+• Notificaciones por email  
+• Seguridad completa con Spring Security  
 
-• Visualización de habitaciones  
-• Detalle de cada habitación  
-• Panel de administración  
-• Crear habitaciones  
-• Eliminar habitaciones  
-• Paginación de resultados  
-• Galería de imágenes  
-
-Arquitectura general del sistema:
+Arquitectura general:
 
 ```
 React Frontend
       ↓
-Spring Boot REST API
+Spring Boot + Security + JWT
       ↓
 Base de Datos H2
 ```
@@ -47,15 +44,18 @@ Base de Datos H2
 | Capa | Tecnología |
 |-----|-------------|
 Backend | Java 21 |
-Framework Backend | Spring Boot |
+Framework | Spring Boot |
+Seguridad | Spring Security + JWT (Auth0) |
+Hashing | BCrypt |
 Persistencia | Spring Data JPA / Hibernate |
-Base de Datos | H2 (en memoria) |
+Base de datos | H2 |
+Email | Spring Mail + Mailtrap |
 Frontend | React 19 |
+Estado global | Context API |
 Build Tool | Vite |
 Routing | React Router DOM |
 Testing | Postman |
-Control de versiones | Git |
-Repositorio | GitHub |
+Control de versiones | Git + GitHub |
 
 ---
 
@@ -76,24 +76,49 @@ Estos colores buscan transmitir **calidez, elegancia y confianza**, alineados co
 
 ---
 
-# 🧩 Funcionalidades Implementadas (Sprint 1)
+# 🧩 Funcionalidades Implementadas (Sprint 2)
 
-### Funcionalidades para usuarios
+### 🔐 Autenticación y Usuarios
 
-- Header con navegación y branding
-- Home con buscador, categorías y recomendaciones
-- Visualización de habitaciones aleatorias
-- Página de detalle de habitación
-- Galería de imágenes
-- Paginación de resultados
-- Footer global
+- Registro de usuario con validación
+- Login con JWT
+- Logout
+- Persistencia en localStorage
+- Avatar con iniciales
+- Gestión de roles (USER / ADMIN)
 
-### Funcionalidades para administradores
+### 🏷️ Categorías
 
-- Panel de administración
-- Listar habitaciones
-- Crear nuevas habitaciones
-- Eliminar habitaciones
+- CRUD de categorías
+- Filtro múltiple en Home
+- Asociación con habitaciones
+
+### ⭐ Características (Features)
+
+- CRUD de features
+- Relación ManyToMany con habitaciones
+- Selección múltiple en formularios
+- Visualización en detalle de producto
+
+### 📧 Notificaciones
+
+- Envío de email de confirmación (Mailtrap)
+
+### 🛠️ Administración
+
+- Panel con 5 vistas:
+  - Listado de habitaciones
+  - Categorías
+  - Features
+  - Usuarios
+  - Dashboard
+
+### 🏠 Producto (Room)
+
+- Crear / editar / eliminar
+- Relación con categorías
+- Relación con features
+- Validaciones completas
 
 ---
 
@@ -103,45 +128,60 @@ Estos colores buscan transmitir **calidez, elegancia y confianza**, alineados co
 com.roomhotel.roomhotel
 
 config
+  ├── SecurityConfig
+  └── JwtFilter
+
 controller
+  ├── AuthController
+  ├── RoomController
+  ├── CategoryController
+  ├── FeatureController
+  └── UserController
+
 dto
 entity
-exception
 repository
 service
 ```
+### 🔐 Nueva capa de seguridad
 
-Responsabilidades:
+```
+Request
+ ↓
+JwtFilter
+ ↓
+SecurityFilterChain
+ ↓
+Controller → Service → Repository
+```
 
-**Controller**  
-Gestiona las peticiones HTTP.
-
-**Service**  
-Contiene la lógica de negocio.
-
-**Repository**  
-Acceso a la base de datos mediante JPA.
-
-**DTO**  
-Objetos de transferencia entre backend y frontend.
-
-**Entity**  
-Representación de las tablas en la base de datos.
+- Autenticación stateless con JWT
+- Validación por roles
+- Protección de endpoints
 
 ---
 
 # 🔌 API REST
 
-| Método | Endpoint | Descripción |
-|------|------|------|
-GET | /api/rooms | Listar habitaciones |
-GET | /api/rooms/random | Habitaciones aleatorias |
-GET | /api/rooms/{id} | Detalle de habitación |
-POST | /api/rooms | Crear habitación |
-DELETE | /api/rooms/{id} | Eliminar habitación |
+Para ver documentación completa:
+👉 https://documenter.getpostman.com/view/33164372/2sBXietaPi
 
-**Documentacion de Postman**
-https://documenter.getpostman.com/view/33164372/2sBXietaPi
+### Auth
+- POST `/api/auth/register`
+- POST `/api/auth/login`
+
+### Rooms
+- GET / POST / PUT / DELETE `/api/rooms`
+
+### Categories
+- GET / POST / DELETE `/api/categories`
+
+### Features
+- GET / POST / DELETE `/api/features`
+
+### Users (Admin)
+- GET `/api/users`
+- PUT `/api/users/{id}/role`
 
 ---
 
@@ -151,36 +191,66 @@ https://documenter.getpostman.com/view/33164372/2sBXietaPi
 src
  ├── components
  ├── pages
- └── services
+ ├── services
+ ├── context
+ └── hooks
 ```
 
-Componentes principales:
+### Nuevos módulos
 
-- Header
-- Footer
-- RoomCard
-- RoomForm
-- Pagination
-- Categories
-- SearchBar
-
-Páginas:
-
-- Home
-- Admin
-- RoomDetail
+- AuthContext (estado global)
+- useAuth hook
+- authService
+- categoryService
+- featureService
+- userService
 
 ---
 
 # 🔄 Flujo de Datos
 
-1️⃣ El usuario interactúa con la interfaz  
-2️⃣ React realiza la petición mediante `roomService.js`  
-3️⃣ Spring Boot recibe la petición en el Controller  
-4️⃣ El Service aplica la lógica de negocio  
-5️⃣ El Repository consulta la base de datos  
-6️⃣ Se devuelve la respuesta en formato JSON  
-7️⃣ React actualiza la interfaz automáticamente
+### Usuario no autenticado
+
+1. Navega el catálogo
+2. Filtra por categorías
+3. Visualiza detalles
+
+### Usuario autenticado
+
+1. Login → recibe JWT
+2. Guarda en localStorage
+3. Envía token en cada request
+4. Accede a funcionalidades protegidas
+
+### Administrador
+
+1. Accede al panel
+2. Gestiona:
+   - habitaciones
+   - categorías
+   - features
+   - usuarios
+3. Realiza operaciones CRUD
+
+### Flujo técnico
+
+```
+Frontend → fetch (token)
+↓
+JwtFilter valida JWT
+↓
+SecurityConfig valida permisos
+↓
+Controller
+↓
+Service
+↓
+Repository
+↓
+DB
+↓
+Response → Frontend
+```
 
 ---
 
@@ -188,26 +258,33 @@ Páginas:
 
 Las pruebas se realizaron utilizando **Postman** y testing manual de componentes.
 
-### API
+### 🔐 Autenticación
 
-✔ Listar habitaciones  
-✔ Habitaciones aleatorias  
-✔ Obtener habitación por ID  
-✔ Crear habitación  
-✔ Validación de nombre duplicado  
-✔ Eliminar habitación  
+- Registro exitoso
+- Registro duplicado
+- Login válido / inválido
+- Protección de endpoints
 
-### UI
+### 📦 API
 
-Componentes probados:
+- CRUD completo de rooms
+- CRUD de categories
+- CRUD de features
+- Gestión de usuarios
 
-- Header
-- Footer
-- Home
-- RoomCard
-- RoomDetail
-- Admin Panel
-- Pagination
+### 🎯 Seguridad
+
+- Acceso sin token → 403
+- ROLE_USER → restringido
+- ROLE_ADMIN → permitido
+
+### 🖥️ Frontend
+
+- Login / Register
+- Header dinámico
+- Filtros múltiples
+- Admin panel completo
+- Formularios (crear/editar)
 
 ---
 
