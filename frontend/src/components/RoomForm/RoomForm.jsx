@@ -224,9 +224,7 @@ const RoomForm = ({ onClose, onRoomCreated, onRoomUpdated, roomToEdit }) => {
 
                 </div>
 
-                {/* características — HU #17
-                    chips seleccionables, múltiple selección
-                    en modo edición los chips ya seleccionados aparecen marcados */}
+                {/* características — chips seleccionables, múltiple selección en modo edición los chips ya seleccionados aparecen marcados */}
                 <div className="room-form__group">
                     <label className="room-form__label">
                         Características <span style={{ color: '#9E8E82', fontWeight: 400 }}>(opcional)</span>

@@ -9,7 +9,7 @@ import './Admin.css'
 // página de administración — maneja habitaciones, características, categorías y usuarios
 const Admin = () => {
 
-    // ─── estado de rooms ──────────────────────────────────────────────────────
+    // estado de rooms
     const [rooms, setRooms] = useState([])
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState(null)
@@ -18,30 +18,30 @@ const Admin = () => {
     const [roomToEdit, setRoomToEdit] = useState(null)
 
     // controla qué vista se renderiza: 'menu' | 'list' | 'features' | 'users' | 'categories'
-    const [view, setView] = useState('menu')
+    const [view, setView] = useState("menu")
 
-    // ─── estado de features ───────────────────────────────────────────────────
+    // estado de features
     const [features, setFeatures] = useState([])
     const [loadingFeatures, setLoadingFeatures] = useState(false)
     const [newFeature, setNewFeature] = useState({ name: "", icon: "" })
     const [featureError, setFeatureError] = useState("")
     const [savingFeature, setSavingFeature] = useState(false)
 
-    // ─── estado de usuarios — HU #16 ─────────────────────────────────────────
+    // estado de usuarios
     const [users, setUsers] = useState([])
     const [loadingUsers, setLoadingUsers] = useState(false)
     // id del usuario cuyo rol está siendo cambiado en este momento
     // sirve para deshabilitar solo ese botón mientras espera la respuesta
     const [updatingUserId, setUpdatingUserId] = useState(null)
 
-    // ─── estado de categorías — HU #21 ───────────────────────────────────────
+    // estado de categorías
     const [categories, setCategories] = useState([])
     const [loadingCategories, setLoadingCategories] = useState(false)
     const [newCategory, setNewCategory] = useState({ title: '', description: '', imageUrl: '' })
     const [categoryError, setCategoryError] = useState('')
     const [savingCategory, setSavingCategory] = useState(false)
 
-    // ─── detección de mobile ──────────────────────────────────────────────────
+    // detección de mobile
     const [isMobile, setIsMobile] = useState(window.innerWidth < 768)
     useEffect(() => {
         const handleResize = () => setIsMobile(window.innerWidth < 768)
@@ -49,7 +49,7 @@ const Admin = () => {
         return () => window.removeEventListener('resize', handleResize)
     }, [])
 
-    // ─── carga de habitaciones ────────────────────────────────────────────────
+    // carga de habitaciones
     const fetchRooms = async () => {
         setLoading(true)
         setError(null)
@@ -67,7 +67,7 @@ const Admin = () => {
         fetchRooms()
     }, [])
 
-    // ─── carga lazy por vista — un solo useEffect para todas las vistas ───────
+    //  carga lazy por vista — un solo useEffect para todas las vistas
     // cada vista carga sus datos solo cuando se necesitan
     // evita hacer 4 requests al montar el componente si el admin quizás
     // solo entra a "Lista de productos"
@@ -77,7 +77,7 @@ const Admin = () => {
             const data = await getAllFeatures()
             setFeatures(data)
         } catch (error) {
-            console.error('Error al cargar características:', error)
+            console.error("Error al cargar características: ", error)
         } finally {
             setLoadingFeatures(false)
         }
@@ -89,7 +89,7 @@ const Admin = () => {
             const data = await getAllUsers()
             setUsers(data)
         } catch (error) {
-            console.error('Error al cargar usuarios:', error)
+            console.error("Error al cargar usuarios: ", error)
         } finally {
             setLoadingUsers(false)
         }
@@ -101,7 +101,7 @@ const Admin = () => {
             const data = await getAllCategories()
             setCategories(data)
         } catch (error) {
-            console.error('Error al cargar categorías:', error)
+            console.error("Error al cargar categorías: ", error)
         } finally {
             setLoadingCategories(false)
         }
@@ -114,7 +114,7 @@ const Admin = () => {
         if (view === 'categories') fetchCategories()
     }, [view])
 
-    // ─── handlers de rooms ────────────────────────────────────────────────────
+    // handlers de rooms
     const handleRoomCreated = (newRoom) => {
         setRooms(prev => [...prev, newRoom])
     }
@@ -140,7 +140,7 @@ const Admin = () => {
         }
     }
 
-    // ─── handlers de features ─────────────────────────────────────────────────
+    //  handlers de features
     const handleFeatureChange = (event) => {
         const { name, value } = event.target
         setNewFeature(prev => ({ ...prev, [name]: value }))
@@ -149,7 +149,7 @@ const Admin = () => {
 
     const handleCreateFeature = async () => {
         if (!newFeature.name.trim()) {
-            setFeatureError('El nombre es obligatorio')
+            setFeatureError("El nombre es obligatorio")
             return
         }
         setSavingFeature(true)
@@ -161,8 +161,8 @@ const Admin = () => {
             setFeatures(prev => [...prev, created])
             setNewFeature({ name: '', icon: '' })
         } catch (error) {
-            setFeatureError('Ya existe una característica con ese nombre')
-            console.error('Error al crear característica:', error)
+            setFeatureError("Ya existe una característica con ese nombre")
+            console.error("Error al crear característica: " , error)
         } finally {
             setSavingFeature(false)
         }
@@ -181,23 +181,23 @@ const Admin = () => {
         }
     }
 
-    // ─── handlers de categorías — HU #21 ─────────────────────────────────────
+    // handlers de categorías
     const handleCategoryChange = (event) => {
         const { name, value } = event.target
         setNewCategory(prev => ({ ...prev, [name]: value }))
         // limpiamos el error apenas el usuario empieza a corregir
-        if (categoryError) setCategoryError('')
+        if (categoryError) setCategoryError("")
     }
 
     const handleCreateCategory = async () => {
         // título y descripción son obligatorios según CategoryRequestDTO
         // imageUrl es opcional
         if (!newCategory.title.trim()) {
-            setCategoryError('El título es obligatorio')
+            setCategoryError("El título es obligatorio")
             return
         }
         if (!newCategory.description.trim()) {
-            setCategoryError('La descripción es obligatoria')
+            setCategoryError("La descripción es obligatoria")
             return
         }
         setSavingCategory(true)
@@ -212,8 +212,8 @@ const Admin = () => {
             setCategories(prev => [...prev, created])
             setNewCategory({ title: '', description: '', imageUrl: '' })
         } catch (error) {
-            setCategoryError('Ya existe una categoría con ese título')
-            console.error('Error al crear categoría:', error)
+            setCategoryError("Ya existe una categoría con ese título")
+            console.error("Error al crear categoría: ", error)
         } finally {
             setSavingCategory(false)
         }
@@ -232,7 +232,7 @@ const Admin = () => {
         }
     }
 
-    // ─── handler de rol de usuarios — HU #16 ─────────────────────────────────
+    // handler de rol de usuarios
     const handleRoleToggle = async (user) => {
         const newRole = user.role === 'ROLE_ADMIN' ? 'ROLE_USER' : 'ROLE_ADMIN'
         const action = newRole === 'ROLE_ADMIN' ? 'promover a administrador' : 'quitar permisos de administrador a'
@@ -252,12 +252,12 @@ const Admin = () => {
         }
     }
 
-    // ─── estadísticas ─────────────────────────────────────────────────────────
+    // estadísticas
     const totalRooms = rooms.length
     const averagePrice = rooms.length > 0 ? Math.round(rooms.reduce((acc, room) => acc + room.price, 0) / rooms.length) : 0
     const minimumPrice = rooms.length > 0 ? Math.min(...rooms.map(room => room.price)) : 0
 
-    // ─── bloqueo mobile ───────────────────────────────────────────────────────
+    // bloqueo mobile
     if (isMobile) {
         return (
             <div className="admin admin--mobile-block">
@@ -270,7 +270,7 @@ const Admin = () => {
         )
     }
 
-    // ─── vista: menú principal ────────────────────────────────────────────────
+    // vista: menú principal
     if (view === 'menu') {
         return (
             <div className="admin">
@@ -322,7 +322,7 @@ const Admin = () => {
                             <span className="admin__menu-desc">Agregá, editá y eliminá características de productos</span>
                         </button>
 
-                        {/* nueva card — HU #21 */}
+                        {/* nueva card */}
                         <button className="admin__menu-card" onClick={() => setView('categories')}>
                             <span className="admin__menu-icon">🏷️</span>
                             <span className="admin__menu-title">Agregar categoría</span>
@@ -351,7 +351,7 @@ const Admin = () => {
         )
     }
 
-    // ─── vista: características — HU #17 ──────────────────────────────────────
+    // vista: características
     if (view === 'features') {
         return (
             <div className="admin">
@@ -467,7 +467,7 @@ const Admin = () => {
         )
     }
 
-    // ─── vista: categorías — HU #21 ───────────────────────────────────────────
+    // vista: categorías
     if (view === 'categories') {
         return (
             <div className="admin">
@@ -608,7 +608,7 @@ const Admin = () => {
         )
     }
 
-    // ─── vista: usuarios — HU #16 ─────────────────────────────────────────────
+    // vista: usuarios
     if (view === 'users') {
         return (
             <div className="admin">
@@ -684,7 +684,7 @@ const Admin = () => {
         )
     }
 
-    // ─── vista: lista de habitaciones ─────────────────────────────────────────
+    // vista: lista de habitaciones
     return (
         <div className="admin">
             <div className="admin__content">
@@ -778,7 +778,6 @@ const Admin = () => {
                                                 </button>
                                             </div>
                                         </td>
-
                                     </tr>
                                 ))}
                             </tbody>

@@ -16,10 +16,7 @@ const Home = () => {
     const [currentPage, setCurrentPage] = useState(1)
     const [categories, setCategories] = useState([])
 
-    // HU #20 — filtro múltiple
-    // cambiamos de un id único (null | number) a un Set de ids
-    // Set vacío significa "todas las categorías" — equivale al null anterior
-    // usamos Set por las mismas razones que en RoomForm:
+    // Set para manejar las categorías seleccionadas porque:
     // has(), add(), delete() son O(1) y no permite duplicados
     const [selectedCategories, setSelectedCategories] = useState(new Set())
 
@@ -53,7 +50,7 @@ const Home = () => {
         fetchCategories()
     }, [])
 
-    // toggle de categoría — si ya estaba seleccionada la deselecciona, si no la agrega
+    // toggle de categoría; si ya estaba seleccionada la deselecciona, si no, la agrega
     // mismo patrón que handleFeatureToggle en RoomForm
     const handleCategorySelect = (categoryId) => {
         setSelectedCategories(prev => {
@@ -65,7 +62,7 @@ const Home = () => {
             }
             return next
         })
-        // volvemos a página 1 al cambiar el filtro
+        // vuelve a página 1 al cambiar el filtro
         // evita quedar en una página que ya no existe con el nuevo filtro
         setCurrentPage(1)
     }
@@ -76,9 +73,9 @@ const Home = () => {
         setCurrentPage(1)
     }
 
-    // filtramos según el Set de categorías seleccionadas
-    // si el Set está vacío mostramos todas
-    // si tiene ids, mostramos solo las rooms cuya category.id esté en el Set
+    // filtra según el Set de categorías seleccionadas
+    // si el Set está vacío muestra todas
+    // si tiene ids, muestra solo las rooms cuya category.id esté en el Set
     const filteredRooms = selectedCategories.size > 0
         ? rooms.filter(room =>
             room.category && selectedCategories.has(room.category.id)
@@ -101,7 +98,7 @@ const Home = () => {
 
             <SearchBar />
 
-            {/* sección de filtro de categorías — HU #20 */}
+            {/* sección de filtro de categorías */}
             <section className="categories-filter">
                 <div className="categories-filter__content">
 
