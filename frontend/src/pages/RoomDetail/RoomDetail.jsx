@@ -80,7 +80,7 @@ const RoomDetail = () => {
                     className="room-detail__back-btn"
                     onClick={() => navigate('/')}
                 >
-                    ← Volver
+                    ← return
                 </button>
             </div>
 
@@ -112,7 +112,7 @@ const RoomDetail = () => {
                             {/* "Ver más" solo en la última celda */}
                             {i === 3 && (
                                 <div className="room-detail__ver-mas">
-                                    Ver más
+                                    See more
                                 </div>
                             )}
                         </div>
@@ -124,17 +124,17 @@ const RoomDetail = () => {
             <div className="room-detail__content">
                 <div className="room-detail__price-row">
                     <span className="room-detail__price">${room.price}</span>
-                    <span className="room-detail__price-label">por noche</span>
+                    <span className="room-detail__price-label">per night</span>
                 </div>
                 <div className="room-detail__divider" />
-                <p className="room-detail__section-title">Descripción</p>
+                <p className="room-detail__section-title">Description</p>
                 <p className="room-detail__description">{room.description}</p>
                 <div className="room-detail__divider" />
                 {/* bloque de características */}
                 {room.features && room.features.length > 0 && (
                     <div className="room-detail__features">
                         <h2 className="room-detail__features-title">
-                            ¿Qué ofrece este lugar?
+                            What does this place offer?
                         </h2>
 
                         <div className="room-detail__divider" />
@@ -159,21 +159,21 @@ const RoomDetail = () => {
                 <div className="room-detail__info-grid">
                     <div className="room-detail__info-card">
                         <span className="room-detail__info-icon">🏷️</span>
-                        <p className="room-detail__info-label">Categoría</p>
+                        <p className="room-detail__info-label">Category</p>
                         <p className="room-detail__info-value">
                             {room.category?.title || 'Sin categoría'}
                         </p>
                     </div>
                     <div className="room-detail__info-card">
                         <span className="room-detail__info-icon">💰</span>
-                        <p className="room-detail__info-label">Precio por noche</p>
+                        <p className="room-detail__info-label">Price per night</p>
                         <p className="room-detail__info-value">${room.price}</p>
                     </div>
                     <div className="room-detail__info-card">
                         <span className="room-detail__info-icon">✅</span>
-                        <p className="room-detail__info-label">Disponibilidad</p>
+                        <p className="room-detail__info-label">Availability</p>
                         <p className="room-detail__info-value">
-                            {room.active ? 'Disponible' : 'No disponible'}
+                            {room.active ? "Available" : "Not available"}
                         </p>
                     </div>
                 </div>

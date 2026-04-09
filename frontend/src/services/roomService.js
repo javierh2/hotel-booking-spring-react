@@ -63,3 +63,20 @@ export const createRoom = async (roomData) => {
     }
     return response.json()
 }
+
+// requiere ROLE_ADMIN — PUT /api/rooms/{id}
+// reemplaza todos los campos editables de la habitación existente
+export const updateRoom = async (id, roomData) => {
+    const response = await fetch(`${BASE_URL}/${id}`, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json",
+            ...getAuthHeader()
+        },
+        body: JSON.stringify(roomData)
+    })
+    if (!response.ok) {
+        throw new Error(`Error ${response.status}: no se pudo actualizar la habitación`)
+    }
+    return response.json()
+}

@@ -105,6 +105,63 @@ public class RoomService {
         return convertToResponseDTO(savedRoom);
     }
 
+    // actualiza una habitación existente — HU #12
+    // PUT semántico: reemplaza todos los campos editables del recurso
+    // el id viene del PathVariable del Controller, no del DTO
+    @Transactional
+    public RoomResponseDTO updateRoom(Long id, RoomRequestDTO requestDTO) {
+
+        // verificamos que la habitación existe antes de modificarla
+        Room room = roomRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Habitación no encontrada con id: " + id
+                ));
+
+        // validación de nombre único — pero solo si el nombre cambió
+        // si el admin no cambió el nombre no tiene sentido chequear duplicado
+        // contra sí misma — findByName devolvería la misma room y tiraría falso positivo
+        if (!room.getName().equals(requestDTO.getName()) &&
+                roomRepository.findByName(requestDTO.getName()).isPresent()) {
+            throw new DuplicateNameException(
+                    "Ya existe una habitación con el nombre: '"
+                            + requestDTO.getName() + "'"
+            );
+        }
+
+        // resolvemos la categoría igual que en convertToEntity
+        Category category = null;
+        if (requestDTO.getCategoryId() != null) {
+            category = categoryRepository.findById(requestDTO.getCategoryId())
+                    .orElseThrow(() -> new ResourceNotFoundException(
+                            "Categoría no encontrada con id: " + requestDTO.getCategoryId()
+                    ));
+        }
+
+        // resolvemos las features igual que en convertToEntity
+        Set<Feature> features = new HashSet<>();
+        if (requestDTO.getFeatureIds() != null && !requestDTO.getFeatureIds().isEmpty()) {
+            for (Long featureId : requestDTO.getFeatureIds()) {
+                Feature feature = featureRepository.findById(featureId)
+                        .orElseThrow(() -> new ResourceNotFoundException(
+                                "Característica no encontrada con id: " + featureId
+                        ));
+                features.add(feature);
+            }
+        }
+
+        // modificamos la entidad existente en lugar de crear una nueva
+        // esto preserva el id y cualquier campo que no editemos (ej: active)
+        room.setName(requestDTO.getName());
+        room.setDescription(requestDTO.getDescription());
+        room.setCategory(category);
+        room.setPrice(requestDTO.getPrice());
+        room.setImageRoom(requestDTO.getImageRoom());
+        room.setFeatures(features);
+
+        // save() sobre una entidad con id existente hace UPDATE, no INSERT
+        Room saved = roomRepository.save(room);
+        return convertToResponseDTO(saved);
+    }
 
     // elimina un registro de la DB mediante HardDelete
     @Transactional

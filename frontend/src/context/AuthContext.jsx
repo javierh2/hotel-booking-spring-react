@@ -45,7 +45,6 @@ export const AuthProvider = ({ children }) =>{
     )
 }
 
-
 // custom hook para usar el contexto de autenticación en cualquier componente de la app, devuelve el estado del usuario y las funciones de login/logout, y los helpers de isAdmin/isAuthenticated
 export const useAuth = () => {
     const context = useContext(AuthContext)

@@ -92,6 +92,7 @@ public class SecurityConfig {
                         // hasRole() agrega el prefijo ROLE_ automáticamente
                         .requestMatchers(HttpMethod.POST, "/api/rooms").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/api/rooms/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/api/rooms/**").hasRole("ADMIN")
 
                         .requestMatchers(HttpMethod.POST, "/api/categories").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/api/categories/**").hasRole("ADMIN")

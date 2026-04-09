@@ -398,3 +398,70 @@
 .admin__feature-icon-cell {
     font-size: 22px;
 }
+
+.admin__badge--admin {
+    background-color: #2C3E50;
+    color: #F9F3EE;
+}
+
+.admin__btn-promote {
+    padding: 7px 16px;
+    background-color: transparent;
+    border: 2px solid #C47E5A;
+    border-radius: 6px;
+    color: #C47E5A;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+
+.admin__btn-promote:hover {
+    background-color: #C47E5A;
+    color: #FFFFFF;
+}
+
+.admin__btn-promote:disabled,
+.admin__btn-delete:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.admin__category-form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr auto;
+    gap: 16px;
+    align-items: flex-end;
+}
+
+.admin__td-desc {
+    max-width: 300px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: #9E8E82;
+    font-size: 13px;
+}
+
+.admin__actions-cell {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.admin__btn-edit {
+    padding: 7px 16px;
+    background-color: transparent;
+    border: 2px solid #2C3E50;
+    border-radius: 6px;
+    color: #2C3E50;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+
+.admin__btn-edit:hover {
+    background-color: #2C3E50;
+    color: #F9F3EE;
+}

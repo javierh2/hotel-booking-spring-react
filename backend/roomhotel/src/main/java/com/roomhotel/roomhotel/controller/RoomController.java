@@ -66,6 +66,18 @@ public class  RoomController {
     }
 
 
+    // PUT /api/rooms/{id}
+    // Actualiza una habitación existente — HU #12
+    // PUT porque reemplazamos todos los campos editables del recurso
+        @PutMapping("/{id}")
+        public ResponseEntity<RoomResponseDTO> updateRoom(
+                @PathVariable Long id,
+                @Valid @RequestBody RoomRequestDTO requestDTO) {
+            RoomResponseDTO updated = roomService.updateRoom(id, requestDTO);
+            return ResponseEntity.ok(updated);
+        }
+
+
     // DELETE /api/rooms/{id}
     // Elimina una habitación por id
     @DeleteMapping("/{id}")

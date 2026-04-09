@@ -1,90 +1,109 @@
 import { useEffect, useState } from 'react'
 import './RoomForm.css'
-import { createRoom } from '../../services/roomService'
+import { createRoom, updateRoom } from '../../services/roomService'
 import { getAllCategories } from '../../services/categoryService'
+import { getAllFeatures } from '../../services/featureService'
 
-// modal para crear una nueva habitación, se muestra al hacer click en el botón "Nueva Habitación" en la página de administración de habitaciones
-const RoomForm = ({ onClose, onRoomCreated }) => {
+// modal para crear o editar una habitación
+// si recibe roomToEdit → modo edición (PUT), pre-llena el formulario
+// si no recibe roomToEdit → modo creación (POST), formulario vacío
+const RoomForm = ({ onClose, onRoomCreated, onRoomUpdated, roomToEdit }) => {
 
-    const [formData, setFormData] = useState({
-        name: "",
-        description: "",
-        categoryId: "",
-        price: "",
-        imageRoom: "",
-    })
+    // inicializamos formData con los datos de roomToEdit si existe
+    // o con valores vacíos si es creación
+    // la función lazy del useState se ejecuta solo una vez al montar
+    // evita recalcular en cada render
+    const [formData, setFormData] = useState(() => ({
+        name: roomToEdit?.name || "",
+        description: roomToEdit?.description || "",
+        // categoryId viene como objeto {id, title} en roomToEdit — extraemos solo el id
+        categoryId: roomToEdit?.category?.id?.toString() || "",
+        price: roomToEdit?.price?.toString() || "",
+        imageRoom: roomToEdit?.imageRoom || "",
+    }))
 
-    // objeto para almacenar los errores de validación de cada campo
     const [errors, setErrors] = useState({})
-
-    // estado para controlar si el formulario se está enviando, para deshabilitar el botón de submit y mostrar un mensaje de "Guardando..." mientras se espera la respuesta del backend
     const [submitting, setSubmitting] = useState(false)
 
-    // estado de las categorias que vienen del back
-    // y se agrega las que se crean desde admin sincronizandolas desde la API
-    const [categories, setCategories] = useState({})
+    const [categories, setCategories] = useState([])
     const [loadingCategories, setLoadingCategories] = useState(true)
 
+    const [features, setFeatures] = useState([])
+    const [loadingFeatures, setLoadingFeatures] = useState(true)
 
-    // modal para cargar categorias, no necesita de token ,ya que, es de acceso público
-    useEffect(()=>{
-        const fetchCategories = async () =>{
-            try{
+    // inicializamos el Set con los ids de las features que ya tiene la room
+    // si es creación el Set arranca vacío
+    // roomToEdit?.features es un array de FeatureResponseDTO — extraemos los ids
+    const [selectedFeatureIds, setSelectedFeatureIds] = useState(() => {
+        if (roomToEdit?.features) {
+            return new Set(roomToEdit.features.map(f => f.id))
+        }
+        return new Set()
+    })
+
+    useEffect(() => {
+        const fetchCategories = async () => {
+            try {
                 const data = await getAllCategories()
-                setCategories(data)
-            }catch(error){
-                console.error("Error al cargar las categorías: ", error) // si falla la carga, el form sigue funcionando
-            }finally{
-                setLoadingCategories(false) // falle o no, se deja de mostrar el loading
+                setCategories(Array.isArray(data) ? data : [])
+            } catch (error) {
+                console.error("Error al cargar las categorías: ", error)
+            } finally {
+                setLoadingCategories(false)
             }
         }
         fetchCategories()
-    },[])
+    }, [])
 
+    useEffect(() => {
+        const fetchFeatures = async () => {
+            try {
+                const data = await getAllFeatures()
+                setFeatures(Array.isArray(data) ? data : [])
+            } catch (error) {
+                console.error("Error al cargar las características: ", error)
+            } finally {
+                setLoadingFeatures(false)
+            }
+        }
+        fetchFeatures()
+    }, [])
 
-    // función para manejar los cambios en los campos del formulario, actualiza el estado formData y borra el error correspondiente si es que existe
     const handleChange = (event) => {
         const { name, value } = event.target
-        setFormData(prev => ({
-            ...prev,
-            [name]: value
-        }))
+        setFormData(prev => ({ ...prev, [name]: value }))
         if (errors[name]) {
-            setErrors(prev => ({
-                ...prev,
-                [name]: ""
-            }))
+            setErrors(prev => ({ ...prev, [name]: "" }))
         }
     }
 
-    // función para validar los campos del formulario desde el frontend, verifica que los campos obligatorios no estén vacíos y que el precio sea un número mayor a 0, si hay errores actualiza el estado errors con los mensajes correspondientes
+    // toggle de feature — creamos Set nuevo para que React detecte el cambio
+    const handleFeatureToggle = (featureId) => {
+        setSelectedFeatureIds(prev => {
+            const next = new Set(prev)
+            if (next.has(featureId)) {
+                next.delete(featureId)
+            } else {
+                next.add(featureId)
+            }
+            return next
+        })
+    }
+
     const validate = () => {
         const newErrors = {}
-        if (!formData.name.trim()) {
-            newErrors.name = "El nombre es obligatorio"
-        }
-        if (!formData.description.trim()) {
-            newErrors.description = "La descripción es obligatoria"
-        }
-        if (!formData.categoryId) {
-            newErrors.categoryId = "La categoría es obligatoria"
-        }
+        if (!formData.name.trim()) newErrors.name = "El nombre es obligatorio"
+        if (!formData.description.trim()) newErrors.description = "La descripción es obligatoria"
+        if (!formData.categoryId) newErrors.categoryId = "La categoría es obligatoria"
         if (!formData.price) {
             newErrors.price = "El precio es obligatorio"
         } else if (Number(formData.price) <= 0) {
             newErrors.price = "El precio debe ser mayor a 0"
         }
-
         setErrors(newErrors)
-        return Object.keys(newErrors).length === 0 // si el objeto errors está vacío, la validación es exitosa, de lo contrario hay errores y se muestra el mensaje correspondiente debajo de cada campo con error
+        return Object.keys(newErrors).length === 0
     }
 
-
-    // función para manejar el envío del formulario, primero valida los campos y si la validación es exitosa,
-    // llama a la función createRoom del servicio de habitaciones para enviar los datos al backend,
-    // mientras se espera la respuesta se deshabilita el botón de submit y se muestra un mensaje de "Guardando...", si la creación es exitosa se llama a la función onRoomCreated para
-    // actualizar la lista de habitaciones en la página de administración y se cierra el modal,
-    // si hay un error se actualiza el estado errors con un mensaje específico para el campo de nombre
     const handleSubmit = async () => {
         if (!validate()) return
         setSubmitting(true)
@@ -93,44 +112,51 @@ const RoomForm = ({ onClose, onRoomCreated }) => {
                 ...formData,
                 price: Number(formData.price),
                 categoryId: Number(formData.categoryId),
-                imageRoom: formData.imageRoom.trim() === '' ? null : formData.imageRoom.trim()
+                imageRoom: formData.imageRoom.trim() === '' ? null : formData.imageRoom.trim(),
+                featureIds: [...selectedFeatureIds]
             }
-            const newRoom = await createRoom(roomData)
-            // aviso a "Admin" que hay una nueva habitaición para que actualice la tabla, sin recargar la pág. completa
-            onRoomCreated(newRoom)
+
+            if (roomToEdit) {
+                // modo edición — PUT /api/rooms/{id}
+                const updated = await updateRoom(roomToEdit.id, roomData)
+                // avisamos a Admin con la room actualizada para que refresque la tabla
+                onRoomUpdated(updated)
+            } else {
+                // modo creación — POST /api/rooms
+                const newRoom = await createRoom(roomData)
+                // avisamos a Admin con la room nueva para que la agregue a la tabla
+                onRoomCreated(newRoom)
+            }
             onClose()
         } catch (error) {
             setErrors({ name: "Ya existe una habitación con ese nombre" })
-            console.error("Error al crear la habitación:", error)
+            console.error("Error al guardar la habitación:", error)
         } finally {
             setSubmitting(false)
         }
     }
 
-    // función para manejar el click en el overlay del modal, si el click se hizo en el overlay (y no en el contenido del modal) se cierra el modal llamando a la función onClose
     const handleOverlayClick = (event) => {
-        if (event.target === event.currentTarget) {
-            onClose()
-        }
+        if (event.target === event.currentTarget) onClose()
     }
+
+    // el título y el texto del botón cambian según el modo
+    const isEditMode = !!roomToEdit
 
     return (
         <div className="room-form-overlay" onClick={handleOverlayClick}>
             <div className="room-form">
 
-                {/* encabezado  */}
                 <div className="room-form__header">
-                    <h2 className="room-form__title">Nueva Habitación</h2>
-                    <button className="room-form__close" onClick={onClose}>
-                        X
-                    </button>
+                    <h2 className="room-form__title">
+                        {isEditMode ? 'Editar habitación' : 'Nueva habitación'}
+                    </h2>
+                    <button className="room-form__close" onClick={onClose}>✕</button>
                 </div>
 
-                {/*  nombre  */}
+                {/* nombre */}
                 <div className="room-form__group">
-                    <label className="room-form__label">
-                        Nombre <span>*</span>
-                    </label>
+                    <label className="room-form__label">Nombre <span>*</span></label>
                     <input
                         type="text"
                         name="name"
@@ -139,16 +165,12 @@ const RoomForm = ({ onClose, onRoomCreated }) => {
                         value={formData.name}
                         onChange={handleChange}
                     />
-                    {errors.name && (
-                        <span className="room-form__error">{errors.name}</span>
-                    )}
+                    {errors.name && <span className="room-form__error">{errors.name}</span>}
                 </div>
 
-                {/*  descripción  */}
+                {/* descripción */}
                 <div className="room-form__group">
-                    <label className="room-form__label">
-                        Descripción <span>*</span>
-                    </label>
+                    <label className="room-form__label">Descripción <span>*</span></label>
                     <textarea
                         name="description"
                         className={`room-form__textarea ${errors.description ? 'room-form__textarea--error' : ''}`}
@@ -156,18 +178,14 @@ const RoomForm = ({ onClose, onRoomCreated }) => {
                         value={formData.description}
                         onChange={handleChange}
                     />
-                    {errors.description && (
-                        <span className="room-form__error">{errors.description}</span>
-                    )}
+                    {errors.description && <span className="room-form__error">{errors.description}</span>}
                 </div>
 
-                {/* precio y categoria */}
+                {/* precio y categoría */}
                 <div className="room-form__row">
 
                     <div className="room-form__group">
-                        <label className="room-form__label">
-                            Precio por noche <span>*</span>
-                        </label>
+                        <label className="room-form__label">Precio por noche <span>*</span></label>
                         <input
                             type="number"
                             name="price"
@@ -177,19 +195,11 @@ const RoomForm = ({ onClose, onRoomCreated }) => {
                             onChange={handleChange}
                             min="1"
                         />
-                        {errors.price && (
-                            <span className="room-form__error">{errors.price}</span>
-                        )}
+                        {errors.price && <span className="room-form__error">{errors.price}</span>}
                     </div>
 
                     <div className="room-form__group">
-                        <label className="room-form__label">
-                            Categoría <span>*</span>
-                        </label>
-
-
-
-                        //TODO
+                        <label className="room-form__label">Categoría <span>*</span></label>
                         <select
                             name="categoryId"
                             className={`room-form__select ${errors.categoryId ? 'room-form__select--error' : ''}`}
@@ -198,25 +208,55 @@ const RoomForm = ({ onClose, onRoomCreated }) => {
                             disabled={loadingCategories}
                         >
                             <option value="">
-                                {loadingCategories ? "Cargando..." : "Selecciona..."}
+                                {loadingCategories ? "Cargando..." : "Seleccioná..."}
                             </option>
-                            {categories.map(category =>(
+                            {categories.map(category => (
                                 <option key={category.id} value={category.id}>
                                     {category.title}
                                 </option>
                             ))}
                             {!loadingCategories && categories.length === 0 && (
-                                <option value="" disabled>Sin categorias disponibles</option>
+                                <option value="" disabled>Sin categorías disponibles</option>
                             )}
-
-
-
                         </select>
-                        {errors.categoryId && (
-                            <span className="room-form__error">{errors.categoryId}</span>
-                        )}
+                        {errors.categoryId && <span className="room-form__error">{errors.categoryId}</span>}
                     </div>
 
+                </div>
+
+                {/* características — HU #17
+                    chips seleccionables, múltiple selección
+                    en modo edición los chips ya seleccionados aparecen marcados */}
+                <div className="room-form__group">
+                    <label className="room-form__label">
+                        Características <span style={{ color: '#9E8E82', fontWeight: 400 }}>(opcional)</span>
+                    </label>
+                    {loadingFeatures ? (
+                        <p className="room-form__loading-text">Cargando características...</p>
+                    ) : features.length === 0 ? (
+                        <p className="room-form__loading-text">No hay características disponibles</p>
+                    ) : (
+                        <div className="room-form__features-grid">
+                            {features.map(feature => (
+                                <button
+                                    key={feature.id}
+                                    type="button"
+                                    className={`room-form__feature-chip ${selectedFeatureIds.has(feature.id) ? 'room-form__feature-chip--selected' : ''}`}
+                                    onClick={() => handleFeatureToggle(feature.id)}
+                                >
+                                    {feature.icon && (
+                                        <span className="room-form__feature-chip-icon">{feature.icon}</span>
+                                    )}
+                                    {feature.name}
+                                </button>
+                            ))}
+                        </div>
+                    )}
+                    {selectedFeatureIds.size > 0 && (
+                        <span className="room-form__features-count">
+                            {selectedFeatureIds.size} característica{selectedFeatureIds.size !== 1 ? 's' : ''} seleccionada{selectedFeatureIds.size !== 1 ? 's' : ''}
+                        </span>
+                    )}
                 </div>
 
                 {/* imagen */}
@@ -236,25 +276,24 @@ const RoomForm = ({ onClose, onRoomCreated }) => {
 
                 {/* botones */}
                 <div className="room-form__actions">
-                    <button
-                        className="room-form__btn-cancel"
-                        onClick={onClose}
-                    >
+                    <button className="room-form__btn-cancel" onClick={onClose}>
                         Cancelar
                     </button>
                     <button
                         className="room-form__btn-submit"
                         onClick={handleSubmit}
-                        disabled={submitting || loadingCategories} //TODO
+                        disabled={submitting || loadingCategories}
                     >
-                        {submitting ? 'Guardando...' : 'Guardar habitación'}
+                        {submitting
+                            ? 'Guardando...'
+                            : isEditMode ? 'Guardar cambios' : 'Guardar habitación'
+                        }
                     </button>
                 </div>
 
             </div>
         </div>
     )
-
 }
 
 export default RoomForm
