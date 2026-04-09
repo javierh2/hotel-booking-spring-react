@@ -60,7 +60,7 @@ public class User implements UserDetails {
 
     @Override
     public String getUsername(){
-        //usa getUsername como identificador y devuelve el s com identificador unico
+        //usa getUsername como identificador y devuelve el email, que es unico y se usa para loguearse
         return email;
     }
     // el password se obtiene del campo password

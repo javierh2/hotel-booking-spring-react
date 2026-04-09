@@ -78,8 +78,9 @@ public class RoomService {
 
 
     // registrar habitación
-    @Transactional
     // @Transactional ,si funciona impacta en la DB, sino, hace rollback, evita datos incompletos en la DB
+    @Transactional
+
     public RoomResponseDTO createRoom(RoomRequestDTO requestDTO) {
 
         // validacion de nombre único para no repetir
@@ -105,9 +106,7 @@ public class RoomService {
         return convertToResponseDTO(savedRoom);
     }
 
-    // actualiza una habitación existente — HU #12
-    // PUT semántico: reemplaza todos los campos editables del recurso
-    // el id viene del PathVariable del Controller, no del DTO
+    // actualizar habitación, solo desde ADMIN, PUT semántico, reemplaza todos los campos editables del recurso
     @Transactional
     public RoomResponseDTO updateRoom(Long id, RoomRequestDTO requestDTO) {
 
@@ -117,9 +116,7 @@ public class RoomService {
                         "Habitación no encontrada con id: " + id
                 ));
 
-        // validación de nombre único — pero solo si el nombre cambió
-        // si el admin no cambió el nombre no tiene sentido chequear duplicado
-        // contra sí misma — findByName devolvería la misma room y tiraría falso positivo
+        // validación de nombre único, permite mantener el mismo nombre de la habitación que estamos editando, pero no repetir el nombre de otra habitación
         if (!room.getName().equals(requestDTO.getName()) &&
                 roomRepository.findByName(requestDTO.getName()).isPresent()) {
             throw new DuplicateNameException(
@@ -128,7 +125,7 @@ public class RoomService {
             );
         }
 
-        // resolvemos la categoría igual que en convertToEntity
+        // categoría igual que en convertToEntity, si el front manda categoryId, busca la categoría en la DB, si no existe, lanza error, si no se manda categoryId, queda null (sin categoría)
         Category category = null;
         if (requestDTO.getCategoryId() != null) {
             category = categoryRepository.findById(requestDTO.getCategoryId())

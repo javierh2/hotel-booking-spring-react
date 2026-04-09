@@ -17,7 +17,6 @@ import java.util.List;
 public class RoomResponseDTO {
 
     // campos que el frontend necesita ver
-
     private Long id;
     private String name;
     private String description;

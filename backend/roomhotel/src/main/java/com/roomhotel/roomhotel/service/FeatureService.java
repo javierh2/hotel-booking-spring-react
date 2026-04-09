@@ -53,7 +53,7 @@ public class FeatureService {
         Feature feature = featureRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Característica no encontrada por id: " + id));
 
-        // TODO
+        // al eliminar una feature, también la desvinculamos de las rooms que la tenían asignada
         for (Room room : feature.getRooms()){
             room.getFeatures().remove(feature);
         }

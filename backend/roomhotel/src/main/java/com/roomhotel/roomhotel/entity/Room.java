@@ -11,7 +11,7 @@ import java.util.Set;
 
 
 @Entity
-@Table(name = "rooms")
+@Table(name = "ROOMS")
 @Getter
 @Setter
 @NoArgsConstructor
