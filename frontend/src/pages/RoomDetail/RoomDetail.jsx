@@ -2,12 +2,51 @@ import { useEffect, useState } from "react"
 import { useNavigate, useParams } from "react-router-dom"
 import { getRoomById } from "../../services/roomService"
 import './RoomDetail.css'
+import { getOccupiedDates } from "../../services/bookingService"
+import AvailabilityCalendar from "../../components/AvailabilityCalendar/AvailabilityCalendar"
 
 
+// datos de políticas fijos y globales para todas las habitaciones
+// no necesitan una DB porque no varían por producto
+const POLICIES = [
+    {
+        id: "checkin",
+        title: "Check-in",
+        icon: "🗝️",
+        items: [
+            "Check-out hasta las 11:00 hs",
+            "Check-in a partir de las 15:00 hs",
+            "Check-in anticipado sujeto a disponibilidad",
+            "Se requiere presentar documento de identidad",
+        ]
+    },
+    {
+        id: "health",
+        title: "Salud y seguridad",
+        icon: "🛡️",
+        items: [
+            "Política de no fumadores en todas las instalaciones",
+            "Detector de humo en todas las habitaciones",
+            "Botiquín de primeros auxilios disponible en recepción",
+            "Protocolo de limpieza certificado",
+        ]
+    },
+    {
+        id: "cancellation",
+        title: "Política de cancelación",
+        icon: "📋",
+        items: [
+            "Cancelación gratuita hasta 48 hs antes del check-in",
+            "Cancelación con menos de 48 hs: cargo del 50%",
+            "No-show: cargo del 100% de la primera noche",
+            "Reembolsos procesados en 5 a 10 días hábiles",
+        ]
+    }
+]
 
 const RoomDetail = () => {
 
-    // Obtener el ID de la habitación desde la URL
+    // obtiene el ID de la habitación desde la URL
     const { id } = useParams()
 
     const navigate = useNavigate()
@@ -16,7 +55,14 @@ const RoomDetail = () => {
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState(null)
 
-    // Al cargar el detalle, asegurarnos de que la página esté scrolleada al top
+    // estado de disponibilidad, separado del estado del room
+    // si falla la disponibilidad, el room igual se muestra
+    const [occupiedRanges, setOccupiedRanges] = useState([])
+    const [availabilityLoading, setAvailabilityLoading] = useState(true)
+    const [availabilityError, setAvailabilityError] = useState(null)
+
+
+    // Al cargar el detalle la pagina se scrollea al top
     useEffect(() => {
         window.scrollTo(0, 0);
     }, []);
@@ -34,6 +80,28 @@ const RoomDetail = () => {
         }
         fetchRoom()
     }, [id])
+
+
+    // carga las fechas ocupadas en paralelo con la room
+    // useEffect separado porque son dos requests independientes
+    // si uno falla no bloquea al otro
+    // depende de id igual que el fetchRoom
+    useEffect(() => {
+        const fetchAvailability = async () => {
+            setAvailabilityLoading(true)
+            setAvailabilityError(null)
+            try {
+                const data = await getOccupiedDates(id)
+                setOccupiedRanges(data)
+            } catch (err) {
+                setAvailabilityError("No se puede obtener la información de disponibilidad en este momento: " + err)
+            } finally {
+                setAvailabilityLoading(false)
+            }
+        }
+        fetchAvailability()
+    }, [id])
+
 
     if (loading) {
         return (
@@ -55,11 +123,10 @@ const RoomDetail = () => {
                     </p>
                     <button
                         className="room-detail__back-btn"
-                        onClick={() => navigate('/')}
+                        onClick={() => navigate("/")}
                     >
                         ← Volver al inicio
                     </button>
-
                 </div>
             </div>
         )
@@ -67,7 +134,6 @@ const RoomDetail = () => {
 
     return (
         <div className="room-detail">
-
             {/* top bar: título, badge de categoría, botón volver */}
             <div className="room-detail__top-bar">
                 <h1 className="room-detail__name">{room.name}</h1>
@@ -78,7 +144,7 @@ const RoomDetail = () => {
                 )}
                 <button
                     className="room-detail__back-btn"
-                    onClick={() => navigate('/')}
+                    onClick={() => navigate("/")}
                 >
                     ← return
                 </button>
@@ -109,6 +175,7 @@ const RoomDetail = () => {
                             ) : (
                                 <div className="room-detail__gallery-placeholder">🏨</div>
                             )}
+
                             {/* "Ver más" solo en la última celda */}
                             {i === 3 && (
                                 <div className="room-detail__ver-mas">
@@ -155,13 +222,77 @@ const RoomDetail = () => {
                     </div>
                 )}
                 <div className="room-detail__divider" />
+
+                {/*  bloque de políticas */}
+                <div className="room-detail__policies">
+                    <h2 className="room-detail__policies-title">
+                        Qué tenés que saber
+                    </h2>
+                    <div className="room-detail__divider" />
+                    <div className="room-detail__policies-grid">
+                        {POLICIES.map(policy => (
+                            <div key={policy.id} className="room-detail__policy-col">
+                                <h3 className="room-detail__policy-col-title">
+                                    <span className="room-detail__policy-col-icon">{policy.icon}</span>
+                                    {policy.title}
+                                </h3>
+                                <ul className="room-detail__policy-list">
+                                    {policy.items.map((item, index) => (
+                                        <li key={index} className="room-detail__policy-item">
+                                            {item}
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+                <div className="room-detail__divider" />
+
+                {/* calendario de disponibilidad */}
+                <div className="room-detail__availability">
+                    <h2 className="room-detail__availability-title">
+                        Disponibilidad
+                    </h2>
+                    <div className="room-detail__divider" />
+
+                    {availabilityLoading ? (
+                        <div className="room-detail__state room-detail__state--inline">
+                            <div className="room-detail__spinner" />
+                            <p>Cargando disponibilidad...</p>
+                        </div>
+                    ) : availabilityError ? (
+                        <div className="room-detail__availability-error">
+                            <span>⚠️</span>
+                            <p>{availabilityError}</p>
+                            <button
+                                className="room-detail__availability-retry"
+                                onClick={() => {
+                                    setAvailabilityError(null)
+                                    setAvailabilityLoading(true)
+                                    getOccupiedDates(id)
+                                        .then(data => setOccupiedRanges(data))
+                                        .catch(() => setAvailabilityError("No se puede obtener la información de disponibilidad en este momento."))
+                                        .finally(() => setAvailabilityLoading(false))
+                                }}
+                            >
+                                Reintentar
+                            </button>
+                        </div>
+                    ) : (
+                        <AvailabilityCalendar occupiedRanges={occupiedRanges} />
+                    )}
+                </div>
+
+                <div className="room-detail__divider" />
+
                 {/* info cards: categoría, precio, disponibilidad */}
                 <div className="room-detail__info-grid">
                     <div className="room-detail__info-card">
                         <span className="room-detail__info-icon">🏷️</span>
                         <p className="room-detail__info-label">Category</p>
                         <p className="room-detail__info-value">
-                            {room.category?.title || 'Sin categoría'}
+                            {room.category?.title || "Sin categoría"}
                         </p>
                     </div>
                     <div className="room-detail__info-card">

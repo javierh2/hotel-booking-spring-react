@@ -413,3 +413,111 @@
         grid-template-columns: repeat(2, 1fr);
     }
 }
+
+
+.room-detail__policies {
+    width: 100%;
+}
+
+.room-detail__policies-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #2C3E50;
+    text-decoration: underline;
+    text-underline-offset: 4px;
+    margin-bottom: 1.25rem;
+}
+
+.room-detail__policies-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 2rem;
+    width: 100%;
+}
+
+.room-detail__policy-col {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.room-detail__policy-col-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #2C3E50;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 0;
+}
+
+.room-detail__policy-col-icon {
+    font-size: 1.1rem;
+}
+
+.room-detail__policy-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.room-detail__policy-item {
+    font-size: 0.9rem;
+    color: #9E8E82;
+    line-height: 1.5;
+    padding-left: 1rem;
+    position: relative;
+}
+
+.room-detail__policy-item::before {
+    content: '·';
+    position: absolute;
+    left: 0;
+    color: #C47E5A;
+    font-weight: 700;
+}
+
+.room-detail__availability-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #2C3E50;
+    margin-bottom: 1.25rem;
+}
+
+.room-detail__state--inline {
+    min-height: 80px;
+    padding: 16px 0;
+}
+
+.room-detail__availability-error {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px;
+    background: #FDF5F0;
+    border-radius: 8px;
+    font-size: 14px;
+    color: #2C3E50;
+}
+
+.room-detail__availability-retry {
+    background: none;
+    border: 2px solid #C47E5A;
+    color: #C47E5A;
+    padding: 6px 16px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+    margin-left: auto;
+}
+
+.room-detail__availability-retry:hover {
+    background: #C47E5A;
+    color: #F9F3EE;
+}
