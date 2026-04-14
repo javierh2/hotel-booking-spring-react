@@ -83,10 +83,12 @@ public class SecurityConfig {
                         .requestMatchers("/h2-console/**").permitAll()
 
                         // las habitaciones pueden ser vistas por cualquier usuario, incluso sin autenticación (para el catálogo público)
+                        .requestMatchers(HttpMethod.GET, "/api/rooms/available").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/rooms/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/rooms/random").permitAll()
                         .requestMatchers(HttpMethod.GET, "api/features/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/categories/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/bookings/room/*/occupied-dates").permitAll()
 
                         // POST y DELETE de rooms requieren ser ADMIN
                         // hasRole() agrega el prefijo ROLE_ automáticamente

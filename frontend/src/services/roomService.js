@@ -80,3 +80,16 @@ export const updateRoom = async (id, roomData) => {
     }
     return response.json()
 }
+
+// GET /api/rooms/available?checkIn=YYYY-MM-DD&checkOut=YYYY-MM-DD
+// público, no requiere token
+// checkIn y checkOut son strings en formato ISO (YYYY-MM-DD) que vienen del date picker
+export const getAvailableRooms = async (checkIn, checkOut) => {
+    const response = await fetch(
+        `${BASE_URL}/available?checkIn=${checkIn}&checkOut=${checkOut}`
+    )
+    if (!response.ok) {
+        throw new Error(`Error ${response.status}: no se pudo consultar la disponibilidad`)
+    }
+    return response.json()
+}

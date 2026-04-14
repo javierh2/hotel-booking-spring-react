@@ -9,12 +9,14 @@ import com.roomhotel.roomhotel.entity.Feature;
 import com.roomhotel.roomhotel.entity.Room;
 import com.roomhotel.roomhotel.exception.DuplicateNameException;
 import com.roomhotel.roomhotel.exception.ResourceNotFoundException;
+import com.roomhotel.roomhotel.repository.BookingRepository;
 import com.roomhotel.roomhotel.repository.CategoryRepository;
 import com.roomhotel.roomhotel.repository.FeatureRepository;
 import com.roomhotel.roomhotel.repository.RoomRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -27,10 +29,14 @@ public class RoomService {
     private final CategoryRepository categoryRepository;
     private final FeatureRepository featureRepository;
 
-    public RoomService(RoomRepository roomRepository, CategoryRepository categoryRepository, FeatureRepository featureRepository) {
+    // inyección del repositorio de reservas necesario para calcular disponibilidad
+    private final BookingRepository bookingRepository;
+
+    public RoomService(RoomRepository roomRepository, CategoryRepository categoryRepository, FeatureRepository featureRepository, BookingRepository bookingRepository) {
         this.roomRepository = roomRepository;
         this.categoryRepository = categoryRepository;
         this.featureRepository = featureRepository;
+        this.bookingRepository = bookingRepository;
     }
 
 
@@ -242,5 +248,27 @@ public class RoomService {
                 .active(true) // toda habitación nueva arranca en "active" (disponible)
                 .features(features)
                 .build();
+    }
+
+    // devuelve los rooms que no tienen reservas en el rango checkIn-checkOut
+    public List<RoomResponseDTO> getAvailableRooms(LocalDate checkIn, LocalDate checkOut) {
+
+        // checkOut debe ser posterior a checkIn
+        if (!checkOut.isAfter(checkIn)) {
+            throw new IllegalArgumentException(
+                    "La fecha de salida debe ser posterior a la fecha de entrada"
+            );
+        }
+
+        // ids de rooms con reservas superpuestas
+        List<Long> occupiedIds = bookingRepository.findOccupiedRoomIds(checkIn, checkOut);
+
+        // todas las rooms excepto las ocupadas
+        // si occupiedIds está vacío, el contains() nunca es true y se devuelven todas
+        return roomRepository.findAll()
+                .stream()
+                .filter(room -> !occupiedIds.contains(room.getId()))
+                .map(this::convertToResponseDTO)
+                .collect(Collectors.toList());
     }
 }
