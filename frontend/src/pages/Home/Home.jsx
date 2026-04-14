@@ -6,6 +6,9 @@ import { getAllRooms } from '../../services/roomService'
 import Pagination from '../../components/Pagination/Pagination'
 import { getAllCategories } from '../../services/categoryService'
 import './Home.css'
+import { useAuth } from '../../context/AuthContext'
+import { getFavoriteIds } from '../../services/favoriteService'
+
 
 
 const ROOMS_PER_PAGE = 6
@@ -30,6 +33,44 @@ const Home = () => {
     const [searchError, setSearchError] = useState(null)
     // guarda el texto de ciudad para mostrarlo en el subtítulo de resultados
     const [activeSearch, setActiveSearch] = useState(null)
+
+    const { isAuthenticated } = useAuth
+
+    // Set de roomIds que el usuario marcó como favoritos
+    // Set porque has() es O(1) — mismo patrón que selectedCategories
+    const [favoriteIds, setFavoriteIds] = useState(new Set())
+
+    // carga los ids de favoritos cuando el usuario está logueado
+    // useEffect separado porque depende de isAuthenticated, no de la carga de rooms
+    useEffect(() => {
+        if (!isAuthenticated) {
+            // si el usuario hace logout, limpiamos los favoritos locales
+            setFavoriteIds(new Set())
+            return
+        }
+        getFavoriteIds()
+            .then(ids => setFavoriteIds(new Set(ids)))
+            .catch(() => {
+                // silencioso — si falla, los corazones aparecen vacíos
+                // no bloqueamos el catálogo por un fallo de favoritos
+            })
+    }, [isAuthenticated])
+
+    // callback que RoomCard llama cuando el usuario hace toggle
+    // actualizamos el Set local para que otros RoomCards reflejen el cambio
+    // sin necesidad de recargar todos los favoritos del servidor
+    const handleFavoriteToggle = (roomId, isFavorited) => {
+        setFavoriteIds(prev => {
+            const next = new Set(prev)
+            if (isFavorited) {
+                next.add(roomId)
+            } else {
+                next.delete(roomId)
+            }
+            return next
+        })
+    }
+
 
 
     const fetchRooms = async () => {
@@ -305,7 +346,7 @@ const Home = () => {
                                 <>
                                     <div className="recommendations__grid">
                                         {currentRooms.map(room => (
-                                            <RoomCard key={room.id} room={room} />
+                                            <RoomCard key={room.id} room={room} isFavorite={favoriteIds.has(room.id)} onFavoriteToggle={handleFavoriteToggle} />
                                         ))}
                                     </div>
                                     <Pagination

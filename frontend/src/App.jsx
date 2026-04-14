@@ -16,6 +16,7 @@ import RoomDetail from './pages/RoomDetail/RoomDetail'
 import { AuthProvider } from './context/AuthContext'
 import Register from './pages/Register/Register'
 import Login from './pages/Login/Login'
+import Favorites from './pages/Favorites/Favorites'
 
 
 const App = () => {
@@ -38,6 +39,7 @@ const App = () => {
               <Route path="/rooms/:id" element={<RoomDetail />} />
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
+              <Route path="/favorites" element={<Favorites/>} />
             </Routes>
           </main>
 

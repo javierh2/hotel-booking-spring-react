@@ -105,6 +105,10 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/users").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/api/users/*/role").hasRole("ADMIN")
 
+                        // favoritos — todos los endpoints requieren autenticación (cualquier usuario logueado)
+                        // no usamos hasRole("ADMIN") — cualquier usuario registrado puede tener favoritos
+                        .requestMatchers("/api/favorites/**").authenticated()
+
                         // Cualquier otro endpoint requiere estar autenticado
                         .anyRequest().authenticated()
                 )

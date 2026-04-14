@@ -134,3 +134,38 @@
     justify-content: center;
     font-size: 40px;
 }
+
+.room-card__favorite {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: rgba(255, 255, 255, 0.9);
+    border: none;
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    font-size: 18px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    color: #9E8E82;
+    box-shadow: 0 2px 8px rgba(44, 62, 80, 0.15);
+    line-height: 1;
+}
+
+.room-card__favorite:hover {
+    transform: scale(1.15);
+    background: #fff;
+}
+
+.room-card__favorite--active {
+    color: #C47E5A;
+}
+
+.room-card__favorite:disabled {
+    opacity: 0.6;
+    cursor: default;
+    transform: none;
+}

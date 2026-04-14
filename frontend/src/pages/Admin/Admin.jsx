@@ -3,6 +3,7 @@ import { deleteRoom, getAllRooms } from '../../services/roomService'
 import { createFeature, deleteFeature, getAllFeatures } from '../../services/featureService';
 import { getAllUsers, updateUserRole } from '../../services/userService';
 import { createCategory, deleteCategory, getAllCategories } from '../../services/categoryService';
+import ConfirmModal from '../../components/ConfirmModal/ConfirmModal';
 import RoomForm from '../../components/RoomForm/RoomForm'
 import './Admin.css'
 
@@ -19,6 +20,27 @@ const Admin = () => {
 
     // controla qué vista se renderiza: 'menu' | 'list' | 'features' | 'users' | 'categories'
     const [view, setView] = useState("menu")
+
+
+    // estado del modal de confirmación reutilizable
+    // un solo objeto maneja todos los casos de confirmación de la app
+    // onConfirm se sobreescribe en cada uso según qué acción se está confirmando
+    const [confirmModal, setConfirmModal] = useState({
+        isOpen: false,
+        title: '',
+        message: '',
+        onConfirm: null
+    })
+
+    // helper para abrir el modal — evita repetir el spread en cada handler
+    const openConfirm = (title, message, onConfirm) => {
+        setConfirmModal({ isOpen: true, title, message, onConfirm })
+    }
+
+    // helper para cerrar — resetea todo el estado de una sola vez
+    const closeConfirm = () => {
+        setConfirmModal({ isOpen: false, title: '', message: '', onConfirm: null })
+    }
 
     // estado de features
     const [features, setFeatures] = useState([])
@@ -126,19 +148,23 @@ const Admin = () => {
     }
 
     const handleDelete = async (id, name) => {
-        const confirmation = window.confirm(
-            `¿Estás seguro de querer eliminar "${name}"?\
-            Esta acción no se puede revertir.`
+        // antes: window.confirm() bloqueante y sin estilos
+        // ahora: modal propio con identidad visual del proyecto
+        openConfirm(
+            `Eliminar "${name}"`,
+            'Esta acción no se puede revertir. La habitación se eliminará permanentemente del catálogo.',
+            async () => {
+                closeConfirm()
+                try {
+                    await deleteRoom(id)
+                    setRooms(prev => prev.filter(room => room.id !== id))
+                } catch (error) {
+                    alert(`Error al eliminar: ${error.message}`)
+                }
+            }
         )
-        if (!confirmation) return
-        try {
-            await deleteRoom(id)
-            setRooms(prev => prev.filter(room => room.id !== id))
-        } catch (error) {
-            alert(`Error al eliminar: ${error.message}`)
-            console.error(`Error al eliminar habitación: `, error)
-        }
     }
+
 
     //  handlers de features
     const handleFeatureChange = (event) => {
@@ -162,23 +188,26 @@ const Admin = () => {
             setNewFeature({ name: '', icon: '' })
         } catch (error) {
             setFeatureError("Ya existe una característica con ese nombre")
-            console.error("Error al crear característica: " , error)
+            console.error("Error al crear característica: ", error)
         } finally {
             setSavingFeature(false)
         }
     }
 
     const handleDeleteFeature = async (id, name) => {
-        const confirmation = window.confirm(
-            `¿Eliminar la característica "${name}"? Se quitará de todas las habitaciones que la tengan asignada.`
+        openConfirm(
+            `Eliminar característica "${name}"`,
+            'Se quitará de todas las habitaciones que la tengan asignada.',
+            async () => {
+                closeConfirm()
+                try {
+                    await deleteFeature(id)
+                    setFeatures(prev => prev.filter(f => f.id !== id))
+                } catch (error) {
+                    alert(`Error al eliminar: ${error.message}`)
+                }
+            }
         )
-        if (!confirmation) return
-        try {
-            await deleteFeature(id)
-            setFeatures(prev => prev.filter(f => f.id !== id))
-        } catch (error) {
-            alert(`Error al eliminar: ${error.message}`)
-        }
     }
 
     // handlers de categorías
@@ -220,36 +249,40 @@ const Admin = () => {
     }
 
     const handleDeleteCategory = async (id, title) => {
-        const confirmation = window.confirm(
-            `¿Eliminar la categoría "${title}"? Las habitaciones asignadas a esta categoría quedarán sin categoría.`
+        openConfirm(
+            `Eliminar categoría "${title}"`,
+            'Las habitaciones asignadas a esta categoría quedarán sin categoría asignada.',
+            async () => {
+                closeConfirm()
+                try {
+                    await deleteCategory(id)
+                    setCategories(prev => prev.filter(c => c.id !== id))
+                } catch (error) {
+                    alert(`Error al eliminar: ${error.message}`)
+                }
+            }
         )
-        if (!confirmation) return
-        try {
-            await deleteCategory(id)
-            setCategories(prev => prev.filter(c => c.id !== id))
-        } catch (error) {
-            alert(`Error al eliminar: ${error.message}`)
-        }
     }
 
-    // handler de rol de usuarios
     const handleRoleToggle = async (user) => {
         const newRole = user.role === 'ROLE_ADMIN' ? 'ROLE_USER' : 'ROLE_ADMIN'
         const action = newRole === 'ROLE_ADMIN' ? 'promover a administrador' : 'quitar permisos de administrador a'
-        const confirmation = window.confirm(
-            `¿Estás seguro de querer ${action} "${user.firstName} ${user.lastName}"?`
+        openConfirm(
+            `Cambiar rol de ${user.firstName} ${user.lastName}`,
+            `¿Estás seguro de querer ${action} este usuario?`,
+            async () => {
+                closeConfirm()
+                setUpdatingUserId(user.id)
+                try {
+                    const updated = await updateUserRole(user.id, newRole)
+                    setUsers(prev => prev.map(u => u.id === updated.id ? updated : u))
+                } catch (error) {
+                    alert(`Error al actualizar el rol: ${error.message}`)
+                } finally {
+                    setUpdatingUserId(null)
+                }
+            }
         )
-        if (!confirmation) return
-        setUpdatingUserId(user.id)
-        try {
-            const updated = await updateUserRole(user.id, newRole)
-            setUsers(prev => prev.map(u => u.id === updated.id ? updated : u))
-        } catch (error) {
-            alert(`Error al actualizar el rol: ${error.message}`)
-            console.error('Error al actualizar rol:', error)
-        } finally {
-            setUpdatingUserId(null)
-        }
     }
 
     // estadísticas
@@ -266,6 +299,14 @@ const Admin = () => {
                     <h2>Panel no disponible en móvil</h2>
                     <p>El panel de administración está diseñado para usarse desde una computadora. Por favor accedé desde un dispositivo de escritorio.</p>
                 </div>
+                {/* modal de confirmación global — un solo componente para toda la página */}
+                <ConfirmModal
+                    isOpen={confirmModal.isOpen}
+                    title={confirmModal.title}
+                    message={confirmModal.message}
+                    onConfirm={confirmModal.onConfirm}
+                    onCancel={closeConfirm}
+                />
             </div>
         )
     }
@@ -347,6 +388,14 @@ const Admin = () => {
                         roomToEdit={null}
                     />
                 )}
+
+                <ConfirmModal
+                    isOpen={confirmModal.isOpen}
+                    title={confirmModal.title}
+                    message={confirmModal.message}
+                    onConfirm={confirmModal.onConfirm}
+                    onCancel={closeConfirm}
+                />
             </div>
         )
     }
@@ -463,6 +512,14 @@ const Admin = () => {
                     )}
 
                 </div>
+                <ConfirmModal
+                    isOpen={confirmModal.isOpen}
+                    title={confirmModal.title}
+                    message={confirmModal.message}
+                    onConfirm={confirmModal.onConfirm}
+                    onCancel={closeConfirm}
+                />
+
             </div>
         )
     }
@@ -604,6 +661,14 @@ const Admin = () => {
                     )}
 
                 </div>
+
+                <ConfirmModal
+                    isOpen={confirmModal.isOpen}
+                    title={confirmModal.title}
+                    message={confirmModal.message}
+                    onConfirm={confirmModal.onConfirm}
+                    onCancel={closeConfirm}
+                />
             </div>
         )
     }
@@ -680,6 +745,14 @@ const Admin = () => {
                     )}
 
                 </div>
+
+                <ConfirmModal
+                    isOpen={confirmModal.isOpen}
+                    title={confirmModal.title}
+                    message={confirmModal.message}
+                    onConfirm={confirmModal.onConfirm}
+                    onCancel={closeConfirm}
+                />
             </div>
         )
     }
@@ -800,6 +873,14 @@ const Admin = () => {
                     roomToEdit={roomToEdit}
                 />
             )}
+
+            <ConfirmModal
+                isOpen={confirmModal.isOpen}
+                title={confirmModal.title}
+                message={confirmModal.message}
+                onConfirm={confirmModal.onConfirm}
+                onCancel={closeConfirm}
+            />
         </div>
     )
 }
