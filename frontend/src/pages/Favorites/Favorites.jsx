@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../../context/AuthContext'
-import { getFavoriteRooms, removeFavorite } from '../../services/favoriteService'
+import { getFavoriteRooms} from '../../services/favoriteService'
 import RoomCard from '../../components/RoomCard/RoomCard'
 import './Favorites.css'
 

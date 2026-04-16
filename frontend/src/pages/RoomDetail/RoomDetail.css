@@ -523,20 +523,19 @@
 }
 
 .room-detail__share-btn {
-    padding: 7px 16px;
-    background: transparent;
-    border: 2px solid #9E8E82;
-    border-radius: 20px;
-    font-size: 13px;
+    padding: 10px 20px;
+    background-color: transparent;
+    border: 2px solid #C47E5A;
+    border-radius: 6px;
+    font-size: 14px;
     font-weight: 600;
-    color: #9E8E82;
+    color: #C47E5A;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: all 0.25s ease;
     white-space: nowrap;
 }
 
 .room-detail__share-btn:hover {
-    border-color: #C47E5A;
-    color: #C47E5A;
-    background: #FDF5F0;
+    background-color: #C47E5A;
+    color: #FFFFFF;
 }
