@@ -17,13 +17,14 @@ import { AuthProvider } from './context/AuthContext'
 import Register from './pages/Register/Register'
 import Login from './pages/Login/Login'
 import Favorites from './pages/Favorites/Favorites'
+import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute'
 
 
 const App = () => {
   return (
     // AuthProvider envuelve toda la app para que el estado de autenticación esté disponible en cualquier parte
     <AuthProvider>
-    {/* BrowserRouter envuelve TODA la app para que el sistema de rutas funcione en cualquier parte */}
+      {/* BrowserRouter envuelve TODA la app para que el sistema de rutas funcione en cualquier parte */}
       <BrowserRouter>
         {/*no podemos entregar Header y main sueltos por ende se necesita un contenedor*/}
         <div className="app-wrapper">
@@ -35,11 +36,32 @@ const App = () => {
           <main className="app-main">
             <Routes>
               <Route path="/" element={<Home />} />
-              <Route path="/admin" element={<Admin />} />
+
+              {/* /admin requiere estar logueado Y tener ROLE_ADMIN
+        si escribís la URL a mano sin ser admin → redirige al home */}
+              <Route
+                path="/admin"
+                element={
+                  <ProtectedRoute requireAdmin={true}>
+                    <Admin />
+                  </ProtectedRoute>
+                }
+              />
+
               <Route path="/rooms/:id" element={<RoomDetail />} />
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
-              <Route path="/favorites" element={<Favorites/>} />
+
+              {/* /favorites requiere solo estar logueado, no ser admin
+        si escribís la URL sin sesión → redirige a login */}
+              <Route
+                path="/favorites"
+                element={
+                  <ProtectedRoute>
+                    <Favorites />
+                  </ProtectedRoute>
+                }
+              />
             </Routes>
           </main>
 
