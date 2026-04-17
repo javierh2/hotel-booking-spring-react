@@ -150,9 +150,7 @@ const RoomDetail = () => {
                     </span>
                 )}
 
-                {/* HU #27 — botón compartir, abre el ShareModal
-                posicionado en el top-bar junto al título — mismo lugar que muestra
-                el ícono de compartir en el prototipo de la galería */}
+                {/* botón compartir, abre el ShareModal.jsx */}
                 <button
                     className="room-detail__share-btn"
                     onClick={() => setShareOpen(true)}
@@ -165,7 +163,7 @@ const RoomDetail = () => {
                     className="room-detail__back-btn"
                     onClick={() => navigate("/")}
                 >
-                    ← return
+                    ← Volver
                 </button>
             </div>
 
@@ -198,7 +196,7 @@ const RoomDetail = () => {
                             {/* "Ver más" solo en la última celda */}
                             {i === 3 && (
                                 <div className="room-detail__ver-mas">
-                                    See more
+                                    Ver más
                                 </div>
                             )}
                         </div>
@@ -210,10 +208,10 @@ const RoomDetail = () => {
             <div className="room-detail__content">
                 <div className="room-detail__price-row">
                     <span className="room-detail__price">${room.price}</span>
-                    <span className="room-detail__price-label">per night</span>
+                    <span className="room-detail__price-label">USD por noche</span>
                 </div>
                 <div className="room-detail__divider" />
-                <p className="room-detail__section-title">Description</p>
+                <p className="room-detail__section-title">Descripción</p>
                 <p className="room-detail__description">{room.description}</p>
 
                 <div className="room-detail__divider" />
@@ -222,7 +220,7 @@ const RoomDetail = () => {
                 {room.features && room.features.length > 0 && (
                     <div className="room-detail__features">
                         <h2 className="room-detail__features-title">
-                            What does this place offer?
+                            ¿Qué ofrece este lugar?
                         </h2>
 
 
@@ -309,9 +307,9 @@ const RoomDetail = () => {
 
 
 
-                {/* HU #28 — sección de valoraciones
+                {/* sección de valoraciones;
                 averageRating y totalRatings vienen del objeto room — calculados en el backend
-                no hacemos un request extra porque ya están en el RoomResponseDTO */}
+                no hace un request extra porque ya están en el RoomResponseDTO */}
                 <RatingSection
                     roomId={room.id}
                     averageRating={room.averageRating || 0}
@@ -324,27 +322,27 @@ const RoomDetail = () => {
                 <div className="room-detail__info-grid">
                     <div className="room-detail__info-card">
                         <span className="room-detail__info-icon">🏷️</span>
-                        <p className="room-detail__info-label">Category</p>
+                        <p className="room-detail__info-label">Categoría</p>
                         <p className="room-detail__info-value">
                             {room.category?.title || "Sin categoría"}
                         </p>
                     </div>
                     <div className="room-detail__info-card">
                         <span className="room-detail__info-icon">💰</span>
-                        <p className="room-detail__info-label">Price per night</p>
+                        <p className="room-detail__info-label">Precio por noche</p>
                         <p className="room-detail__info-value">${room.price}</p>
                     </div>
                     <div className="room-detail__info-card">
                         <span className="room-detail__info-icon">✅</span>
-                        <p className="room-detail__info-label">Availability</p>
+                        <p className="room-detail__info-label">Disponibilidad</p>
                         <p className="room-detail__info-value">
-                            {room.active ? "Available" : "Not available"}
+                            {room.active ? "Disponible" : "No Disponible"}
                         </p>
                     </div>
                 </div>
             </div>
 
-            {/* modal de compartir — recibe el objeto room completo para la preview
+            {/* modal de compartir, recibe el objeto room completo para la preview
             onClose limpia el estado local del modal (mensaje personalizado) al cerrar */}
             <ShareModal
                 isOpen={shareOpen}

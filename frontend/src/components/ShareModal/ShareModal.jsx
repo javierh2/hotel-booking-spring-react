@@ -2,12 +2,6 @@ import { useState } from 'react'
 import './ShareModal.css'
 
 // construye las URLs de intención para cada red social
-// Facebook: sharer.php solo acepta 'u' desde 2018 — el parámetro quote fue deprecado
-// el texto aparece cuando la URL tiene Open Graph tags (og:title, og:description)
-// en localhost no hay OG tags, en producción sí funcionaría con meta tags correctos
-// Twitter/X: intent/tweet sí acepta text + url — funciona en localhost
-// WhatsApp: wa.me acepta texto libre con link embebido
-// Instagram: no tiene URL de intención pública — copiamos el link al portapapeles
 const buildShareUrls = (url, title, description, customMessage) => {
     const text = customMessage.trim() || description
     const encodedUrl = encodeURIComponent(url)
@@ -15,7 +9,6 @@ const buildShareUrls = (url, title, description, customMessage) => {
 
     return {
         twitter: `https://twitter.com/intent/tweet?text=${encodedText}&url=${encodedUrl}`,
-        // facebook solo acepta la url — el texto viene de los OG tags de la página
         facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`,
         whatsapp: `https://wa.me/?text=${encodeURIComponent(`${text}\n\n${url}`)}`,
     }
@@ -28,7 +21,7 @@ const ShareModal = ({ isOpen, onClose, room }) => {
 
     if (!isOpen || !room) return null
 
-    // construimos productUrl con window.location.origin para que sea correcto
+    // productUrl con window.location.origin para que sea correcto
     // tanto en localhost como en producción sin hardcodear el dominio
     const productUrl = `${window.location.origin}/rooms/${room.id}`
     const shortDescription = room.description?.slice(0, 120) + (room.description?.length > 120 ? '...' : '')
@@ -41,8 +34,8 @@ const ShareModal = ({ isOpen, onClose, room }) => {
     }
 
     const handleCopyLink = async () => {
-        // copiamos productUrl — la URL del producto construida arriba, no window.location.href
-        // esto garantiza que siempre copiamos /rooms/{id} y no la URL actual del browser
+        // copia productUrl; la URL del producto construida arriba, no window.location.href
+        // esto garantiza que siempre copia /rooms/{id} y no la URL actual del browser
         try {
             await navigator.clipboard.writeText(productUrl)
             setCopied(true)
@@ -82,14 +75,14 @@ const ShareModal = ({ isOpen, onClose, room }) => {
                     </div>
                 </div>
 
-                {/* mensaje personalizado — criterio de aceptación explícito */}
+                {/* mensaje personalizado */}
                 <div className="share-modal__message-group">
                     <label className="share-modal__message-label">
                         Mensaje personalizado <span className="share-modal__optional">(opcional)</span>
                     </label>
                     <textarea
                         className="share-modal__message-input"
-                        placeholder="Ej: ¡Mirá esta habitación increíble que encontré!"
+                        placeholder="¡Mirá esta habitación increíble que encontré!"
                         value={customMessage}
                         onChange={e => setCustomMessage(e.target.value)}
                         rows={2}
@@ -125,7 +118,7 @@ const ShareModal = ({ isOpen, onClose, room }) => {
                             WhatsApp
                         </button>
 
-                        {/* Instagram no tiene URL de intención — copiamos el link al portapapeles
+                        {/* Instagram no tiene URL de intención, copia el link al portapapeles
                             el usuario puede pegarlo en su story, bio o DM manualmente */}
                         <button
                             className={`share-modal__network-btn share-modal__network-btn--instagram ${copied ? 'share-modal__network-btn--copied' : ''}`}

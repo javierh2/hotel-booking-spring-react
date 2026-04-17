@@ -14,7 +14,6 @@ const Favorites = () => {
     const [error, setError] = useState(null)
 
     // si el usuario no está logueado, redirigimos al login
-    // esta página no tiene sentido sin autenticación
     useEffect(() => {
         if (!isAuthenticated) {
             navigate('/login')
@@ -39,7 +38,6 @@ const Favorites = () => {
 
     // cuando el usuario desmarca un favorito desde esta página,
     // lo eliminamos directamente del estado local
-    // criterio de aceptación: gestión de favoritos desde esta sección
     const handleFavoriteToggle = (roomId, isFavorited) => {
         if (!isFavorited) {
             setFavorites(prev => prev.filter(r => r.id !== roomId))

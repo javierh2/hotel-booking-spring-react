@@ -131,7 +131,7 @@ const Register = () => {
                             type="email"
                             name="email"
                             className={`register__input ${errors.email ? 'register__input--error' : ''}`}
-                            placeholder="Ej: juan@email.com"
+                            placeholder="Ej: juanperez@email.com"
                             value={formData.email}
                             onChange={handleChange}
                         />

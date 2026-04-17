@@ -1,6 +1,6 @@
 const BASE_URL = "http://localhost:8080/api/users"
 
-// lee el token del localStorage usando la key "db_user" — igual que featureService
+// lee el token del localStorage usando la key "db_user",igual que featureService
 // los endpoints de /api/users requieren ROLE_ADMIN
 const getToken = () => {
     const user = JSON.parse(localStorage.getItem("db_user"))
@@ -27,7 +27,7 @@ export const updateUserRole = async (id, newRole) => {
     const response = await fetch(`${BASE_URL}/${id}/role`, {
         method: "PUT",
         headers: {
-            "Content-Type": 'application/json',
+            "Content-Type": "application/json",
             "Authorization": `Bearer ${getToken()}`
         },
         // el backend espera RoleUpdateRequestDTO con campo "role"

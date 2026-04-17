@@ -235,7 +235,7 @@ const SearchBar = ({ onSearch }) => {
             <div className="searchbar__content">
 
                 <h1 className="searchbar__title">
-                    Busca ofertas en hoteles, casas y mucho más
+                    Busca tu lugar en hoteles, casas y mucho más
                 </h1>
 
                 <div className="searchbar__form">
@@ -251,7 +251,7 @@ const SearchBar = ({ onSearch }) => {
                             onChange={handleCityChange}
                             onFocus={() => cityInput.length > 0 && setShowSuggestions(true)}
                         />
-                        {/* dropdown de sugerencias — se muestra cuando hay texto */}
+                        {/* dropdown de sugerencias, se muestra cuando hay texto */}
                         {showSuggestions && filteredCities.length > 0 && (
                             <ul className="searchbar__suggestions">
                                 {filteredCities.map(city => (

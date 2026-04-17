@@ -25,13 +25,13 @@ export const canUserRate = async (roomId) => {
     return response.json()
 }
 
-// envía una nueva reseña — requiere token
+// envía una nueva reseña, requiere token
 // body: { stars: number, comment: string | null }
 export const createRating = async (roomId, stars, comment) => {
     const response = await fetch(`${BASE_URL}/room/${roomId}`, {
-        method: 'POST',
+        method: "POST",
         headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
             ...getAuthHeader()
         },
         body: JSON.stringify({ stars, comment: comment || null })

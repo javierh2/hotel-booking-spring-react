@@ -119,7 +119,7 @@ const Header = () => {
 
                                     <div className="header__dropdown-divider" />
 
-                                    {/* mis favoritos — accesible desde la cuenta del usuario, criterio HU #25 */}
+                                    {/* mis favoritos — accesible desde la cuenta del usuario */}
                                     <button
                                         className="header__dropdown-item"
                                         onClick={() => {
@@ -139,7 +139,7 @@ const Header = () => {
                                                 setDropdownOpen(false)
                                             }}
                                         >
-                                            Admin Panel
+                                            ⚙️ Admin Panel
                                         </button>
                                     )}
 

@@ -83,7 +83,7 @@ const Home = () => {
             setRooms(data)
         } catch (err) {
             setError(err.message)
-            console.log("Error al cargar habitaciones", err)
+            console.log("Error al cargar habitaciones: ", err)
         } finally {
             setLoading(false)
         }
@@ -94,7 +94,7 @@ const Home = () => {
             const data = await getAllCategories()
             setCategories(data)
         } catch (error) {
-            console.error("Error al cargar las categorías", error)
+            console.error("Error al cargar las categorías: ", error)
         }
     }
 
@@ -167,7 +167,7 @@ const Home = () => {
 
             setSearchResults(filtered)
         } catch (err) {
-            setSearchError(err + 'No se pudo realizar la búsqueda. Verificá tu conexión e intentá de nuevo. ??????????????????????')
+            setSearchError(err + ': No se pudo realizar la búsqueda. Verificá tu conexión e intentá de nuevo.')
             setSearchResults([])
         } finally {
             setSearchLoading(false)
@@ -214,7 +214,7 @@ const Home = () => {
                 <div className="categories-filter__content">
 
                     <div className="categories-filter__header">
-                        <h2 className="categories-filter__title">Categories</h2>
+                        <h2 className="categories-filter__title">Categorias de hospedaje:</h2>
 
                         {/* mostramos cuántas categorías están activas y botón para limpiar
                             solo visible cuando hay al menos un filtro activo */}
@@ -227,7 +227,7 @@ const Home = () => {
                                     className="categories-filter__clear"
                                     onClick={handleClearFilters}
                                 >
-                                    Limpiar filtros ✕
+                                    Limpiar filtro ✕
                                 </button>
                             </div>
                         )}
@@ -260,13 +260,13 @@ const Home = () => {
                 <div className="recommendations__content">
 
                     <div className="recommendations__header">
-                        <h2 className="recommendations__title">Recommendations</h2>
+                        <h2 className="recommendations__title">Recomendaciones</h2>
                         <p className="recommendations__subtitle">
                             {searchResults !== null
                                 ? `${filteredRooms.length} resultado${filteredRooms.length !== 1 ? 's' : ''} encontrado${filteredRooms.length !== 1 ? 's' : ''}`
                                 : selectedCategories.size > 0
                                     ? `${filteredRooms.length} habitación${filteredRooms.length !== 1 ? 'es' : ''} encontrada${filteredRooms.length !== 1 ? 's' : ''}`
-                                    : 'Rooms selected for you'
+                                    : 'Habitaciones selecionadas para vos'
                             }
                         </p>
                     </div>
@@ -275,7 +275,7 @@ const Home = () => {
                         <div className="recommendations__state">
                             <div className="recommendations__spinner" />
                             <p className="recommendations__loading-text">
-                                {searchLoading ? 'Buscando disponibilidad...' : 'Loading rooms...'}
+                                {searchLoading ? 'Buscando disponibilidad...' : 'Cargando habitaciones...'}
                             </p>
                         </div>
 
@@ -295,10 +295,10 @@ const Home = () => {
                             <div className="recommendations__error">
                                 <span className="recommendations__error-icon">⚠️</span>
                                 <p className="recommendations__error-text">
-                                    We were unable to load the rooms. Verify that the backend is running.
+                                    No pudimos cargar las habitaciones. Verifique que el servidor esté funcionando..
                                 </p>
                                 <button className="recommendations__retry-btn" onClick={fetchRooms}>
-                                    Retry
+                                    Reintentar
                                 </button>
                             </div>
                         </div>

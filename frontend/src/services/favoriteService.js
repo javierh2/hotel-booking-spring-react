@@ -30,7 +30,7 @@ export const getFavoriteIds = async () => {
 // agrega una room a favoritos
 export const addFavorite = async (roomId) => {
     const response = await fetch(`${BASE_URL}/${roomId}`, {
-        method: 'POST',
+        method: "POST",
         headers: { ...getAuthHeader() }
     })
     if (!response.ok) throw new Error(`Error ${response.status}`)
@@ -39,7 +39,7 @@ export const addFavorite = async (roomId) => {
 // quita una room de favoritos
 export const removeFavorite = async (roomId) => {
     const response = await fetch(`${BASE_URL}/${roomId}`, {
-        method: 'DELETE',
+        method: "DELETE",
         headers: { ...getAuthHeader() }
     })
     if (!response.ok) throw new Error(`Error ${response.status}`)

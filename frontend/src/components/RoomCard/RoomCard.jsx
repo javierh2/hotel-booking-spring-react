@@ -31,7 +31,6 @@ const RoomCard = ({ room, isFavorite = false, onFavoriteToggle }) => {
         e.stopPropagation()
 
         // si no está logueado, redirigimos al login
-        // criterio de aceptación: solo usuarios autenticados pueden marcar favoritos
         if (!isAuthenticated) {
             navigate('/login')
             return
@@ -101,7 +100,7 @@ const RoomCard = ({ room, isFavorite = false, onFavoriteToggle }) => {
                 <div className="room-card__footer">
                     <div className="room-card__price">
                         <span className="room-card__price-amount">${room.price}</span>
-                        <span className="room-card__price-label">for night</span>
+                        <span className="room-card__price-label">por noche</span>
                     </div>
                     <button
                         className="room-card__btn"
@@ -110,7 +109,7 @@ const RoomCard = ({ room, isFavorite = false, onFavoriteToggle }) => {
                             handleViewDetail()
                         }}
                     >
-                        View Details
+                        ver detalles
                     </button>
                 </div>
             </div>
