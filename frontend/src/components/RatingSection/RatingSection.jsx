@@ -100,7 +100,7 @@ const RatingSection = ({ roomId, averageRating, totalRatings }) => {
     return (
         <div className="rating-section">
 
-            {/* encabezado con promedio y total — criterio de aceptación explícito */}
+            {/* encabezado con promedio y total */}
             <div className="rating-section__header">
                 <h2 className="rating-section__title">Valoraciones</h2>
                 <div className="rating-section__summary">
@@ -140,7 +140,7 @@ const RatingSection = ({ roomId, averageRating, totalRatings }) => {
 
                     <textarea
                         className="rating-section__textarea"
-                        placeholder="Contá tu experiencia (opcional)..."
+                        placeholder="Contá tu experiencia..."
                         value={comment}
                         onChange={e => setComment(e.target.value)}
                         rows={3}

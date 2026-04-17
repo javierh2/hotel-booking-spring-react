@@ -105,6 +105,7 @@ const Admin = () => {
         }
     }
 
+    // handlers de features, usuarios y categorías — definidos aquí para tener acceso a las funciones de carga y al estado del modal de confirmación
     const fetchUsers = async () => {
         setLoadingUsers(true)
         try {
@@ -117,6 +118,7 @@ const Admin = () => {
         }
     }
 
+    // carga de categorías — mismo patrón que features y usuarios
     const fetchCategories = async () => {
         setLoadingCategories(true)
         try {
@@ -129,10 +131,10 @@ const Admin = () => {
         }
     }
 
+    // efecto que dispara la carga de datos según la vista seleccionada
     useEffect(() => {
         if (view === 'features') fetchFeatures()
         if (view === 'users') fetchUsers()
-        // cuando el admin entra a la vista de categorías cargamos la lista
         if (view === 'categories') fetchCategories()
     }, [view])
 
@@ -165,7 +167,6 @@ const Admin = () => {
         )
     }
 
-
     //  handlers de features
     const handleFeatureChange = (event) => {
         const { name, value } = event.target
@@ -173,6 +174,7 @@ const Admin = () => {
         if (featureError) setFeatureError('')
     }
 
+    // creación de característica — validación simple y manejo de error específico para nombre duplicado (error 400 con mensaje específico desde el backend)
     const handleCreateFeature = async () => {
         if (!newFeature.name.trim()) {
             setFeatureError("El nombre es obligatorio")
@@ -194,6 +196,7 @@ const Admin = () => {
         }
     }
 
+    // eliminación de característica con confirmación — se muestra el nombre de la característica en el mensaje para evitar confusiones
     const handleDeleteFeature = async (id, name) => {
         openConfirm(
             `Eliminar característica "${name}"`,
@@ -248,6 +251,7 @@ const Admin = () => {
         }
     }
 
+    // eliminación de categoría con confirmación — se muestra el título en el mensaje para evitar confusiones
     const handleDeleteCategory = async (id, title) => {
         openConfirm(
             `Eliminar categoría "${title}"`,
@@ -264,6 +268,7 @@ const Admin = () => {
         )
     }
 
+    // handler para cambiar el rol de un usuario — promueve a admin o revoca permisos de admin según el rol actual del usuario
     const handleRoleToggle = async (user) => {
         const newRole = user.role === 'ROLE_ADMIN' ? 'ROLE_USER' : 'ROLE_ADMIN'
         const action = newRole === 'ROLE_ADMIN' ? 'promover a administrador' : 'quitar permisos de administrador a'
@@ -285,7 +290,7 @@ const Admin = () => {
         )
     }
 
-    // estadísticas
+    // estadísticas para mostrar en el menú principal — se calculan a partir del estado de rooms sin necesidad de requests adicionales
     const totalRooms = rooms.length
     const averagePrice = rooms.length > 0 ? Math.round(rooms.reduce((acc, room) => acc + room.price, 0) / rooms.length) : 0
     const minimumPrice = rooms.length > 0 ? Math.min(...rooms.map(room => room.price)) : 0

@@ -64,6 +64,7 @@ const AvailabilityCalendar = ({ occupiedRanges = [] }) => {
         return classes.join(' ')
     }
 
+    // navega al mes anterior o siguiente actualizando el estado
     const prevMonth = () => {
         setCalendarMonth(prev => {
             const d = new Date(prev.year, prev.month - 1, 1)
@@ -71,6 +72,7 @@ const AvailabilityCalendar = ({ occupiedRanges = [] }) => {
         })
     }
 
+    // navega al mes siguiente actualizando el estado
     const nextMonth = () => {
         setCalendarMonth(prev => {
             const d = new Date(prev.year, prev.month + 1, 1)
@@ -78,6 +80,7 @@ const AvailabilityCalendar = ({ occupiedRanges = [] }) => {
         })
     }
 
+    // renderiza un mes con su título, días de la semana y grilla de días
     const renderMonth = ({ year, month }) => {
         const grid = buildGrid(year, month)
         return (
