@@ -3,7 +3,6 @@ import { useNavigate, useParams } from "react-router-dom"
 import { getRoomById } from "../../services/roomService"
 import './RoomDetail.css'
 import { getOccupiedDates } from "../../services/bookingService"
-import AvailabilityCalendar from "../../components/AvailabilityCalendar/AvailabilityCalendar"
 import RatingSection from "../../components/RatingSection/RatingSection"
 import ShareModal from "../../components/ShareModal/ShareModal"
 import BookingForm from "../../components/BookingForm/BookingForm"
@@ -277,14 +276,11 @@ const RoomDetail = () => {
                 </div>
                 <div className="room-detail__divider" />
 
-                {/* HU #23 — calendario de disponibilidad + formulario de reserva
-    AvailabilityCalendar muestra las fechas ocupadas (solo lectura, vista general)
-    BookingForm permite seleccionar fechas e iniciar la reserva (interactivo)
-    ambos reciben occupiedRanges del mismo fetch — sin request extra */}
+                {/* HU #23 — calendario unificado de disponibilidad y reserva
+    BookingForm ahora muestra tanto los días ocupados (visual)
+    como permite seleccionar fechas y confirmar la reserva (interactivo)
+    recibe occupiedRanges del mismo fetch — sin request extra */}
                 <div className="room-detail__availability">
-                    <h2 className="room-detail__availability-title">
-                        Disponibilidad
-                    </h2>
                     {availabilityLoading ? (
                         <div className="room-detail__state room-detail__state--inline">
                             <div className="room-detail__spinner" />
@@ -309,17 +305,11 @@ const RoomDetail = () => {
                             </button>
                         </div>
                     ) : (
-                        <>
-                            {/* vista general de disponibilidad — solo lectura */}
-                            <AvailabilityCalendar occupiedRanges={occupiedRanges} />
-                            <div className="room-detail__divider" />
-                            {/* formulario de reserva interactivo — mismos occupiedRanges para bloquear días */}
-                            <BookingForm
-                                room={room}
-                                occupiedRanges={occupiedRanges}
-                                onBookingCreated={handleBookingCreated}
-                            />
-                        </>
+                        <BookingForm
+                            room={room}
+                            occupiedRanges={occupiedRanges}
+                            onBookingCreated={handleBookingCreated}
+                        />
                     )}
                 </div>
 

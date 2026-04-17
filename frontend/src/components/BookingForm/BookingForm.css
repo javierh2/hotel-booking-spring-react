@@ -5,6 +5,12 @@
     gap: 20px;
 }
 
+.booking-form__header {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
 .booking-form__title {
     font-size: 1.25rem;
     font-weight: 700;
@@ -84,44 +90,51 @@
 .booking-form__cal-day {
     aspect-ratio: 1;
     border: none;
-    background: none;
     border-radius: 50%;
     font-size: 12px;
     color: #2C3E50;
     cursor: pointer;
-    transition: background 0.12s ease;
+    transition: background 0.12s ease, color 0.12s ease;
     display: flex;
     align-items: center;
     justify-content: center;
     width: 100%;
     font-family: inherit;
-}
-
-.booking-form__cal-day:hover:not(:disabled) {
-    background: #EFE4D9;
+    font-weight: 500;
 }
 
 .booking-form__cal-day--empty {
     background: transparent;
     cursor: default;
+    border: none;
 }
 
 .booking-form__cal-day--past {
+    background: transparent;
     color: #D0C8C2;
     cursor: default;
 }
 
+.booking-form__cal-day--available {
+    background: #EAF4EE;
+    color: #2C3E50;
+}
+
+.booking-form__cal-day--available:hover {
+    background: #D4ECD9;
+}
+
 .booking-form__cal-day--occupied {
-    background: #EFE4D9;
-    color: #B0A9A4;
+    background: #C47E5A;
+    color: #fff;
+    font-weight: 700;
     cursor: not-allowed;
-    text-decoration: line-through;
     border-radius: 50%;
 }
 
 .booking-form__cal-day--selected {
-    background: #C47E5A !important;
-    color: #fff !important;
+    background: #2C3E50 !important;
+    color: #F9F3EE !important;
     font-weight: 700;
 }
 
@@ -135,6 +148,8 @@
     display: flex;
     gap: 20px;
     flex-wrap: wrap;
+    padding-top: 16px;
+    border-top: 1px solid #EFE4D9;
 }
 
 .booking-form__legend-item {
@@ -146,23 +161,28 @@
 }
 
 .booking-form__legend-dot {
-    width: 12px;
-    height: 12px;
+    width: 14px;
+    height: 14px;
     border-radius: 50%;
     flex-shrink: 0;
 }
 
 .booking-form__legend-dot--available {
-    background: #fff;
-    border: 1px solid #EFE4D9;
+    background: #EAF4EE;
+    border: 1px solid #B8D9C0;
 }
 
 .booking-form__legend-dot--occupied {
-    background: #EFE4D9;
+    background: #C47E5A;
 }
 
 .booking-form__legend-dot--selected {
-    background: #C47E5A;
+    background: #2C3E50;
+}
+
+.booking-form__legend-dot--past {
+    background: transparent;
+    border: 1px solid #EFE4D9;
 }
 
 .booking-form__summary {
