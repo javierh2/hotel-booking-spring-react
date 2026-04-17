@@ -167,7 +167,7 @@ const Home = () => {
 
             setSearchResults(filtered)
         } catch (err) {
-            setSearchError(err + ': No se pudo realizar la búsqueda. Verificá tu conexión e intentá de nuevo.')
+            setSearchError('No se pudo realizar la búsqueda. Verificá tu conexión e intentá de nuevo: '+ err)
             setSearchResults([])
         } finally {
             setSearchLoading(false)
