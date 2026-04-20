@@ -119,6 +119,17 @@ const Header = () => {
 
                                     <div className="header__dropdown-divider" />
 
+                                    {/* mis favoritos — accesible desde la cuenta del usuario */}
+                                    <button
+                                        className="header__dropdown-item"
+                                        onClick={() => {
+                                            navigate('/favorites')
+                                            setDropdownOpen(false)
+                                        }}
+                                    >
+                                        ♥ Mis favoritos
+                                    </button>
+
                                     {/* solo el admin ve el link al panel */}
                                     {isAdmin && (
                                         <button
@@ -128,11 +139,10 @@ const Header = () => {
                                                 setDropdownOpen(false)
                                             }}
                                         >
-                                            Admin Panel
+                                            ⚙️ Admin Panel
                                         </button>
                                     )}
 
-                                    {/* cerrar sesión debajo del avatar */}
                                     <button
                                         className="header__dropdown-item header__dropdown-item--logout"
                                         onClick={handleLogout}

@@ -3,6 +3,7 @@ import { deleteRoom, getAllRooms } from '../../services/roomService'
 import { createFeature, deleteFeature, getAllFeatures } from '../../services/featureService';
 import { getAllUsers, updateUserRole } from '../../services/userService';
 import { createCategory, deleteCategory, getAllCategories } from '../../services/categoryService';
+import ConfirmModal from '../../components/ConfirmModal/ConfirmModal';
 import RoomForm from '../../components/RoomForm/RoomForm'
 import './Admin.css'
 
@@ -19,6 +20,28 @@ const Admin = () => {
 
     // controla qué vista se renderiza: 'menu' | 'list' | 'features' | 'users' | 'categories'
     const [view, setView] = useState("menu")
+
+
+    // estado del modal de confirmación reutilizable
+    // un solo objeto maneja todos los casos de confirmación de la app
+    // onConfirm se sobreescribe en cada uso según qué acción se está confirmando
+    const [confirmModal, setConfirmModal] = useState({
+        isOpen: false,
+        title: '',
+        message: '',
+        onConfirm: null,
+        confirmText: "Sí, confirmar"
+    })
+
+    // helper para abrir el modal — evita repetir el spread en cada handler
+    const openConfirm = (title, message, onConfirm, confirmText = "Sí, confirmar") => {
+        setConfirmModal({ isOpen: true, title, message, onConfirm,confirmText })
+    }
+
+    // helper para cerrar — resetea todo el estado de una sola vez
+    const closeConfirm = () => {
+        setConfirmModal({ isOpen: false, title: '', message: '', onConfirm: null, confirmText: "Sí, confirmar" })
+    }
 
     // estado de features
     const [features, setFeatures] = useState([])
@@ -38,7 +61,8 @@ const Admin = () => {
     const [categories, setCategories] = useState([])
     const [loadingCategories, setLoadingCategories] = useState(false)
     const [newCategory, setNewCategory] = useState({ title: '', description: '', imageUrl: '' })
-    const [categoryError, setCategoryError] = useState('')
+    const [titleError, setTitleError] = useState('')
+    const [descriptionError, setDescriptionError] = useState('')
     const [savingCategory, setSavingCategory] = useState(false)
 
     // detección de mobile
@@ -83,6 +107,7 @@ const Admin = () => {
         }
     }
 
+    // handlers de features, usuarios y categorías — definidos aquí para tener acceso a las funciones de carga y al estado del modal de confirmación
     const fetchUsers = async () => {
         setLoadingUsers(true)
         try {
@@ -95,6 +120,7 @@ const Admin = () => {
         }
     }
 
+    // carga de categorías — mismo patrón que features y usuarios
     const fetchCategories = async () => {
         setLoadingCategories(true)
         try {
@@ -107,10 +133,10 @@ const Admin = () => {
         }
     }
 
+    // efecto que dispara la carga de datos según la vista seleccionada
     useEffect(() => {
         if (view === 'features') fetchFeatures()
         if (view === 'users') fetchUsers()
-        // cuando el admin entra a la vista de categorías cargamos la lista
         if (view === 'categories') fetchCategories()
     }, [view])
 
@@ -126,18 +152,22 @@ const Admin = () => {
     }
 
     const handleDelete = async (id, name) => {
-        const confirmation = window.confirm(
-            `¿Estás seguro de querer eliminar "${name}"?\
-            Esta acción no se puede revertir.`
+        // antes: window.confirm() bloqueante y sin estilos
+        // ahora: modal propio con identidad visual del proyecto
+        openConfirm(
+            `Eliminar "${name}"`,
+            'Esta acción no se puede revertir. La habitación se eliminará permanentemente del catálogo.',
+            async () => {
+                closeConfirm()
+                try {
+                    await deleteRoom(id)
+                    setRooms(prev => prev.filter(room => room.id !== id))
+                } catch (error) {
+                    alert(`Error al eliminar: ${error.message}`)
+                }
+            },
+            "Sí, eliminar"
         )
-        if (!confirmation) return
-        try {
-            await deleteRoom(id)
-            setRooms(prev => prev.filter(room => room.id !== id))
-        } catch (error) {
-            alert(`Error al eliminar: ${error.message}`)
-            console.error(`Error al eliminar habitación: `, error)
-        }
     }
 
     //  handlers de features
@@ -147,6 +177,7 @@ const Admin = () => {
         if (featureError) setFeatureError('')
     }
 
+    // creación de característica — validación simple y manejo de error específico para nombre duplicado (error 400 con mensaje específico desde el backend)
     const handleCreateFeature = async () => {
         if (!newFeature.name.trim()) {
             setFeatureError("El nombre es obligatorio")
@@ -162,23 +193,28 @@ const Admin = () => {
             setNewFeature({ name: '', icon: '' })
         } catch (error) {
             setFeatureError("Ya existe una característica con ese nombre")
-            console.error("Error al crear característica: " , error)
+            console.error("Error al crear característica: ", error)
         } finally {
             setSavingFeature(false)
         }
     }
 
+    // eliminación de característica con confirmación — se muestra el nombre de la característica en el mensaje para evitar confusiones
     const handleDeleteFeature = async (id, name) => {
-        const confirmation = window.confirm(
-            `¿Eliminar la característica "${name}"? Se quitará de todas las habitaciones que la tengan asignada.`
+        openConfirm(
+            `Eliminar característica "${name}"`,
+            'Se quitará de todas las habitaciones que la tengan asignada.',
+            async () => {
+                closeConfirm()
+                try {
+                    await deleteFeature(id)
+                    setFeatures(prev => prev.filter(f => f.id !== id))
+                } catch (error) {
+                    alert(`Error al eliminar: ${error.message}`)
+                }
+            },
+            "Sí, eliminar"
         )
-        if (!confirmation) return
-        try {
-            await deleteFeature(id)
-            setFeatures(prev => prev.filter(f => f.id !== id))
-        } catch (error) {
-            alert(`Error al eliminar: ${error.message}`)
-        }
     }
 
     // handlers de categorías
@@ -186,18 +222,23 @@ const Admin = () => {
         const { name, value } = event.target
         setNewCategory(prev => ({ ...prev, [name]: value }))
         // limpiamos el error apenas el usuario empieza a corregir
-        if (categoryError) setCategoryError("")
+        if (name === 'title' && titleError) setTitleError('')
+        if (name === 'description' && descriptionError) setDescriptionError('')
     }
 
     const handleCreateCategory = async () => {
-        // título y descripción son obligatorios según CategoryRequestDTO
-        // imageUrl es opcional
+        // Limpiar errores previos
+        setTitleError('')
+        setDescriptionError('')
+
+        // Título obligatorio
         if (!newCategory.title.trim()) {
-            setCategoryError("El título es obligatorio")
+            setTitleError('El título es obligatorio')
             return
         }
+        // Descripción obligatoria
         if (!newCategory.description.trim()) {
-            setCategoryError("La descripción es obligatoria")
+            setDescriptionError('La descripción es obligatoria')
             return
         }
         setSavingCategory(true)
@@ -212,47 +253,56 @@ const Admin = () => {
             setCategories(prev => [...prev, created])
             setNewCategory({ title: '', description: '', imageUrl: '' })
         } catch (error) {
-            setCategoryError("Ya existe una categoría con ese título")
+            setTitleError("Ya existe una categoría con ese título")
             console.error("Error al crear categoría: ", error)
         } finally {
             setSavingCategory(false)
         }
     }
 
+    // eliminación de categoría con confirmación — se muestra el título en el mensaje para evitar confusiones
     const handleDeleteCategory = async (id, title) => {
-        const confirmation = window.confirm(
-            `¿Eliminar la categoría "${title}"? Las habitaciones asignadas a esta categoría quedarán sin categoría.`
+        openConfirm(
+            `Eliminar categoría "${title}"`,
+            'Las habitaciones asignadas a esta categoría quedarán sin categoría asignada.',
+            async () => {
+                closeConfirm()
+                try {
+                    await deleteCategory(id)
+                    setCategories(prev => prev.filter(c => c.id !== id))
+                } catch (error) {
+                    alert(`Error al eliminar: ${error.message}`)
+                }
+            },
+            "Sí, eliminar"
         )
-        if (!confirmation) return
-        try {
-            await deleteCategory(id)
-            setCategories(prev => prev.filter(c => c.id !== id))
-        } catch (error) {
-            alert(`Error al eliminar: ${error.message}`)
-        }
     }
 
-    // handler de rol de usuarios
+    // handler para cambiar el rol de un usuario — promueve a admin o revoca permisos de admin según el rol actual del usuario
     const handleRoleToggle = async (user) => {
         const newRole = user.role === 'ROLE_ADMIN' ? 'ROLE_USER' : 'ROLE_ADMIN'
         const action = newRole === 'ROLE_ADMIN' ? 'promover a administrador' : 'quitar permisos de administrador a'
-        const confirmation = window.confirm(
-            `¿Estás seguro de querer ${action} "${user.firstName} ${user.lastName}"?`
+        const confirmText = newRole === 'ROLE_ADMIN' ? 'Sí, promover' : 'Sí, quitar permisos'
+        openConfirm(
+            `Cambiar rol de ${user.firstName} ${user.lastName}`,
+            `¿Estás seguro de querer ${action} este usuario?`,
+            async () => {
+                closeConfirm()
+                setUpdatingUserId(user.id)
+                try {
+                    const updated = await updateUserRole(user.id, newRole)
+                    setUsers(prev => prev.map(u => u.id === updated.id ? updated : u))
+                } catch (error) {
+                    alert(`Error al actualizar el rol: ${error.message}`)
+                } finally {
+                    setUpdatingUserId(null)
+                }
+            },
+            confirmText
         )
-        if (!confirmation) return
-        setUpdatingUserId(user.id)
-        try {
-            const updated = await updateUserRole(user.id, newRole)
-            setUsers(prev => prev.map(u => u.id === updated.id ? updated : u))
-        } catch (error) {
-            alert(`Error al actualizar el rol: ${error.message}`)
-            console.error('Error al actualizar rol:', error)
-        } finally {
-            setUpdatingUserId(null)
-        }
     }
 
-    // estadísticas
+    // estadísticas para mostrar en el menú principal — se calculan a partir del estado de rooms sin necesidad de requests adicionales
     const totalRooms = rooms.length
     const averagePrice = rooms.length > 0 ? Math.round(rooms.reduce((acc, room) => acc + room.price, 0) / rooms.length) : 0
     const minimumPrice = rooms.length > 0 ? Math.min(...rooms.map(room => room.price)) : 0
@@ -347,6 +397,15 @@ const Admin = () => {
                         roomToEdit={null}
                     />
                 )}
+
+                <ConfirmModal
+                    isOpen={confirmModal.isOpen}
+                    title={confirmModal.title}
+                    message={confirmModal.message}
+                    onConfirm={confirmModal.onConfirm}
+                    onCancel={closeConfirm}
+                    confirmText={confirmModal.confirmText} 
+                />
             </div>
         )
     }
@@ -463,6 +522,15 @@ const Admin = () => {
                     )}
 
                 </div>
+                <ConfirmModal
+                    isOpen={confirmModal.isOpen}
+                    title={confirmModal.title}
+                    message={confirmModal.message}
+                    onConfirm={confirmModal.onConfirm}
+                    onCancel={closeConfirm}
+                    confirmText={confirmModal.confirmText}
+                />
+
             </div>
         )
     }
@@ -496,12 +564,12 @@ const Admin = () => {
                                 <input
                                     type="text"
                                     name="title"
-                                    className={`admin__feature-input ${categoryError ? 'admin__feature-input--error' : ''}`}
+                                    className={`admin__feature-input ${titleError ? 'admin__feature-input--error' : ''}`}
                                     placeholder="Ej: Suite, Hostel, Departamento..."
                                     value={newCategory.title}
                                     onChange={handleCategoryChange}
                                 />
-                                {categoryError && <span className="admin__feature-error">{categoryError}</span>}
+                                {titleError && <span className="admin__feature-error">{titleError}</span>}
                             </div>
 
                             <div className="admin__feature-form-group">
@@ -509,11 +577,12 @@ const Admin = () => {
                                 <input
                                     type="text"
                                     name="description"
-                                    className="admin__feature-input"
+                                    className={`admin__feature-input ${descriptionError ? 'admin__feature-input--error' : ''}`}
                                     placeholder="Ej: Habitaciones de lujo con vista al mar..."
                                     value={newCategory.description}
                                     onChange={handleCategoryChange}
                                 />
+                                {descriptionError && <span className="admin__feature-error">{descriptionError}</span>}
                             </div>
 
                             <div className="admin__feature-form-group">
@@ -604,6 +673,15 @@ const Admin = () => {
                     )}
 
                 </div>
+
+                <ConfirmModal
+                    isOpen={confirmModal.isOpen}
+                    title={confirmModal.title}
+                    message={confirmModal.message}
+                    onConfirm={confirmModal.onConfirm}
+                    onCancel={closeConfirm}
+                    confirmText={confirmModal.confirmText}
+                />
             </div>
         )
     }
@@ -680,6 +758,15 @@ const Admin = () => {
                     )}
 
                 </div>
+
+                <ConfirmModal
+                    isOpen={confirmModal.isOpen}
+                    title={confirmModal.title}
+                    message={confirmModal.message}
+                    onConfirm={confirmModal.onConfirm}
+                    onCancel={closeConfirm}
+                    confirmText={confirmModal.confirmText}
+                />
             </div>
         )
     }
@@ -800,6 +887,15 @@ const Admin = () => {
                     roomToEdit={roomToEdit}
                 />
             )}
+
+            <ConfirmModal
+                isOpen={confirmModal.isOpen}
+                title={confirmModal.title}
+                message={confirmModal.message}
+                onConfirm={confirmModal.onConfirm}
+                onCancel={closeConfirm}
+                confirmText={confirmModal.confirmText} 
+            />
         </div>
     )
 }

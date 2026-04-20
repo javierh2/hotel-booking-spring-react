@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 
@@ -67,7 +68,7 @@ public class  RoomController {
 
 
     // PUT /api/rooms/{id}
-    // Actualiza una habitación existente — HU #12
+    // Actualiza una habitación existente
     // PUT porque reemplazamos todos los campos editables del recurso
         @PutMapping("/{id}")
         public ResponseEntity<RoomResponseDTO> updateRoom(
@@ -85,4 +86,21 @@ public class  RoomController {
         roomService.deleteRoom(id);
         return ResponseEntity.noContent().build();
     }
+
+    // GET /api/rooms/available?checkIn=2026-05-01&checkOut=2026-05-05
+    // público, cualquier usuario puede buscar disponibilidad sin token
+    // los parámetros son @RequestParam porque van en la query string, no en el path
+    @GetMapping("/available")
+    public ResponseEntity<List<RoomResponseDTO>> getAvailableRooms(
+            @RequestParam String checkIn,
+            @RequestParam String checkOut) {
+        // parseamos String a LocalDate acá en el Controller
+        // si el formato es inválido, Spring lanza una excepción que el GlobalExceptionHandler captura
+        List<RoomResponseDTO> rooms = roomService.getAvailableRooms(
+                LocalDate.parse(checkIn),
+                LocalDate.parse(checkOut)
+        );
+        return ResponseEntity.ok(rooms);
+    }
+
 }

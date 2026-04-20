@@ -1,113 +1,336 @@
 .searchbar {
     width: 100%;
-    min-height: 200px;
-    background: linear-gradient(135deg,
-            #2C3E50 0%,
-            #3D5166 60%,
-            #2C3E50 100%);
+    min-height: 180px;
+    background: linear-gradient(135deg, #2C3E50 0%, #3D5166 60%, #2C3E50 100%);
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 40px 40px;
+    padding: 40px;
 }
-
 
 .searchbar__content {
     width: 100%;
-    max-width: 720px;
+    max-width: 900px;
     text-align: center;
 }
 
-
 .searchbar__title {
-    font-size: 32px;
+    font-size: 26px;
     font-weight: 700;
     color: #F9F3EE;
-    margin-bottom: 10px;
+    margin-bottom: 24px;
     line-height: 1.3;
 }
 
-
-.searchbar__subtitle {
-    font-size: 16px;
-    font-weight: 300;
-    color: #E8C5B0;
-    margin-bottom: 32px;
-    font-style: italic;
-}
-
-
 .searchbar__form {
     display: flex;
-    gap: 0;
+    align-items: stretch;
     width: 100%;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    background: #fff;
     border-radius: 8px;
-    overflow: hidden;
+    overflow: visible;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+    position: relative;
 }
 
+.searchbar__field {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0 20px;
+    flex: 1;
+}
+
+.searchbar__field--city {
+    flex: 1.2;
+}
+
+.searchbar__field--dates {
+    flex: 1.5;
+}
+
+.searchbar__field-icon {
+    font-size: 16px;
+    flex-shrink: 0;
+}
+
+.searchbar__separator {
+    width: 1px;
+    background: #EFE4D9;
+    margin: 14px 0;
+}
 
 .searchbar__input {
     flex: 1;
-    padding: 18px 24px;
-    font-size: 15px;
+    padding: 18px 0;
+    font-size: 14px;
     border: none;
     outline: none;
-    background-color: #FFFFFF;
+    background: transparent;
     color: #2C3E50;
     font-family: inherit;
+    min-width: 0;
 }
 
 .searchbar__input::placeholder {
     color: #9E8E82;
 }
 
-.searchbar__input:focus {
-    background-color: #FAFAFA;
+.searchbar__date-btn {
+    flex: 1;
+    padding: 18px 0;
+    font-size: 14px;
+    border: none;
+    outline: none;
+    background: transparent;
+    color: #9E8E82;
+    font-family: inherit;
+    text-align: left;
+    cursor: pointer;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
+.searchbar__date-btn--active {
+    color: #2C3E50;
+    font-weight: 600;
+}
 
 .searchbar__button {
     padding: 18px 32px;
-    background-color: #A8C5B5;
-    color: #2C3E50;
+    background: #C47E5A;
+    color: #F9F3EE;
     font-size: 15px;
     font-weight: 700;
     border: none;
     cursor: pointer;
-    transition: background-color 0.25s ease;
+    transition: background 0.25s ease;
     white-space: nowrap;
+    border-radius: 0 8px 8px 0;
+    flex-shrink: 0;
 }
 
 .searchbar__button:hover {
-    background-color: #8FB5A3;
+    background: #B06A45;
 }
 
+.searchbar__suggestions {
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 0;
+    right: 0;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 8px 24px rgba(44,62,80,0.15);
+    list-style: none;
+    padding: 6px 0;
+    margin: 0;
+    z-index: 100;
+}
+
+.searchbar__suggestion-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 16px;
+    font-size: 14px;
+    color: #2C3E50;
+    cursor: pointer;
+    transition: background 0.15s ease;
+}
+
+.searchbar__suggestion-item:hover {
+    background: #F9F3EE;
+}
+
+.searchbar__suggestion-icon {
+    font-size: 14px;
+    color: #9E8E82;
+}
+
+.searchbar__suggestion-country {
+    margin-left: auto;
+    font-size: 12px;
+    color: #9E8E82;
+}
+
+.searchbar__calendar {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%);
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 8px 32px rgba(44,62,80,0.18);
+    padding: 20px;
+    z-index: 200;
+    min-width: 580px;
+}
+
+.searchbar__cal-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+}
+
+.searchbar__cal-months {
+    display: flex;
+    gap: 32px;
+    flex: 1;
+}
+
+.searchbar__cal-nav {
+    background: none;
+    border: none;
+    font-size: 22px;
+    color: #2C3E50;
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: 6px;
+    transition: background 0.15s ease;
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.searchbar__cal-nav:hover {
+    background: #EFE4D9;
+}
+
+.searchbar__cal-month {
+    flex: 1;
+}
+
+.searchbar__cal-month-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: #2C3E50;
+    text-align: center;
+    margin-bottom: 12px;
+}
+
+.searchbar__cal-days-header {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    margin-bottom: 6px;
+}
+
+.searchbar__cal-day-name {
+    font-size: 11px;
+    font-weight: 600;
+    color: #9E8E82;
+    text-align: center;
+    padding: 4px 0;
+}
+
+.searchbar__cal-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 2px;
+}
+
+.searchbar__cal-day {
+    aspect-ratio: 1;
+    border: none;
+    background: none;
+    border-radius: 50%;
+    font-size: 13px;
+    color: #2C3E50;
+    cursor: pointer;
+    transition: background 0.12s ease, color 0.12s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
+.searchbar__cal-day:hover:not(:disabled) {
+    background: #EFE4D9;
+}
+
+.searchbar__cal-day--selected {
+    background: #C47E5A !important;
+    color: #fff !important;
+    font-weight: 700;
+}
+
+.searchbar__cal-day--range {
+    background: #F5E6DC;
+    border-radius: 0;
+    color: #2C3E50;
+}
+
+.searchbar__cal-day--past {
+    color: #D0C8C2;
+    cursor: default;
+}
+
+.searchbar__cal-day:disabled {
+    cursor: default;
+}
+
+.searchbar__cal-footer {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid #EFE4D9;
+}
+
+.searchbar__cal-clear {
+    background: none;
+    border: none;
+    font-size: 13px;
+    color: #C47E5A;
+    cursor: pointer;
+    font-weight: 600;
+    padding: 4px 8px;
+    border-radius: 4px;
+    transition: background 0.15s ease;
+}
+
+.searchbar__cal-clear:hover {
+    background: #FDF5F0;
+}
 
 @media (max-width: 768px) {
     .searchbar {
-        min-height: 260px;
-        padding: 40px 20px;
+        padding: 32px 16px;
     }
 
     .searchbar__title {
-        font-size: 24px;
+        font-size: 20px;
     }
-
-    .searchbar__subtitle {
-        font-size: 14px;
-        margin-bottom: 24px;
-    }
-}
-
-@media (max-width: 480px) {
 
     .searchbar__form {
         flex-direction: column;
         border-radius: 8px;
     }
 
+    .searchbar__separator {
+        display: none;
+    }
+
+    .searchbar__field {
+        padding: 4px 16px;
+        border-bottom: 1px solid #EFE4D9;
+    }
+
     .searchbar__button {
-        padding: 14px;
+        border-radius: 0 0 8px 8px;
+        padding: 16px;
+    }
+
+    .searchbar__calendar {
+        min-width: unset;
+        width: 95vw;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+
+    .searchbar__cal-months {
+        flex-direction: column;
+        gap: 20px;
     }
 }

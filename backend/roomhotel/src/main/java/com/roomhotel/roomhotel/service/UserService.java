@@ -17,7 +17,7 @@ public class UserService {
 
     private final UserRepository userRepository;
 
-    // devuelve todos los usuarios — solo ROLE_ADMIN puede llamar este endpoint
+    // devuelve todos los usuarios; solo ROLE_ADMIN puede llamar este endpoint
     // el control de acceso lo hace SecurityConfig, no este método
     public List<UserResponseDTO> getAllUsers() {
         return userRepository.findAll()

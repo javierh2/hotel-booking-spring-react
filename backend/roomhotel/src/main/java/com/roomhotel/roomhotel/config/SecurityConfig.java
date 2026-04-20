@@ -34,8 +34,7 @@ public class SecurityConfig {
     public UserDetailsService userDetailsService() {
         return email -> userRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException(
-                        "Usuario no encontrado con email: " + email
-                ));
+                        "Usuario no encontrado con email: " + email));
     }
 
     // BCryptPasswordEncoder — el algoritmo estándar para hashear contraseñas.
@@ -56,59 +55,68 @@ public class SecurityConfig {
         return provider;
     }
 
-    // AuthenticationManager — el componente central que Spring Security usa para autenticar usuarios
+    // AuthenticationManager — el componente central que Spring Security usa para
+    // autenticar usuarios
     // expuesto como bean para poder inyectarlo en nuestro AuthService.
     @Bean
     public AuthenticationManager authenticationManager(
-            AuthenticationConfiguration config
-    ) throws Exception {
+            AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
     }
 
-
     // SecurityFilterChain define la configuración de seguridad HTTP
-    // config de que endpoints son públicos, cuáles requieren autenticación y qué roles se necesitan.
-    // registro del filtro JWT para que se ejecute antes del filtro de autenticación estándar de Spring Security.
+    // config de que endpoints son públicos, cuáles requieren autenticación y qué
+    // roles se necesitan.
+    // registro del filtro JWT para que se ejecute antes del filtro de autenticación
+    // estándar de Spring Security.
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(csrf -> csrf.disable()) // CSRF no aplica en APIs REST sin cookies de sesión
-                .sessionManagement(session ->
-                        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                )
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
 
-                        // puede utilizarse sin token
+                        // públicos sin token
                         .requestMatchers("/api/auth/**").permitAll()
                         .requestMatchers("/h2-console/**").permitAll()
 
-                        // las habitaciones pueden ser vistas por cualquier usuario, incluso sin autenticación (para el catálogo público)
-                        .requestMatchers(HttpMethod.GET, "/api/rooms/**").permitAll()
+                        // rooms — más específico ANTES que el wildcard
+                        .requestMatchers(HttpMethod.GET, "/api/rooms/available").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/rooms/random").permitAll()
-                        .requestMatchers(HttpMethod.GET, "api/features/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/rooms/**").permitAll()
+
+                        // features y categories
+                        .requestMatchers(HttpMethod.GET, "/api/features/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/categories/**").permitAll()
 
-                        // POST y DELETE de rooms requieren ser ADMIN
-                        // hasRole() agrega el prefijo ROLE_ automáticamente
-                        .requestMatchers(HttpMethod.POST, "/api/rooms").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.DELETE, "/api/rooms/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.PUT, "/api/rooms/**").hasRole("ADMIN")
+                        // bookings — occupied-dates público, POST autenticado
+                        .requestMatchers(HttpMethod.GET, "/api/bookings/room/*/occupied-dates").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/bookings").authenticated()
 
+                        // ratings — can-rate ANTES que el wildcard GET público
+                        .requestMatchers(HttpMethod.GET, "/api/ratings/room/*/can-rate").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/api/ratings/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/ratings/**").authenticated()
+
+                        // favoritos — todos autenticados
+                        .requestMatchers("/api/favorites/**").authenticated()
+
+                        // admin — ROLE_ADMIN
+                        .requestMatchers(HttpMethod.POST, "/api/rooms").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/api/rooms/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/rooms/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.POST, "/api/categories").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/api/categories/**").hasRole("ADMIN")
-
                         .requestMatchers(HttpMethod.POST, "/api/features").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/api/features/**").hasRole("ADMIN")
-
                         .requestMatchers(HttpMethod.GET, "/api/users").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/api/users/*/role").hasRole("ADMIN")
 
-                        // Cualquier otro endpoint requiere estar autenticado
-                        .anyRequest().authenticated()
-                )
+                        .anyRequest().authenticated())
                 // Desactivamos el frameOptions para que la consola H2 funcione en el browser
                 .headers(headers -> headers.frameOptions(frame -> frame.disable()))
-                // registro del filtro JWT para que se ejecute antes del filtro de autenticación estándar de Spring Security.
+                // registro del filtro JWT para que se ejecute antes del filtro de autenticación
+                // estándar de Spring Security.
                 .authenticationProvider(authenticationProvider())
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 

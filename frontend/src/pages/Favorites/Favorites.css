@@ -1,0 +1,119 @@
+.favorites {
+    width: 100%;
+    min-height: 60vh;
+    padding: 60px 40px;
+    background: #F9F3EE;
+}
+
+.favorites__content {
+    max-width: 1280px;
+    margin: 0 auto;
+}
+
+.favorites__header {
+    margin-bottom: 40px;
+}
+
+.favorites__title {
+    font-size: 26px;
+    font-weight: 700;
+    color: #2C3E50;
+    margin-bottom: 8px;
+}
+
+.favorites__subtitle {
+    font-size: 14px;
+    color: #9E8E82;
+    font-style: italic;
+}
+
+.favorites__grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+}
+
+.favorites__state {
+    min-height: 300px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    text-align: center;
+}
+
+.favorites__spinner {
+    width: 44px;
+    height: 44px;
+    border: 4px solid #EFE4D9;
+    border-top-color: #C47E5A;
+    border-radius: 50%;
+    animation: fav-spin 0.8s linear infinite;
+}
+
+@keyframes fav-spin {
+    to { transform: rotate(360deg); }
+}
+
+.favorites__state--empty {
+    color: #9E8E82;
+}
+
+.favorites__empty-icon {
+    font-size: 64px;
+    color: #EFE4D9;
+}
+
+.favorites__empty-text {
+    font-size: 16px;
+    color: #9E8E82;
+}
+
+.favorites__go-home {
+    padding: 10px 28px;
+    background: #C47E5A;
+    color: #F9F3EE;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.favorites__go-home:hover {
+    background: #B06A45;
+}
+
+@media (max-width: 768px) {
+    .favorites {
+        padding: 40px 16px;
+    }
+
+    .favorites__grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.favorites__header-top {
+    margin-bottom: 12px;
+}
+
+.favorites__back-btn {
+    padding: 12px 24px;
+    background-color: transparent;
+    border: 2px solid #2C3E50;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #2C3E50;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    font-family: inherit;
+}
+
+.favorites__back-btn:hover {
+    background-color: #2C3E50;
+    color: #F9F3EE;
+}

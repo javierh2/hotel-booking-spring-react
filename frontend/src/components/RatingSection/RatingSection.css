@@ -1,0 +1,245 @@
+.rating-section {
+    width: 100%;
+}
+
+.rating-section__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-bottom: 1.25rem;
+}
+
+.rating-section__title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #2C3E50;
+}
+
+.rating-section__summary {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.rating-section__avg {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: #C47E5A;
+    line-height: 1;
+}
+
+.rating-section__summary-detail {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.rating-section__stars-display {
+    display: flex;
+    gap: 2px;
+}
+
+.rating-section__total {
+    font-size: 12px;
+    color: #9E8E82;
+}
+
+.rating-section__no-ratings {
+    font-size: 13px;
+    color: #9E8E82;
+    font-style: italic;
+}
+
+.rating-section__divider {
+    height: 1px;
+    background: #EFE4D9;
+    margin: 1rem 0;
+}
+
+.rating-section__form {
+    background: #FDF5F0;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.rating-section__form-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: #2C3E50;
+}
+
+.rating-section__picker {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.rating-section__picker-label {
+    font-size: 13px;
+    color: #9E8E82;
+    margin-left: 8px;
+}
+
+.rating-section__star {
+    font-size: 24px;
+    color: #EFE4D9;
+    transition: color 0.1s ease;
+}
+
+.rating-section__star--filled {
+    color: #C47E5A;
+}
+
+.rating-section__star--interactive {
+    cursor: pointer;
+}
+
+.rating-section__star--interactive:hover {
+    transform: scale(1.15);
+}
+
+.rating-section__textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #EFE4D9;
+    border-radius: 8px;
+    font-size: 14px;
+    font-family: inherit;
+    color: #2C3E50;
+    background: #fff;
+    resize: vertical;
+    outline: none;
+    transition: border-color 0.2s ease;
+    box-sizing: border-box;
+}
+
+.rating-section__textarea:focus {
+    border-color: #C47E5A;
+}
+
+.rating-section__error {
+    font-size: 13px;
+    color: #E74C3C;
+}
+
+.rating-section__submit {
+    align-self: flex-start;
+    padding: 10px 24px;
+    background: #C47E5A;
+    color: #F9F3EE;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.rating-section__submit:hover:not(:disabled) {
+    background: #B06A45;
+}
+
+.rating-section__submit:disabled {
+    opacity: 0.5;
+    cursor: default;
+}
+
+.rating-section__success {
+    padding: 14px 20px;
+    background: #EAF4EE;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #2C3E50;
+    margin-bottom: 24px;
+}
+
+.rating-section__loading {
+    font-size: 14px;
+    color: #9E8E82;
+    padding: 16px 0;
+}
+
+.rating-section__empty {
+    font-size: 14px;
+    color: #9E8E82;
+    font-style: italic;
+    padding: 8px 0;
+}
+
+.rating-section__list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.rating-section__item {
+    padding: 16px;
+    background: #fff;
+    border-radius: 10px;
+    border: 1px solid #EFE4D9;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.rating-section__item-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.rating-section__avatar {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: #C47E5A;
+    color: #F9F3EE;
+    font-size: 13px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.rating-section__item-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    flex: 1;
+}
+
+.rating-section__item-name {
+    font-size: 14px;
+    font-weight: 700;
+    color: #2C3E50;
+}
+
+.rating-section__item-date {
+    font-size: 12px;
+    color: #9E8E82;
+}
+
+.rating-section__item-stars {
+    display: flex;
+    gap: 2px;
+}
+
+.rating-section__item-stars .rating-section__star {
+    font-size: 16px;
+}
+
+.rating-section__item-comment {
+    font-size: 14px;
+    color: #2C3E50;
+    line-height: 1.6;
+    margin: 0;
+    padding-left: 50px;
+}

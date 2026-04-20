@@ -230,3 +230,32 @@
     font-weight: 600;
     color: #C47E5A;
 }
+
+.recommendations__search-banner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #EFE4D9;
+    border-radius: 8px;
+    padding: 12px 20px;
+    margin-bottom: 24px;
+    font-size: 14px;
+    color: #2C3E50;
+    font-weight: 600;
+}
+
+.recommendations__search-clear {
+    background: none;
+    border: none;
+    font-size: 13px;
+    color: #C47E5A;
+    cursor: pointer;
+    font-weight: 600;
+    padding: 4px 8px;
+    border-radius: 4px;
+    transition: background 0.15s ease;
+}
+
+.recommendations__search-clear:hover {
+    background: #F9F3EE;
+}

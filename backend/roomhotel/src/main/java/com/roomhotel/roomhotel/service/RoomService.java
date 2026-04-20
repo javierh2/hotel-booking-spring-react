@@ -9,12 +9,11 @@ import com.roomhotel.roomhotel.entity.Feature;
 import com.roomhotel.roomhotel.entity.Room;
 import com.roomhotel.roomhotel.exception.DuplicateNameException;
 import com.roomhotel.roomhotel.exception.ResourceNotFoundException;
-import com.roomhotel.roomhotel.repository.CategoryRepository;
-import com.roomhotel.roomhotel.repository.FeatureRepository;
-import com.roomhotel.roomhotel.repository.RoomRepository;
+import com.roomhotel.roomhotel.repository.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -26,11 +25,17 @@ public class RoomService {
     private final RoomRepository roomRepository;
     private final CategoryRepository categoryRepository;
     private final FeatureRepository featureRepository;
+    private final BookingRepository bookingRepository;
+    private final RatingRepository ratingRepository;
+    private final FavoriteRepository favoriteRepository;
 
-    public RoomService(RoomRepository roomRepository, CategoryRepository categoryRepository, FeatureRepository featureRepository) {
+    public RoomService(RoomRepository roomRepository, CategoryRepository categoryRepository, FeatureRepository featureRepository, BookingRepository bookingRepository, RatingRepository ratingRepository, FavoriteRepository favoriteRepository) {
         this.roomRepository = roomRepository;
         this.categoryRepository = categoryRepository;
         this.featureRepository = featureRepository;
+        this.bookingRepository = bookingRepository;
+        this.ratingRepository = ratingRepository;
+        this.favoriteRepository = favoriteRepository;
     }
 
 
@@ -158,22 +163,33 @@ public class RoomService {
     }
 
     // elimina un registro de la DB mediante HardDelete
+    // antes de borrar la room, elimina en cascada todos los registros dependientes
+    // para no violar las constraints de FK de FAVORITES, BOOKINGS y RATINGS
     @Transactional
     public void deleteRoom(Long id) {
 
-        // verificacion de habitación existente
+        // verificacion de habitación existente antes de intentar borrar nada
         roomRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(
                         "Habitación no encontrada con id: " + id
                 ));
 
-        // Borra físicamente el registro de la DB
+        // orden: primero borra las tablas hijo, luego la tabla padre
+        // si borrára ROOMS primero, las FK constraints fallarían igual
+        // ratings primero porque no tiene dependencias propias
+        ratingRepository.deleteByRoomId(id);
+        // luego favoritos
+        favoriteRepository.deleteByRoomId(id);
+        // luego bookings; va después de ratings porque ratings no depende de bookings
+        bookingRepository.deleteByRoomId(id);
+
+        // ultimo borra la room, sin registros hijo que la referencien
         roomRepository.deleteById(id);
     }
 
-
     // Convierte Room (entidad DB) a RoomResponseDTO (lo que ve el frontend)
     // si el room no tiene categoria designada devuelve null en ese campo
+    // agrega averageRating y totalRatings calculados on-the-fly con RatingRepository
     private RoomResponseDTO convertToResponseDTO(Room room) {
         CategoryResponseDTO categoryDTO = null;
         if (room.getCategory() != null){
@@ -195,6 +211,11 @@ public class RoomService {
                         .build())
                 .collect(Collectors.toList());
 
+        // promedio calculado on-the-fly — siempre consistente, sin riesgo de desfase
+        // findAverageStarsByRoomId devuelve null si no hay reseñas; usamos 0.0 como fallback
+        Double avg = ratingRepository.findAverageStarsByRoomId(room.getId());
+        Long total = ratingRepository.countByRoomId(room.getId());
+
         return RoomResponseDTO.builder()
                 .id(room.getId())
                 .name(room.getName())
@@ -204,6 +225,10 @@ public class RoomService {
                 .images(room.getImages())
                 .active(room.getActive())
                 .features(featureDTOs)
+                // null → 0.0 para que el frontend no tenga que manejar null
+                .averageRating(avg != null ? Math.round(avg * 10.0) / 10.0 : 0.0)
+                // casteamos Long a Integer — countByRoomId nunca va a superar Integer.MAX_VALUE
+                .totalRatings(total.intValue())
                 .build();
     }
 
@@ -242,5 +267,27 @@ public class RoomService {
                 .active(true) // toda habitación nueva arranca en "active" (disponible)
                 .features(features)
                 .build();
+    }
+
+    // devuelve los rooms que no tienen reservas en el rango checkIn-checkOut
+    public List<RoomResponseDTO> getAvailableRooms(LocalDate checkIn, LocalDate checkOut) {
+
+        // checkOut debe ser posterior a checkIn
+        if (!checkOut.isAfter(checkIn)) {
+            throw new IllegalArgumentException(
+                    "La fecha de salida debe ser posterior a la fecha de entrada"
+            );
+        }
+
+        // ids de rooms con reservas superpuestas
+        List<Long> occupiedIds = bookingRepository.findOccupiedRoomIds(checkIn, checkOut);
+
+        // todas las rooms excepto las ocupadas
+        // si occupiedIds está vacío, el contains() nunca es true y se devuelven todas
+        return roomRepository.findAll()
+                .stream()
+                .filter(room -> !occupiedIds.contains(room.getId()))
+                .map(this::convertToResponseDTO)
+                .collect(Collectors.toList());
     }
 }
