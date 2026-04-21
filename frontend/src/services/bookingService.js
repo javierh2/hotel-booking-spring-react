@@ -29,3 +29,17 @@ export const createBooking = async (roomId, checkIn, checkOut) => {
     }
     return response.json()
 }
+
+
+// trae el historial de reservas del usuario autenticado
+// el backend ordena por checkIn descendente, el frontend solo renderiza
+export const getMyBookings = async () => {
+    const response = await fetch(`${BASE_URL}/my-bookings`, {
+        headers: {
+            // este endpoint requiere JWT — sin token el backend devuelve 403
+            ...getAuthHeader()
+        }
+    })
+    if (!response.ok) throw new Error(`Error ${response.status}`)
+    return response.json()
+}

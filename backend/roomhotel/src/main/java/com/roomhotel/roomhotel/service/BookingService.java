@@ -45,6 +45,19 @@ public class BookingService {
                 .collect(Collectors.toList());
     }
 
+
+    // devuelve el historial de reservas del usuario autenticado
+    // ordenado por checkIn descendente: las reservas más recientes aparecen primero
+    public List<BookingResponseDTO> getMyBookings(Long userId) {
+        return bookingRepository.findByUserId(userId)
+                .stream()
+                // más reciente primero — checkIn más cercano al presente aparece arriba
+                .sorted((a, b) -> b.getCheckIn().compareTo(a.getCheckIn()))
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
+    }
+
+
     // crea una reserva para el usuario autenticado
     // valida: checkOut > checkIn, room existe, room disponible en ese rango
     // después del save, ejecuta el email de confirmación al usuario
