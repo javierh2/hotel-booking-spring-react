@@ -127,22 +127,22 @@ Para ver documentación completa:
 https://documenter.getpostman.com/view/33164372/2sBXietaPi
 
 ### Ratings
-GET /ratings/room/{roomId}
-GET /ratings/room/{roomId}/can-rate
-POST /ratings/room/{roomId}
+- GET /ratings/room/{roomId}
+- GET /ratings/room/{roomId}/can-rate
+- POST /ratings/room/{roomId}
 
 ### Rooms
 GET /rooms/available?checkIn=2026-06-01&checkOut=2026-06-05
 
 ### Bookings
-GET /bookings/room/{roomId}/occupied-dates
-POST /bookings
+- GET /bookings/room/{roomId}/occupied-dates
+- POST /bookings
 
 ### Favorites
-GET /favorites
-GET /favorites/ids
-POST /favorites/{roomId}
-DELETE /favorites/{roomId}
+- GET /favorites
+- GET /favorites/ids
+- POST /favorites/{roomId}
+- DELETE /favorites/{roomId}
 
 ---
 
