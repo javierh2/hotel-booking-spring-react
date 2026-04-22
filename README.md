@@ -5,7 +5,6 @@
 ![React](https://img.shields.io/badge/React-19-blue)
 ![Vite](https://img.shields.io/badge/Vite-7-purple)
 ![Database](https://img.shields.io/badge/Database-H2-lightgrey)
-![Estado](https://img.shields.io/badge/Sprint-3%20Completado-success)
 
 Aplicación **Full Stack de reservas de habitaciones** desarrollada con **Java Spring Boot y React**.
 
@@ -62,6 +61,8 @@ Control de versiones | Git + GitHub |
 
 # 🎨 Identidad de Marca
 
+El proyecto incluye una **identidad visual definida** con logotipo y paleta de colores.
+
 | Color | Código | Uso |
 |------|------|------|
 Cream | #F9F3EE | Fondo principal |
@@ -70,6 +71,8 @@ Terracotta | #C47E5A | Botones principales |
 Terracotta Dark | #B06A45 | Hover botones |
 Gray | #9E8E82 | Textos secundarios |
 Blush | #EFE4D9 | Bordes |
+
+Estos colores buscan transmitir **calidez, elegancia y confianza**, alineados con la estética del sector hotelero.
 
 ---
 
@@ -83,7 +86,7 @@ Blush | #EFE4D9 | Bordes |
 ### ❤️ Favoritos
 - Agregar / quitar favoritos
 
-### ⭐ Reviews
+### ⭐ Rating
 - Puntuar productos
 - Comentar experiencias
 
@@ -107,14 +110,14 @@ dto
 entity
 repository
 service
-security
+exception
 ```
 
 Nuevos módulos:
 
 - Booking
 - Favorite
-- Review
+- Rating
 
 ---
 
@@ -123,23 +126,23 @@ Nuevos módulos:
 Para ver documentación completa:
 https://documenter.getpostman.com/view/33164372/2sBXietaPi
 
-### Auth
-POST /api/auth/register  
-POST /api/auth/login  
+### Ratings
+GET /ratings/room/{roomId}
+GET /ratings/room/{roomId}/can-rate
+POST /ratings/room/{roomId}
 
 ### Rooms
-GET / POST / PUT / DELETE /api/rooms  
+GET /rooms/available?checkIn=2026-06-01&checkOut=2026-06-05
 
 ### Bookings
-GET / POST /api/bookings  
+GET /bookings/room/{roomId}/occupied-dates
+POST /bookings
 
 ### Favorites
-POST /api/favorites  
-DELETE /api/favorites/{id}  
-
-### Reviews
-POST /api/reviews  
-GET /api/reviews/{roomId}  
+GET /favorites
+GET /favorites/ids
+POST /favorites/{roomId}
+DELETE /favorites/{roomId}
 
 ---
 
@@ -151,14 +154,14 @@ src
  ├── pages
  ├── services
  ├── context
- └── hooks
+
 ```
 
 Nuevos:
 
 - bookingService
 - favoriteService
-- reviewService
+- ratingService
 
 ---
 
@@ -181,7 +184,7 @@ Nuevos:
 
 - Reservas
 - Favoritos
-- Reviews
+- Reviews y Rating de producto
 - Seguridad
 - Flujo completo frontend-backend
 
