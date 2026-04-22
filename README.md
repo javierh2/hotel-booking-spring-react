@@ -1,4 +1,3 @@
-
 # 🏨 Digital Booking — Room Hotel
 
 ![Java](https://img.shields.io/badge/Java-21-orange)
@@ -17,14 +16,17 @@ El proyecto simula una plataforma de **gestión y visualización de habitaciones
 
 **Digital Booking – Room Hotel** es una aplicación web desarrollada como parte de un desafío profesional Full Stack.
 
-Durante el **Sprint 2** se implementó una evolución completa del sistema agregando:
+Durante el **Sprint 3** se implementó una evolución completa del sistema agregando:
 
-• Sistema de autenticación con JWT  
-• Gestión de usuarios y roles  
-• Categorías y características de productos  
-• Panel de administración avanzado  
-• Notificaciones por email  
-• Seguridad completa con Spring Security  
+• Crear reservas asociadas a usuarios  
+• Validar disponibilidad por fechas  
+• Evitar conflictos de reservas  
+• Gestión de reservas y favoritos  
+• Bloque fijo de políticas del producto  
+• Posibilidad de compartir el producto en variadas plataformas  
+• Capacidad de puntuar el producto con posibilidad de comentar  
+• Eliminación de categorías  
+• Integración completa con seguridad JWT  
 
 Arquitectura general:
 
@@ -44,8 +46,7 @@ Base de Datos H2
 |-----|-------------|
 Backend | Java 21 |
 Framework | Spring Boot |
-Seguridad | Spring Security + JWT (Auth0) |
-Hashing | BCrypt |
+Seguridad | Spring Security + JWT |
 Persistencia | Spring Data JPA / Hibernate |
 Base de datos | H2 |
 Email | Spring Mail + Mailtrap |
@@ -69,118 +70,79 @@ Navy | #2C3E50 | Header y textos |
 Terracotta | #C47E5A | Botones principales |
 Terracotta Dark | #B06A45 | Hover botones |
 Gray | #9E8E82 | Textos secundarios |
-Blush | #EFE4D9 | Bordes / placeholders |
+Blush | #EFE4D9 | Bordes |
 
 Estos colores buscan transmitir **calidez, elegancia y confianza**, alineados con la estética del sector hotelero.
 
 ---
 
-# 🧩 Funcionalidades Implementadas (Sprint 2)
+# 🧩 Funcionalidades Implementadas (Sprint 3)
 
-### 🔐 Autenticación y Usuarios
+### 📅 Reservas
+- Crear reservas
+- Validar disponibilidad
+- Evitar conflictos
 
-- Registro de usuario con validación
-- Login con JWT
-- Logout
-- Persistencia en localStorage
-- Avatar con iniciales
-- Gestión de roles (USER / ADMIN)
+### ❤️ Favoritos
+- Agregar / quitar favoritos
+
+### ⭐ Rating
+- Puntuar productos
+- Comentar experiencias
+
+### 🔗 Compartir
+- Compartir productos en plataformas externas
 
 ### 🏷️ Categorías
+- Eliminación de categorías
 
-- CRUD de categorías
-- Filtro múltiple en Home
-- Asociación con habitaciones
-
-### ⭐ Características (Features)
-
-- CRUD de features
-- Relación ManyToMany con habitaciones
-- Selección múltiple en formularios
-- Visualización en detalle de producto
-
-### 📧 Notificaciones
-
-- Envío de email de confirmación (Mailtrap)
-
-### 🛠️ Administración
-
-- Panel con 5 vistas:
-  - Listado de habitaciones
-  - Categorías
-  - Features
-  - Usuarios
-  - Dashboard
-
-### 🏠 Producto (Room)
-
-- Crear / editar / eliminar
-- Relación con categorías
-- Relación con features
-- Validaciones completas
+### 📜 Políticas
+- Bloque fijo en detalle de producto
 
 ---
 
 # ⚙️ Arquitectura Backend
 
 ```
-com.roomhotel.roomhotel
-
 config
-  ├── SecurityConfig
-  └── JwtFilter
-
 controller
-  ├── AuthController
-  ├── RoomController
-  ├── CategoryController
-  ├── FeatureController
-  └── UserController
-
 dto
 entity
 repository
 service
-```
-### 🔐 Nueva capa de seguridad
-
-```
-Request
- ↓
-JwtFilter
- ↓
-SecurityFilterChain
- ↓
-Controller → Service → Repository
+exception
 ```
 
-- Autenticación stateless con JWT
-- Validación por roles
-- Protección de endpoints
+Nuevos módulos:
+
+- Booking
+- Favorite
+- Rating
 
 ---
 
 # 🔌 API REST
 
 Para ver documentación completa:
-👉 https://documenter.getpostman.com/view/33164372/2sBXietaPi
+https://documenter.getpostman.com/view/33164372/2sBXietaPi
 
-### Auth
-- POST `/api/auth/register`
-- POST `/api/auth/login`
+### Ratings
+- GET /ratings/room/{roomId}
+- GET /ratings/room/{roomId}/can-rate
+- POST /ratings/room/{roomId}
 
 ### Rooms
-- GET / POST / PUT / DELETE `/api/rooms`
+- GET /rooms/available?checkIn=2026-06-01&checkOut=2026-06-05
 
-### Categories
-- GET / POST / DELETE `/api/categories`
+### Bookings
+- GET /bookings/room/{roomId}/occupied-dates
+- POST /bookings
 
-### Features
-- GET / POST / DELETE `/api/features`
-
-### Users (Admin)
-- GET `/api/users`
-- PUT `/api/users/{id}/role`
+### Favorites
+- GET /favorites
+- GET /favorites/ids
+- POST /favorites/{roomId}
+- DELETE /favorites/{roomId}
 
 ---
 
@@ -192,98 +154,39 @@ src
  ├── pages
  ├── services
  ├── context
- └── hooks
+
 ```
 
-### Nuevos módulos
+Nuevos:
 
-- AuthContext (estado global)
-- useAuth hook
-- authService
-- categoryService
-- featureService
-- userService
+- bookingService
+- favoriteService
+- ratingService
 
 ---
 
 # 🔄 Flujo de Datos
 
-### Usuario no autenticado
+### Usuario
+- Navega productos
+- Guarda favoritos
+- Reserva habitaciones
+- Puntúa y comenta
 
-1. Navega el catálogo
-2. Filtra por categorías
-3. Visualiza detalles
-
-### Usuario autenticado
-
-1. Login → recibe JWT
-2. Guarda en localStorage
-3. Envía token en cada request
-4. Accede a funcionalidades protegidas
-
-### Administrador
-
-1. Accede al panel
-2. Gestiona:
-   - habitaciones
-   - categorías
-   - features
-   - usuarios
-3. Realiza operaciones CRUD
-
-### Flujo técnico
-
-```
-Frontend → fetch (token)
-↓
-JwtFilter valida JWT
-↓
-SecurityConfig valida permisos
-↓
-Controller
-↓
-Service
-↓
-Repository
-↓
-DB
-↓
-Response → Frontend
-```
+### Admin
+- Gestiona productos
+- Controla reservas
+- Administra contenido
 
 ---
 
-# 🧪 Testing
+# 🧪 Testing (Sprint 3)
 
-Las pruebas se realizaron utilizando **Postman** y testing manual de componentes.
-
-### 🔐 Autenticación
-
-- Registro exitoso
-- Registro duplicado
-- Login válido / inválido
-- Protección de endpoints
-
-### 📦 API
-
-- CRUD completo de rooms
-- CRUD de categories
-- CRUD de features
-- Gestión de usuarios
-
-### 🎯 Seguridad
-
-- Acceso sin token → 403
-- ROLE_USER → restringido
-- ROLE_ADMIN → permitido
-
-### 🖥️ Frontend
-
-- Login / Register
-- Header dinámico
-- Filtros múltiples
-- Admin panel completo
-- Formularios (crear/editar)
+- Reservas
+- Favoritos
+- Reviews y Rating de producto
+- Seguridad
+- Flujo completo frontend-backend
 
 ---
 

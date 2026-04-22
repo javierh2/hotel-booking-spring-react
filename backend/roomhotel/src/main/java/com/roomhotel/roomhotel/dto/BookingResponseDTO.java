@@ -18,4 +18,12 @@ public class BookingResponseDTO {
     // LocalDate serializa directo como "2026-05-01" con Jackson; sin configuración extra
     private LocalDate checkIn;
     private LocalDate checkOut;
+
+    // datos del producto reservado y para la respuesta del email de booking exitoso
+    private String roomName;
+
+    // datos del usuario que reservó para mostrar la reserva y responder el email de booking exitoso
+    private String userFirstName;
+    private String userLastName;
+    private String userEmail;
 }

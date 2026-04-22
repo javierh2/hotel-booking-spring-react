@@ -130,6 +130,17 @@ const Header = () => {
                                         ♥ Mis favoritos
                                     </button>
 
+                                    {/* mis reservas - acceso directo al historial de reservas */}
+                                    <button
+                                        className="header__dropdown-item"
+                                        onClick={() => {
+                                            navigate('/my-bookings')
+                                            setDropdownOpen(false)
+                                        }}
+                                    >
+                                        📋 Mis reservas
+                                    </button>
+
                                     {/* solo el admin ve el link al panel */}
                                     {isAdmin && (
                                         <button

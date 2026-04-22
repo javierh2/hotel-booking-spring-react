@@ -14,9 +14,13 @@ const DAYS = ['Do','Lu','Ma','Mi','Ju','Vi','Sá']
 // permitir seleccionar un rango de fechas para reservar
 // ambas responsabilidades comparten el mismo calendar grid — un solo componente, cero redundancia
 // recibe room para calcular el precio total y occupiedRanges del fetch en RoomDetail
+// HU #31: agregamos bloque de datos del usuario autenticado arriba del calendario
+// HU #32: al confirmar exitosamente, navegamos a /booking/confirmation con los datos via state
+//         en lugar de mostrar el éxito inline — la HU pide una página dedicada
 const BookingForm = ({ room, occupiedRanges = [], onBookingCreated }) => {
 
-    const { isAuthenticated } = useAuth()
+    // HU #31: necesitamos user para mostrar nombre, apellido y email en el formulario
+    const { isAuthenticated, user } = useAuth()
     const navigate = useNavigate()
 
     const today = new Date()
@@ -37,7 +41,6 @@ const BookingForm = ({ room, occupiedRanges = [], onBookingCreated }) => {
 
     const [submitting, setSubmitting] = useState(false)
     const [error, setError] = useState(null)
-    const [success, setSuccess] = useState(false)
 
     // mes derecho siempre es mes izquierdo + 1
     const rightDate = new Date(calendarMonth.year, calendarMonth.month + 1, 1)
@@ -196,43 +199,34 @@ const BookingForm = ({ room, occupiedRanges = [], onBookingCreated }) => {
         setError(null)
         try {
             await createBooking(room.id, checkIn, checkOut)
-            setSuccess(true)
+
             // notificamos al padre para que recargue occupiedRanges
             // así el calendario refleja inmediatamente la reserva recién creada
             if (onBookingCreated) onBookingCreated()
+
+            // HU #32: navegamos a la página de confirmación con los datos via state
+            // usamos navigate state en lugar de query params para no exponer datos en la URL
+            // y para no tener que re-fetchear el room en la página de confirmación
+            navigate('/booking/confirmation', {
+                state: {
+                    roomId: room.id,
+                    roomName: room.name,
+                    roomImage: room.images?.[0] || null,
+                    checkIn,
+                    checkOut,
+                    nights,
+                    total: (room.price * nights).toFixed(2),
+                    // datos del usuario para mostrar en la confirmación (HU #31)
+                    userFirstName: user.firstName,
+                    userLastName: user.lastName,
+                    userEmail: user.email,
+                }
+            })
         } catch (err) {
             setError(err.message || 'No se pudo completar la reserva. Intentá de nuevo.')
         } finally {
             setSubmitting(false)
         }
-    }
-
-    // pantalla de confirmación — reemplaza el calendario tras reservar exitosamente
-    if (success) {
-        return (
-            <div className="booking-form__success">
-                <span className="booking-form__success-icon">✅</span>
-                <h3 className="booking-form__success-title">¡Reserva confirmada!</h3>
-                <p className="booking-form__success-detail">
-                    {room.name} · {fmt(checkIn)} → {fmt(checkOut)} · {nights} noche{nights !== 1 ? 's' : ''}
-                </p>
-                <p className="booking-form__success-price">
-                    Total: <strong>${(room.price * nights).toFixed(2)} USD</strong>
-                </p>
-                <button
-                    className="booking-form__btn booking-form__btn--secondary"
-                    onClick={() => {
-                        // al hacer "otra reserva" reseteamos todo el estado del componente
-                        setSuccess(false)
-                        setCheckIn(null)
-                        setCheckOut(null)
-                        setSelectionStep('checkIn')
-                    }}
-                >
-                    Hacer otra reserva
-                </button>
-            </div>
-        )
     }
 
     return (
@@ -250,6 +244,30 @@ const BookingForm = ({ room, occupiedRanges = [], onBookingCreated }) => {
                     }
                 </p>
             </div>
+
+            {/* HU #31 — bloque de datos del usuario autenticado
+                solo se muestra si está logueado — si no lo está, el botón de submit
+                ya lo redirige al login, no tiene sentido mostrar un bloque vacío
+                los datos vienen de AuthContext, no hace ningún fetch extra */}
+            {isAuthenticated && user && (
+                <div className="booking-form__user-info">
+                    <h3 className="booking-form__user-info-title">Tus datos</h3>
+                    <div className="booking-form__user-info-grid">
+                        <div className="booking-form__user-info-field">
+                            <span className="booking-form__user-info-label">Nombre</span>
+                            <span className="booking-form__user-info-value">{user.firstName}</span>
+                        </div>
+                        <div className="booking-form__user-info-field">
+                            <span className="booking-form__user-info-label">Apellido</span>
+                            <span className="booking-form__user-info-value">{user.lastName}</span>
+                        </div>
+                        <div className="booking-form__user-info-field booking-form__user-info-field--full">
+                            <span className="booking-form__user-info-label">Email</span>
+                            <span className="booking-form__user-info-value">{user.email}</span>
+                        </div>
+                    </div>
+                </div>
+            )}
 
             {/* calendario doble con navegación */}
             <div className="booking-form__cal-controls">

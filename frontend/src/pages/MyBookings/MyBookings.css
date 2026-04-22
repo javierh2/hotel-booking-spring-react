@@ -1,0 +1,209 @@
+.my-bookings {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 48px 24px 80px;
+    min-height: 60vh;
+}
+
+.my-bookings__header {
+    margin-bottom: 36px;
+}
+
+.my-bookings__title {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: #2C3E50;
+    margin: 0 0 8px;
+}
+
+.my-bookings__subtitle {
+    font-size: 15px;
+    color: #9E8E82;
+    margin: 0;
+}
+
+.my-bookings__loading,
+.my-bookings__error {
+    text-align: center;
+    padding: 80px 24px;
+    font-size: 15px;
+    color: #9E8E82;
+}
+
+.my-bookings__error {
+    color: #E74C3C;
+}
+
+.my-bookings__empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    padding: 80px 24px;
+    text-align: center;
+}
+
+.my-bookings__empty-icon {
+    font-size: 48px;
+}
+
+.my-bookings__empty-text {
+    font-size: 16px;
+    color: #9E8E82;
+    margin: 0;
+}
+
+.my-bookings__cta {
+    padding: 12px 28px;
+    background: #C47E5A;
+    color: #F9F3EE;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: inherit;
+    transition: background 0.2s ease;
+}
+
+.my-bookings__cta:hover {
+    background: #B06A45;
+}
+
+.my-bookings__list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.my-bookings__card {
+    background: #fff;
+    border: 1px solid #EFE4D9;
+    border-radius: 12px;
+    padding: 24px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    position: relative;
+    transition: box-shadow 0.2s ease;
+}
+
+.my-bookings__card:hover {
+    box-shadow: 0 4px 20px rgba(44, 62, 80, 0.08);
+}
+
+.my-bookings__badge {
+    position: static;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 20px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    align-self: flex-start;
+    width: fit-content;
+}
+
+.my-bookings__badge--upcoming {
+    background: #EAF4EE;
+    color: #2E7D4F;
+}
+
+.my-bookings__badge--active {
+    background: #EBF5FB;
+    color: #1A6FA8;
+}
+
+.my-bookings__badge--completed {
+    background: #F4F4F4;
+    color: #9E8E82;
+}
+
+.my-bookings__card-body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.my-bookings__room-name {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #2C3E50;
+    margin: 0;
+    padding-right: 0;
+}
+
+.my-bookings__dates {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.my-bookings__date-block {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.my-bookings__date-label {
+    font-size: 11px;
+    color: #9E8E82;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: 600;
+}
+
+.my-bookings__date-value {
+    font-size: 14px;
+    font-weight: 700;
+    color: #2C3E50;
+}
+
+.my-bookings__date-arrow {
+    font-size: 16px;
+    color: #C47E5A;
+    font-weight: 700;
+}
+
+.my-bookings__nights {
+    font-size: 13px;
+    color: #9E8E82;
+    background: #F9F3EE;
+    padding: 4px 10px;
+    border-radius: 20px;
+}
+
+.my-bookings__view-btn {
+    padding: 10px 20px;
+    background: transparent;
+    border: 2px solid #2C3E50;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 700;
+    color: #2C3E50;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+    flex-shrink: 0;
+    align-self: center;
+}
+
+.my-bookings__view-btn:hover {
+    background: #2C3E50;
+    color: #F9F3EE;
+}
+
+@media (max-width: 600px) {
+    .my-bookings__card {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .my-bookings__view-btn {
+        width: 100%;
+        text-align: center;
+    }
+}

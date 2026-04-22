@@ -39,6 +39,18 @@ public class BookingController {
         return ResponseEntity.ok(bookingService.getOccupiedDatesByRoom(roomId));
     }
 
+
+    // GET /api/bookings/my-bookings — historial de reservas del usuario autenticado
+    @GetMapping("/my-bookings")
+    public ResponseEntity<List<BookingResponseDTO>> getMyBookings(
+            @AuthenticationPrincipal UserDetails userDetails){
+        Long userId = resolveUserId(userDetails);
+        return ResponseEntity.ok(bookingService.getMyBookings(userId));
+    }
+
+
+
+
     // POST /api/bookings — crea una reserva
     // autenticado — cualquier usuario logueado puede reservar
     @PostMapping

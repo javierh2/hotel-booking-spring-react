@@ -18,6 +18,9 @@ import Register from './pages/Register/Register'
 import Login from './pages/Login/Login'
 import Favorites from './pages/Favorites/Favorites'
 import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute'
+import MyBookings from './pages/MyBookings/MyBookings'
+import WspButton from './components/WspButton/WspButton'
+import BookingConfirmation from './pages/BookingConfirmation/BookingConfirmation'
 
 
 const App = () => {
@@ -38,7 +41,7 @@ const App = () => {
               <Route path="/" element={<Home />} />
 
               {/* /admin requiere estar logueado Y tener ROLE_ADMIN
-        si escribís la URL a mano sin ser admin → redirige al home */}
+              si escribís la URL a mano sin ser admin redirige al home */}
               <Route
                 path="/admin"
                 element={
@@ -53,7 +56,7 @@ const App = () => {
               <Route path="/register" element={<Register />} />
 
               {/* /favorites requiere solo estar logueado, no ser admin
-        si escribís la URL sin sesión → redirige a login */}
+              si escribís la URL sin sesión  redirige a login */}
               <Route
                 path="/favorites"
                 element={
@@ -62,11 +65,31 @@ const App = () => {
                   </ProtectedRoute>
                 }
               />
+
+              {/* /my-bookings requiere estar logueado
+              sin sesión redirige a login con replace para no ensuciar el historial */}
+              <Route
+                path="/my-bookings"
+                element={
+                  <ProtectedRoute>
+                    <MyBookings />
+                  </ProtectedRoute>
+                }
+              />
+
+              {/* /booking/confirmation — página de éxito post-reserva — HU #32
+    no tiene ProtectedRoute porque si el usuario llega sin state
+    el propio componente lo redirige al home con replace */}
+              <Route path="/booking/confirmation" element={<BookingConfirmation />} />
+
             </Routes>
           </main>
 
           {/* footer siempre visible */}
           <Footer />
+
+          {/* botón flotante de WhatsApp*/}
+          <WspButton />
 
         </div>
       </BrowserRouter>

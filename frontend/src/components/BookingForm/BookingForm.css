@@ -305,6 +305,56 @@
     margin: 0;
 }
 
+.booking-form__user-info {
+    background: #F9F3EE;
+    border: 1px solid #EFE4D9;
+    border-radius: 10px;
+    padding: 16px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.booking-form__user-info-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: #9E8E82;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin: 0;
+}
+
+.booking-form__user-info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.booking-form__user-info-field {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.booking-form__user-info-field--full {
+    grid-column: 1 / -1;
+}
+
+.booking-form__user-info-label {
+    font-size: 11px;
+    color: #9E8E82;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: 600;
+}
+
+.booking-form__user-info-value {
+    font-size: 14px;
+    font-weight: 600;
+    color: #2C3E50;
+}
+
+
 @media (max-width: 768px) {
     .booking-form__cal-months {
         grid-template-columns: 1fr;

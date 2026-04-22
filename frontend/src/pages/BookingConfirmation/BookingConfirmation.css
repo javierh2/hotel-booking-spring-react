@@ -1,0 +1,244 @@
+.booking-conf {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 64px 24px 80px;
+    min-height: 70vh;
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+}
+
+.booking-conf__hero {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    text-align: center;
+}
+
+.booking-conf__hero-icon {
+    font-size: 56px;
+    line-height: 1;
+}
+
+.booking-conf__hero-title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #2C3E50;
+    margin: 0;
+}
+
+.booking-conf__hero-subtitle {
+    font-size: 15px;
+    color: #9E8E82;
+    margin: 0;
+}
+
+.booking-conf__hero-subtitle strong {
+    color: #2C3E50;
+}
+
+.booking-conf__body {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.booking-conf__card {
+    background: #fff;
+    border: 1px solid #EFE4D9;
+    border-radius: 14px;
+    padding: 24px 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.booking-conf__card-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: #9E8E82;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin: 0;
+}
+
+.booking-conf__room {
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+}
+
+.booking-conf__room-img {
+    width: 110px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 8px;
+    flex-shrink: 0;
+}
+
+.booking-conf__room-info {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    flex: 1;
+}
+
+.booking-conf__room-name {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #2C3E50;
+    margin: 0;
+}
+
+.booking-conf__dates {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.booking-conf__date-block {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.booking-conf__date-label {
+    font-size: 11px;
+    color: #9E8E82;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: 600;
+}
+
+.booking-conf__date-value {
+    font-size: 14px;
+    font-weight: 700;
+    color: #2C3E50;
+}
+
+.booking-conf__date-arrow {
+    font-size: 16px;
+    color: #C47E5A;
+    font-weight: 700;
+}
+
+.booking-conf__total-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 12px;
+    border-top: 1px solid #EFE4D9;
+}
+
+.booking-conf__total-label {
+    font-size: 14px;
+    color: #9E8E82;
+}
+
+.booking-conf__total-value {
+    font-size: 18px;
+    font-weight: 700;
+    color: #C47E5A;
+}
+
+.booking-conf__user-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+.booking-conf__user-field {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.booking-conf__user-field--full {
+    grid-column: 1 / -1;
+}
+
+.booking-conf__user-label {
+    font-size: 11px;
+    color: #9E8E82;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: 600;
+}
+
+.booking-conf__user-value {
+    font-size: 15px;
+    font-weight: 600;
+    color: #2C3E50;
+}
+
+.booking-conf__actions {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.booking-conf__btn {
+    width: 100%;
+    padding: 14px 24px;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 700;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-family: inherit;
+}
+
+.booking-conf__btn--primary {
+    background: #C47E5A;
+    color: #F9F3EE;
+}
+
+.booking-conf__btn--primary:hover {
+    background: #B06A45;
+}
+
+.booking-conf__btn--secondary {
+    background: transparent;
+    border: 2px solid #2C3E50;
+    color: #2C3E50;
+}
+
+.booking-conf__btn--secondary:hover {
+    background: #2C3E50;
+    color: #F9F3EE;
+}
+
+.booking-conf__btn--ghost {
+    background: transparent;
+    border: none;
+    color: #9E8E82;
+    font-size: 14px;
+    text-decoration: underline;
+    font-weight: 500;
+}
+
+.booking-conf__btn--ghost:hover {
+    color: #2C3E50;
+}
+
+@media (max-width: 480px) {
+    .booking-conf {
+        padding: 40px 16px 60px;
+    }
+
+    .booking-conf__hero-title {
+        font-size: 1.5rem;
+    }
+
+    .booking-conf__room {
+        flex-direction: column;
+    }
+
+    .booking-conf__room-img {
+        width: 100%;
+        height: 160px;
+    }
+}
