@@ -1,4 +1,4 @@
-# 🏨 Digital Booking — Room Hotel
+# 🏨 Digital Booking
 
 ![Java](https://img.shields.io/badge/Java-21-orange)
 ![Spring Boot](https://img.shields.io/badge/SpringBoot-3.2-green)
@@ -6,7 +6,7 @@
 ![Vite](https://img.shields.io/badge/Vite-7-purple)
 ![Database](https://img.shields.io/badge/Database-H2-lightgrey)
 
-Aplicación **Full Stack de reservas de habitaciones** desarrollada con **Java Spring Boot y React**.
+Aplicación **Full Stack de reservas** desarrollada con **Java Spring Boot y React**.
 
 El proyecto simula una plataforma de **gestión y visualización de habitaciones de hotel**, permitiendo a los usuarios explorar productos y a los administradores gestionarlos mediante un panel de administración.
 
@@ -14,10 +14,22 @@ El proyecto simula una plataforma de **gestión y visualización de habitaciones
 
 # 📌 Descripción del Proyecto
 
-**Digital Booking – Room Hotel** es una aplicación web desarrollada como parte de un desafío profesional Full Stack.
+**Digital Booking** es una aplicación web desarrollada como parte de un desafío profesional Full Stack.
+Durante **Sprints** se implementó una evolución completa del sistema agregando explícitos requisitos y características de funcionalidad:
 
-Durante el **Sprint 3** se implementó una evolución completa del sistema agregando:
-
+• Visualización de habitaciones  
+• Detalle de cada habitación  
+• Panel de administración  
+• Crear habitaciones  
+• Eliminar habitaciones  
+• Paginación de resultados  
+• Galería de imágenes  
+• Sistema de autenticación con JWT  
+• Gestión de usuarios y roles  
+• Categorías y características de productos  
+• Panel de administración avanzado  
+• Notificaciones por email  
+• Seguridad completa con Spring Security  
 • Crear reservas asociadas a usuarios  
 • Validar disponibilidad por fechas  
 • Evitar conflictos de reservas  
@@ -26,7 +38,10 @@ Durante el **Sprint 3** se implementó una evolución completa del sistema agreg
 • Posibilidad de compartir el producto en variadas plataformas  
 • Capacidad de puntuar el producto con posibilidad de comentar  
 • Eliminación de categorías  
-• Integración completa con seguridad JWT  
+• Historial de reservas
+• Email de confirmación de reserva
+• Integración completa con seguridad JWT
+
 
 Arquitectura general:
 
@@ -76,31 +91,6 @@ Estos colores buscan transmitir **calidez, elegancia y confianza**, alineados co
 
 ---
 
-# 🧩 Funcionalidades Implementadas (Sprint 3)
-
-### 📅 Reservas
-- Crear reservas
-- Validar disponibilidad
-- Evitar conflictos
-
-### ❤️ Favoritos
-- Agregar / quitar favoritos
-
-### ⭐ Rating
-- Puntuar productos
-- Comentar experiencias
-
-### 🔗 Compartir
-- Compartir productos en plataformas externas
-
-### 🏷️ Categorías
-- Eliminación de categorías
-
-### 📜 Políticas
-- Bloque fijo en detalle de producto
-
----
-
 # ⚙️ Arquitectura Backend
 
 ```
@@ -112,37 +102,12 @@ repository
 service
 exception
 ```
-
-Nuevos módulos:
-
-- Booking
-- Favorite
-- Rating
-
 ---
 
-# 🔌 API REST
+# 🔌  API REST
 
 Para ver documentación completa:
 https://documenter.getpostman.com/view/33164372/2sBXietaPi
-
-### Ratings
-- GET /ratings/room/{roomId}
-- GET /ratings/room/{roomId}/can-rate
-- POST /ratings/room/{roomId}
-
-### Rooms
-- GET /rooms/available?checkIn=2026-06-01&checkOut=2026-06-05
-
-### Bookings
-- GET /bookings/room/{roomId}/occupied-dates
-- POST /bookings
-
-### Favorites
-- GET /favorites
-- GET /favorites/ids
-- POST /favorites/{roomId}
-- DELETE /favorites/{roomId}
 
 ---
 
@@ -156,13 +121,6 @@ src
  ├── context
 
 ```
-
-Nuevos:
-
-- bookingService
-- favoriteService
-- ratingService
-
 ---
 
 # 🔄 Flujo de Datos
@@ -172,21 +130,12 @@ Nuevos:
 - Guarda favoritos
 - Reserva habitaciones
 - Puntúa y comenta
+- Posibilidad de compartir el producto
 
 ### Admin
 - Gestiona productos
 - Controla reservas
 - Administra contenido
-
----
-
-# 🧪 Testing (Sprint 3)
-
-- Reservas
-- Favoritos
-- Reviews y Rating de producto
-- Seguridad
-- Flujo completo frontend-backend
 
 ---
 
