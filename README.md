@@ -157,13 +157,13 @@ git clone https://github.com/javierh2/proyect_hotel_java_react_dh.git
 cd proyect_hotel_java_react_dh
 ```
 
-Para hacer uso del servicio de confirmación via Email:
+Para hacer uso del servicio de confirmación via Email: 
 https://mailtrap.io/email-sandbox/
-crear un archivo .env en la raiz del Backend y utilizar las credenciales que se te otorgan al crear un Sandbox; el archivo .env.example sirve de guía para aplicarlos en el archivo .env
+• crear un archivo .env en la raiz del Backend y utilizar las credenciales que se te otorgan al crear un Sandbox; el archivo .env.example sirve de guía para aplicarlos en .env
+
 
 Para hacer uso del botón de WSP para la consulta sobre un producto:
-crear un archivo .env en la raiz del Frontend y utilizar el archivo .env.example como ejemplo para ingresar el número a utilizar como número de consultas en el archivo .env
-
+• crear un archivo .env en la raiz del Frontend y utilizar el archivo .env.example como ejemplo para ingresar el número de consultas a utilizar dentro de .env
 
 ---
 
