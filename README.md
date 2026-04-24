@@ -36,9 +36,10 @@ Durante **Sprints** se implementó una evolución completa del sistema agregando
 • Gestión de reservas y favoritos  
 • Bloque fijo de políticas del producto  
 • Posibilidad de compartir el producto en variadas plataformas  
-• Capacidad de puntuar el producto con posibilidad de comentar   
+• Capacidad de puntuar el producto con posibilidad de comentar
 • Historial de reservas
 • Integración completa con seguridad JWT
+
 
 
 Arquitectura general:
