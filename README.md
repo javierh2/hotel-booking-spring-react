@@ -104,6 +104,16 @@ exception
 
 # 🔌  API REST
 
+POST /api/auth/register **&** POST /api/auth/login **->** creación y login de usuario
+
+GET, POST, PUT, DELETE **->** /api/rooms
+
+GET, POST, DELETE **->** /api/categories
+
+GET, POST, DELETE **->** /api/features
+
+**Operaciones de usuario administrativo bajo ->** /api/users
+
 Para ver documentación completa:
 https://documenter.getpostman.com/view/33164372/2sBXietaPi
 
