@@ -46,8 +46,7 @@ class BookingServiceTest {
         @Mock
         private UserRepository userRepository;
 
-        // EmailService también se mockea — no queremos que los tests envíen emails
-        // reales
+        // EmailService también se mockea — no queremos que los tests envíen emails reales
         @Mock
         private EmailService emailService;
 
@@ -87,7 +86,6 @@ class BookingServiceTest {
         }
 
         // TEST 1
-
         @Test
         @DisplayName("createBooking: checkOut igual a checkIn debe lanzar IllegalArgumentException")
         void createBooking_checkOutEqualCheckIn_throwsIllegalArgument() {
@@ -114,7 +112,7 @@ class BookingServiceTest {
 
                 // verificamos que nunca se intentó guardar nada en la DB
                 // si el service hubiera llamado a save() antes de validar, este verify fallaría
-                // never() es la forma de Mockito de decir "este método nunca debería haberse
+                // never() es la forma de Mockito de decir "este method nunca debería haberse
                 // llamado"
                 verify(bookingRepository, never()).save(any());
         }
@@ -137,8 +135,7 @@ class BookingServiceTest {
         }
 
 
-        // TEST 2:
-
+        // TEST 2
         @Test
         @DisplayName("createBooking: usuario inexistente debe lanzar ResourceNotFoundException")
         void createBooking_userNotFound_throwsResourceNotFoundException() {
@@ -161,8 +158,7 @@ class BookingServiceTest {
         }
 
 
-        // TEST 3: room no encontrada
-
+        // TEST 3
         @Test
         @DisplayName("createBooking: room inexistente debe lanzar ResourceNotFoundException")
         void createBooking_roomNotFound_throwsResourceNotFoundException() {
@@ -182,7 +178,6 @@ class BookingServiceTest {
 
 
         // TEST 4
-
         @Test
         @DisplayName("createBooking: room ocupada debe lanzar ResponseStatusException 409")
         void createBooking_roomOccupied_throwsConflict() {
@@ -209,7 +204,6 @@ class BookingServiceTest {
 
 
         // TEST 5
-
         @Test
         @DisplayName("createBooking: reserva válida debe retornar BookingResponseDTO con datos correctos")
         void createBooking_validData_returnsBookingResponseDTO() {
@@ -266,7 +260,6 @@ class BookingServiceTest {
 
 
         // TEST 6
-
         @Test
         @DisplayName("createBooking: si el email falla, la reserva igual se retorna correctamente")
         void createBooking_emailFails_bookingStillReturned() {
