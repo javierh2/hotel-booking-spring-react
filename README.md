@@ -18,7 +18,6 @@ El proyecto modela un sistema real de gestión hotelera con flujo completo end-t
 
 🌐 https://digitalbooking-theta.vercel.app/
 
-
 > ⚠️ Nota: el backend puede tardar unos segundos en responder la primera vez (cold start en Render)
 
 👤 Usuario ADMIN  
@@ -76,7 +75,7 @@ password: admin1234
 
 ### Base de datos
 - PostgreSQL (Supabase) como base de datos relacional en la nube
-- Desplegada mediante Docker Compose con volumen persistente
+- Docker Compose para entorno local con persistencia
 
 ### DevOps y herramientas
 - Docker Compose para entorno local
@@ -95,7 +94,7 @@ El sistema sigue una arquitectura en capas:
 - API REST: Spring Boot (controladores, servicios y endpoints)
 - Capa de servicios: lógica de negocio
 - Capa de persistencia: JPA / Hibernate
-- Base de datos: PostgreSQL
+- Base de datos: PostgreSQL (Supabase)
 
 La autenticación se gestiona mediante JWT, validado en cada request a través de Spring Security.
 
