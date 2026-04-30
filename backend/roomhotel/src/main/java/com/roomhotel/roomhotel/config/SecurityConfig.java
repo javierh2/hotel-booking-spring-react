@@ -131,10 +131,10 @@ public class SecurityConfig {
         return http.build(); // construye la cadena de filtros de seguridad con la configuración definida
     }
 
-        // CORS centralizado — reemplaza los @CrossOrigin en cada controller
-        // allowedOriginPatterns en lugar de allowedOrigins para soportar credenciales
-        // el patrón *.vercel.app cubre cualquier URL de preview que Vercel genere
-        // localhost:5173 se mantiene para desarrollo local sin cambiar nada
+    // CORS centralizado — reemplaza los @CrossOrigin en cada controller
+    // allowedOriginPatterns en lugar de allowedOrigins para soportar credenciales
+    // el patrón *.vercel.app cubre cualquier URL de preview que Vercel genere
+    // localhost:5173 se mantiene para desarrollo local sin cambiar nada
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
@@ -144,8 +144,7 @@ public class SecurityConfig {
         // allowedOrigins no es compatible con allowCredentials(true)
         config.setAllowedOriginPatterns(List.of(
                 "http://localhost:5173",
-                "https://*.vercel.app"
-        ));
+                "https://*.vercel.app"));
 
         // métodos HTTP permitidos
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
