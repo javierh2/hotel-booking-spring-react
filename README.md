@@ -1,7 +1,7 @@
 # 🏨 Digital Booking
 
 ![Java](https://img.shields.io/badge/java-%23ED8B00.svg?style=for-the-badge&logo=openjdk&logoColor=white)
-![Spring Boot](https://camo.githubusercontent.com/f5c6875e92ff9869a889637ca150aedc44f813ecfabe290afbe0449ec1ebac7c/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f537072696e675f426f6f742d3644423333463f7374796c653d666f722d7468652d6261646765266c6f676f3d737072696e672d626f6f74266c6f676f436f6c6f723d7768697465)
+![Spring Boot](https://img.shields.io/badge/Spring_Boot-6DB33F?style=for-the-badge&logo=spring&logoColor=white)
 ![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)
 ![Vite](https://img.shields.io/badge/vite-%23646CFF.svg?style=for-the-badge&logo=vite&logoColor=white)
 ![Postgres](https://img.shields.io/badge/postgres-%23316192.svg?style=for-the-badge&logo=postgresql&logoColor=white)
@@ -16,7 +16,8 @@ El proyecto modela un sistema real de gestión hotelera con flujo completo end-t
 
 ## 💻 Live Demo
 
-🌐 URL: https://digitalbooking-theta.vercel.app/
+🌐 https://digitalbooking-theta.vercel.app/
+
 
 > ⚠️ Nota: el backend puede tardar unos segundos en responder la primera vez (cold start en Render)
 
@@ -74,16 +75,17 @@ password: admin1234
 - Vite como herramienta de build
 
 ### Base de datos
-- PostgreSQL como base de datos relacional en la nube (Supabase)
+- PostgreSQL (Supabase) como base de datos relacional en la nube
 - Desplegada mediante Docker Compose con volumen persistente
 
 ### DevOps y herramientas
 - Docker Compose para entorno local
+- Render (deploy de backend)
+- Vercel (deploy de frontend)
 - Postman para testing manual de endpoints
 - JUnit 5 + Mockito para testing unitario
 - Git y GitHub para control de versiones
-- Render (deploy de backend)
-- Vercel (deploy de frontend)
+
 
 ## 🏗️ Arquitectura
 
@@ -160,7 +162,7 @@ https://documenter.getpostman.com/view/33164372/2sBXietaPi
 
 ~~~bash
 git clone https://github.com/javierh2/hotel-booking-spring-react.git
-cd proyect_hotel_java_react_dh
+cd hotel-booking-spring-react
 ~~~
 
 ---
