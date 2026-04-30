@@ -33,7 +33,7 @@ public class DataInitializer {
                         UserRepository userRepository) {
                 return args -> {
 
-                        // ── Usuario admin por defecto ─────────────────────────────────────
+                        // Usuario admin por defecto
                         // se crea solo si no existe ningún usuario en la DB
                         // con PostgreSQL y ddl-auto=update los datos persisten entre reinicios
                         // por eso el guard count() == 0 es crítico — evita duplicar en cada arranque
@@ -50,7 +50,7 @@ public class DataInitializer {
                                 System.out.println(">>> Usuario admin creado: dev@admin.com / admin1234");
                         }
 
-                        // ── Categorías y rooms ────────────────────────────────────────────
+                        // Categorías y rooms
                         // el guard anidado garantiza que las rooms solo se crean si las categorías
                         // tampoco existen — evita rooms sin categoría si el init se interrumpió
                         if (categoryRepository.count() == 0) {

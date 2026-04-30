@@ -36,7 +36,7 @@ import static org.mockito.Mockito.*;
 class BookingServiceTest {
 
         // @Mock crea una version falsa del repositorio — no toca ninguna DB real
-        // Mockito intercepta todas las llamadas y devuelve lo que vos le programes
+        // Mockito intercepta todas las llamadas y devuelve lo que le programemos en cada test
         @Mock
         private BookingRepository bookingRepository;
 
@@ -46,18 +46,18 @@ class BookingServiceTest {
         @Mock
         private UserRepository userRepository;
 
-        // EmailService también se mockea — no queremos que los tests envíen emails reales
+        // EmailService también se mockea — los tests no envian emails reales
         @Mock
         private EmailService emailService;
 
         // @InjectMocks crea una instancia REAL de BookingService
         // e inyecta los @Mock de arriba en su constructor automáticamente
-        // esto es lo que testeamos — la lógica real del servicio
+        // esto es lo que se testea: la lógica real del servicio
         @InjectMocks
         private BookingService bookingService;
 
         // objetos que reutilizamos en múltiples tests
-        // los armamos en @BeforeEach para que cada test arranque con datos limpios
+        // se arman con @BeforeEach para que cada test arranque con datos limpios
         private User testUser;
         private Room testRoom;
         private BookingRequestDTO validDto;
