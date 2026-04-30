@@ -14,6 +14,16 @@ Desarrollada con Java Spring Boot en el backend, React en el frontend y PostgreS
 
 El proyecto modela un sistema real de gestión hotelera con flujo completo end-to-end, desde la búsqueda hasta la confirmación de reservas.
 
+## 💻 Live Demo
+
+🌐 URL: https://digitalbooking-theta.vercel.app/
+
+> ⚠️ Nota: el backend puede tardar unos segundos en responder la primera vez (cold start en Render)
+
+👤 Usuario ADMIN  
+email: dev@admin.com  
+password: admin1234
+
 ---
 
 ## 🚀 Funcionalidades principales
@@ -64,7 +74,7 @@ El proyecto modela un sistema real de gestión hotelera con flujo completo end-t
 - Vite como herramienta de build
 
 ### Base de datos
-- PostgreSQL como base de datos relacional
+- PostgreSQL (Supabase) como base de datos relacional
 - Desplegada mediante Docker Compose con volumen persistente
 
 ### DevOps y herramientas
@@ -79,7 +89,7 @@ El proyecto modela un sistema real de gestión hotelera con flujo completo end-t
 El sistema sigue una arquitectura en capas:
 
 - Frontend: React (interfaz de usuario)
-- API REST: Spring Boot (controladores y endpoints)
+- API REST: Spring Boot (controladores, servicios y endpoints)
 - Capa de servicios: lógica de negocio
 - Capa de persistencia: JPA / Hibernate
 - Base de datos: PostgreSQL
@@ -102,6 +112,8 @@ La autenticación se gestiona mediante JWT, validado en cada request a través d
 
 - Se implementaron tests unitarios con JUnit y Mockito para validar la lógica de reservas, aislando dependencias externas como base de datos y servicios de email.
 
+- Se priorizó el manejo de errores controlados y respuestas HTTP semánticas para representar correctamente los estados del sistema.
+
 ---
 
 ## 🔌 API REST (principales endpoints)
@@ -120,7 +132,7 @@ La autenticación se gestiona mediante JWT, validado en cada request a través d
 - POST /api/bookings → Crear reserva
 - GET /api/bookings/my → Reservas del usuario
 
-### Otros recursos
+### Recursos adicionales
 - /api/categories
 - /api/features
 - /api/users (solo ADMIN)
@@ -130,7 +142,7 @@ https://documenter.getpostman.com/view/33164372/2sBXietaPi
 
 ---
 
-## 🎯 Qué demuestra este proyecto
+## 🎯 Qué aporta este proyecto
 
 - Desarrollo Full Stack completo (frontend + backend + base de datos)
 - Implementación de autenticación segura con JWT
@@ -141,75 +153,60 @@ https://documenter.getpostman.com/view/33164372/2sBXietaPi
 
 ---
 
-# 🚀 Cómo ejecutar el proyecto
+## ⚙️ Ejecución local
 
-## 1️⃣ Clonar el repositorio
+### 1. Clonar el repositorio
 
-```bash
-git clone https://github.com/javierh2/proyect_hotel_java_react_dh.git
+~~~bash
+git clone https://github.com/javierh2/hotel-booking-spring-react.git
 cd proyect_hotel_java_react_dh
-```
-
-Para hacer uso del servicio de confirmación via Email: 
-https://mailtrap.io/email-sandbox/
-• crear un archivo .env en la raiz del Backend y utilizar las credenciales que se te otorgan al crear un Sandbox; el archivo .env.example sirve de guía para aplicarlos en .env
-
-
-Para hacer uso del botón de WSP para la consulta sobre un producto:
-• crear un archivo .env en la raiz del Frontend y utilizar el archivo .env.example como ejemplo para ingresar el número de consultas a utilizar dentro de .env
+~~~
 
 ---
 
-# Backend (Spring Boot)
+### 2. Variables de entorno
 
-## Requisitos
+- **Backend:** configurar `.env` basado en `.env.example` (credenciales de Mailtrap)
+- **Frontend:** configurar `.env` para integración de WhatsApp
 
+---
+
+### 3. Backend (Spring Boot)
+
+**Requisitos:**
 - Java 21
 - Maven
 
-## Ejecutar backend
+**Ejecutar:**
 
-```bash
+~~~bash
 cd backend/roomhotel
 mvn spring-boot:run
-```
+~~~
 
-El servidor se ejecutará en:
-
-```
-http://localhost:8080
-```
+📍 http://localhost:8080
 
 ---
 
-# Frontend (React)
+### 4. Frontend (React)
 
-## Requisitos
-
+**Requisitos:**
 - Node.js
 - npm
 
-## Instalar dependencias
+**Ejecutar:**
 
-```bash
+~~~bash
 cd frontend
 npm install
-```
-
-## Ejecutar aplicación
-
-```bash
 npm run dev
-```
+~~~
 
-La aplicación se abrirá en:
-
-```
-http://localhost:5173
-```
+📍 http://localhost:5173
 
 ---
-## 🎥 Demos de la aplicación
+
+## 🎥 Demo de la aplicación
 
 ![Demo del home](assets/user_test.gif)
 
