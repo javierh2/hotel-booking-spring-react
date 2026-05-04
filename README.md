@@ -168,8 +168,8 @@ cd hotel-booking-spring-react
 
 ### 2. Variables de entorno
 
-- **Backend:** configurar `.env` basado en `.env.example` (credenciales de Mailtrap)
-- **Frontend:** configurar `.env` para integración de WhatsApp
+- **Backend:** configurar `.env` basado en `.env.example` (credenciales de Mailtrap, JWT y PostgreSQL)
+- **Frontend:** configurar `.env` basado en `.env.example` para integración de consulta via WhatsApp
 
 ---
 
@@ -178,11 +178,13 @@ cd hotel-booking-spring-react
 **Requisitos:**
 - Java 21
 - Maven
+- Docker
 
 **Ejecutar:**
 
 ~~~bash
 cd backend/roomhotel
+docker-compose up -d 
 mvn spring-boot:run
 ~~~
 
